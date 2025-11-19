@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MyEshop_Phone.Domain", "MyEshop_Phone.Domain", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MyEshop_Phone.Application", "MyEshop_Phone.Application", "{A57C0D11-63C9-4A05-84A0-4490D935FF26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MyEshop_Phone..Infra.IoC", "MyEshop_Phone..Infra.IoC", "{428C24F1-C3D5-4C16-B4ED-4499704E9320}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MyEshop_Phone.Infra.Data", "MyEshop_Phone.Infra.Data", "{235724B0-1C6A-4344-92EC-7690EC89A718}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{B79941EB-BE1C-4E54-BCF0-C089B76398AC}"
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE005A5D-5A2F-4584-B89C-EB6B852650DB}
+	EndGlobalSection
+EndGlobal
