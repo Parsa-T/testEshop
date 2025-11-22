@@ -19,4 +19,11 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyEshop_Phone.Application\MyEshop_Phone.Application.csproj" />
+    <ProjectReference Include="..\MyEshop_Phone.Domain\MyEshop_Phone.Domain.csproj" />
+    <ProjectReference Include="..\MyEshop_Phone.Infra.Data\MyEshop_Phone.Infra.Data.csproj" />
+    <ProjectReference Include="..\MyEshop_Phone.Infra.IoC\MyEshop_Phone.Infra.IoC.csproj" />
+  </ItemGroup>
+
 </Project>

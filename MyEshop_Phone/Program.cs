@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using MyEshop_Phone.Infra.Data.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+#region Database
+builder.Services.AddDbContext<MyDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EShop_PhoneDb"));
+});
+#endregion
 
 var app = builder.Build();
 

@@ -19,4 +19,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyEshop_Phone.Domain\MyEshop_Phone.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
