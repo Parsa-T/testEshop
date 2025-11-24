@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using MyEshop_Phone.Infra.Data.Context;
+using MyEshop_Phone.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddRazorPages();
 
 #region Database
 builder.Services.AddDbContext<MyDbContext>(options =>
@@ -14,6 +15,14 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 });
 #endregion
 
+
+#region Services
+RegisterServices(builder.Services);
+static void RegisterServices(IServiceCollection services)
+{
+    DependencyContainer.RegisterServices(services);
+}
+#endregion
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,7 +39,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

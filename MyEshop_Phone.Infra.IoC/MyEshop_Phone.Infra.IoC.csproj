@@ -10,4 +10,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MyEshop_Phone.Application\MyEshop_Phone.Application.csproj" />
+    <ProjectReference Include="..\MyEshop_Phone.Domain\MyEshop_Phone.Domain.csproj" />
+    <ProjectReference Include="..\MyEshop_Phone.Infra.Data\MyEshop_Phone.Infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>
