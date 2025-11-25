@@ -1,0 +1,48 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Users.IndexModel
+@{
+    ViewBag.Title = "مدیریت کاربران";
+}
+<br />
+<p>
+    <a asp-page="Add" class="btn btn-success">کاربر جدید</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>عکس کاربر</th>
+            <th>نام</th>
+            <th>شماره تماس</th>
+            <th>تاریخ ثبت</th>
+            <th>ادمینی کاربر</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GetAllUsers)
+        {
+            <tr>
+                <td>
+                    <img src="~/AdminPanel/Photo/Users/@item.UrlPhoto" class="thumbnail" style="max-width:120px" />
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Number
+                </td>
+                <td>
+                    @item.RegisterDate.ToShamsi()
+                </td>
+                <td>
+                    <input asp-for="@(item.IsAdmin)" />
+                </td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@(item.Id)" class="btn btn-warning">ویرایش</a>
+                    <a asp-page="Delete" asp-route-id="@(item.Id)" class="btn btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

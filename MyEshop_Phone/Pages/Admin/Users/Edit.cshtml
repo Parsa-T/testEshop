@@ -1,0 +1,28 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Users.EditModel
+@{
+    ViewBag.Title = "ویرایش کاربر";
+}
+
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="EditUser.Id" />
+    <label>نام</label>
+    <input asp-for="EditUser.Name" class="form-control" />
+    <label>نام خانوادگی</label>
+    <input asp-for="EditUser.Family" class="form-control" />
+    <label>شماره تماس</label>
+    <input asp-for="EditUser.Number" class="form-control" />
+    <label>آدرس</label>
+    <textarea asp-for="EditUser.Address" class="form-control"></textarea><br />
+    <label>پروفایل</label>
+    <input asp-for="EditUser.imgUp" /><br />
+    <label>کاربر ادمین است</label> <input asp-for="EditUser.IsAdmin" /><br />
+    <input type="submit" value="ویرایش" class="btn btn-warning" style="margin: 10px;padding: 10px;width: 76px;font-family: system-ui;font-size: medium;" />
+</form>

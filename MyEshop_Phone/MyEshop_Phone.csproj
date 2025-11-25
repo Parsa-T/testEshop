@@ -26,4 +26,8 @@
     <ProjectReference Include="..\MyEshop_Phone.Infra.IoC\MyEshop_Phone.Infra.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\AdminPanel\Photo\Users\" />
+  </ItemGroup>
+
 </Project>

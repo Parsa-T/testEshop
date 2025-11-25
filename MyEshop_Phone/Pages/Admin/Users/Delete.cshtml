@@ -1,0 +1,28 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Users.DeleteModel
+@{
+    ViewBag.Title = "حذف کاربر";
+}
+
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="DeleteUsers.Id" />
+    <label>نام</label>
+    <input asp-for="DeleteUsers.Name" class="form-control" readonly />
+    <label>نام خانوادگی</label>
+    <input asp-for="DeleteUsers.Family" class="form-control" readonly />
+    <label>شماره تماس</label>
+    <input asp-for="DeleteUsers.Number" class="form-control" readonly />
+    <label>آدرس</label>
+    <textarea asp-for="DeleteUsers.Address" class="form-control" readonly></textarea><br />
+    <label>پروفایل</label>
+    <img src="/AdminPanel/Photo/Users/@(Model.DeleteUsers.UrlPhoto)" class="thumbnail" style="max-width:120px" />
+    <label>کاربر ادمین است</label> <input asp-for="DeleteUsers.IsAdmin" disabled /><br />
+    <input type="submit" value="حذف" class="btn btn-danger" style="margin: 10px;padding: 10px;width: 76px;font-family: system-ui;font-size: medium;" />
+</form>

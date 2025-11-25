@@ -25,17 +25,5 @@ namespace MyEshop_Phone.Infra.Data.Context
         public DbSet<_Products_Groups> Products_Groups { get; set; }
         public DbSet<_Products_Tags> Products_Tags { get; set; }
         public DbSet<_Users> Users { get; set; }
-        public DbSet<_Roles> Roles { get; set; }
-
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<_Roles>().HasData(
-                new _Roles { Id = 1, Title = "Admin" },
-                new _Roles { Id = 2, Title = "User" }
-            );
-        }
     }
 }
