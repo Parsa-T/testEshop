@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyEshop_Phone.Application.DTO;
+using MyEshop_Phone.Domain.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +11,6 @@ namespace MyEshop_Phone.Application.Interface
     public interface IProductsServices
     {
         Task<int> GetProductsCount();
+        Task<IEnumerable<GetProductsDTO>> GetAll();
     }
 }

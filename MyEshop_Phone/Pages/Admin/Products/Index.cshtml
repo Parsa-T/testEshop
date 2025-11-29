@@ -1,0 +1,51 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products.IndexModel
+@{
+    ViewBag.Title = "محصولات";
+}
+<br />
+<p>
+    <a asp-page="Add" class="btn btn-success">محصول جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>عکس</th>
+            <th>عنوان گروه</th>
+            <th>نام محصول</th>
+            <th>توضیح مختصر</th>
+            <th>قیمت</th>
+            <th>زمان ثبت</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GetAllProducts)
+        {
+            <tr>
+                <td>
+                    <img src="/AdminPanel/Photo/Products/@(item.ImageName)" class="thumbnail" style="max-width:120px" />
+                </td>
+                <td>
+                    @item.GroupsTitle
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.ShortDescription
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>
+                    @item.CreateTime.ToShamsi()
+                </td>
+                <td>
+                    <a>ویرایش</a>
+                    <a>حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
