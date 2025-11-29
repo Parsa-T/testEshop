@@ -1,0 +1,21 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Groupe.AddModel
+@{
+    ViewBag.Title = "عنوان جدید";
+}
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
+<form method="post">
+    <label>عنوان</label>
+    <span asp-validation-for="AddGroups.GroupTitle" class="text-danger"></span>
+    <input asp-for="AddGroups.GroupTitle" class="form-control" style="width: 319px;" />
+    <input type="submit" value="ثبت" class="btn btn-success" style="margin: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

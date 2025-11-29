@@ -1,0 +1,11 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Groupe.EditModel
+@{
+    ViewBag.Title = "ویرایش عنوان";
+}
+<form method="post">
+    <input type="hidden" asp-for="EditGroups.Id" />
+    <label>عنوان</label>
+    <input asp-for="EditGroups.GroupTitle" class="form-control" style="width: 319px;" />
+    <input type="submit" value="ویرایش" class="btn btn-warning" style="margin-top: 5px;padding: 10px" />
+</form>

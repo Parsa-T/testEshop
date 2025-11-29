@@ -1,0 +1,12 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Groupe.DeleteModel
+@{
+    ViewBag.Title = "حذف عنوان";
+}
+
+<form method="post">
+    <input asp-for="DeleteGroups.Id" type="hidden" />
+    <label>عنوان</label>
+    <input asp-for="DeleteGroups.GroupTitle" class="form-control" style="width: 319px;" readonly />
+    <input type="submit" value="حذف" class="btn btn-danger" style="margin-top: 5px;padding: 10px" />
+</form>

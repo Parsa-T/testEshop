@@ -1,0 +1,30 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Groupe.IndexModel
+@{
+    ViewBag.Title = "عناوین محصولات";
+}
+<br />
+<p>
+    <a asp-page="Add" class="btn btn-success">عنوان جدید</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>عنوان گروه</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GetAllGroups)
+        {
+            <tr>
+                <td>@item.GroupTitle</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@item.Id" class="btn btn-warning">ویرایش</a>
+                    <a asp-page="Delete" asp-route-id="@item.Id" class="btn btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -19,10 +19,12 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IProductsCommentRepository, ProductCommentRepository>();
+            services.AddScoped<IProductsGroupeRepository, ProductsGroupsRepository>();
             //Application
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<IProductsServices, ProductsServices>();
             services.AddScoped<IProductsCommentServices, ProductsCommentServices>();
+            services.AddScoped<IProductsGroupServices, ProductsGroupServices>();
         }
     }
 }
