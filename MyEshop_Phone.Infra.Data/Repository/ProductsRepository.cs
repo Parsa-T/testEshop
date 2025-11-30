@@ -26,7 +26,33 @@ namespace MyEshop_Phone.Infra.Data.Repository
 
         public async Task<IEnumerable<_Products>> GetAllProducts()
         {
-            return await _db.Products.Include(p=>p.products_Groups).ToListAsync();
+            return await _db.Products.Include(p => p.products_Groups).ToListAsync();
+        }
+
+        public async Task<IEnumerable<_Products>> GetAll()
+        {
+            return await _db.Products.ToListAsync();
+        }
+
+        public async Task AddProducts(_Products products)
+        {
+            _db.Products.Add(products);
+        }
+
+        public async Task Save()
+        {
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<_Products> GetProductsById(int id)
+        {
+            return await _db.Products.FindAsync(id);
+        }
+
+        public async Task UpdateProducts(_Products products)
+        {
+            _db.Products.Update(products);
+            await Save();
         }
     }
 }

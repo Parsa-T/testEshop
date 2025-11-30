@@ -3,6 +3,12 @@
 @{
     ViewBag.Title = "محصولات";
 }
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
 <br />
 <p>
     <a asp-page="Add" class="btn btn-success">محصول جدید</a>
@@ -42,8 +48,11 @@
                     @item.CreateTime.ToShamsi()
                 </td>
                 <td>
-                    <a>ویرایش</a>
-                    <a>حذف</a>
+                    <a asp-page="Edit" asp-route-id="@(item.Id)" class="btn btn-warning">ویرایش</a>
+                    <a asp-page="Delete" asp-route-id="@(item.Id)" class="btn btn-danger">حذف</a>
+                    <a asp-page="Products_Features" asp-route-id="@(item.Id)" class="btn btn-primary">ویژگی</a>
+                    <a asp-page="Products_Galleries" asp-route-id="@(item.Id)" class="btn btn-success">گالری</a>
+                    <a asp-page="Products_Tags" asp-route-id="@(item.Id)" class="btn btn-danger">تگ</a>
                 </td>
             </tr>
         }

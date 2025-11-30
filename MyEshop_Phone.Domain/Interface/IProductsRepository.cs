@@ -11,5 +11,10 @@ namespace MyEshop_Phone.Domain.Interface
     {
         Task<int> ProductsCount();
         Task<IEnumerable<_Products>> GetAllProducts();
+        Task<IEnumerable<_Products>> GetAll();
+        Task AddProducts(_Products products);
+        Task<_Products> GetProductsById(int id);
+        Task UpdateProducts(_Products products);
+        Task Save();
     }
 }

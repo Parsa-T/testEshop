@@ -12,5 +12,10 @@ namespace MyEshop_Phone.Application.Interface
     {
         Task<int> GetProductsCount();
         Task<IEnumerable<GetProductsDTO>> GetAll();
+        Task<ShowProductsDTO> GetAllProducts();
+        Task<int> RegisterProducts(_Products dTO);
+        Task<ShowProductsDTO?> GetProductsForEdit(int id);
+        Task EditProdutcs(ShowProductsDTO dTO);
+        Task Save();
     }
 }

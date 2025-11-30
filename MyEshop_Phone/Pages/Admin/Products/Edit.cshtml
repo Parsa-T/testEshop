@@ -1,0 +1,30 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products.EditModel
+@{
+    ViewBag.Title = "ویرایش محصول";
+}
+<style>
+    label {
+    font-family: system-ui;
+    font-size: medium;
+    }
+</style>
+<form method="post" enctype="multipart/form-data">
+    <input asp-for="EditProducts.Id" type="hidden" />
+    <input asp-for="EditProducts.ImageName" type="hidden" />
+    <input asp-for="EditProducts.CreateTime" type="hidden" />
+    <select asp-for="EditProducts.ProductGroupsId"
+            asp-items="@(new SelectList(Model.EditProducts.ShowGroups,"Id","GroupTitle"))" class="form-control" style="margin-top:20px">
+    </select><br />
+    <label>نام</label>
+    <input asp-for="EditProducts.Title" class="form-control" />
+    <label>توضیح مختصر</label>
+    <textarea asp-for="EditProducts.ShortDescription" class="form-control"></textarea>
+    <label>متن</label>
+    <textarea asp-for="EditProducts.Text" class="form-control"></textarea>
+    <label>قیمت</label>
+    <input asp-for="EditProducts.Price" class="form-control" />
+    <label>عکس</label>
+    <input asp-for="EditProducts.imgUp" />
+    <input type="submit" value="ویرایش" class="btn btn-warning" style="margin: 10px;padding: 10px;width: 72px;font-family: system-ui;font-size: medium;" />
+</form>

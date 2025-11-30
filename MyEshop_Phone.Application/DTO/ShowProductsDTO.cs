@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyEshop_Phone.Application.DTO
 {
-    public class GetProductsDTO
+    public class ShowProductsDTO
     {
         public int Id { get; set; }
         [Display(Name = "عنوان گروه")]
@@ -25,8 +26,11 @@ namespace MyEshop_Phone.Application.DTO
         [Display(Name = "عکس محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string ImageName { get; set; }
+        [Display(Name = "آپلود عکس")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public IFormFile imgUp { get; set; }
         [Display(Name = "تاریخ ایجاد")]
         public DateTime CreateTime { get; set; }
-        public string GroupsTitle { get; set; }
+        public IEnumerable<AddOrEditGroupsDTO> ShowGroups { get; set; }
     }
 }
