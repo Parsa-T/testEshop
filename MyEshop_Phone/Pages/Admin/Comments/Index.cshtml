@@ -1,0 +1,43 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Comments.IndexModel
+@{
+    ViewBag.Title = "کامنت ها";
+}
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>عنوان محصول</th>
+            <th>نام</th>
+            <th>ایمیل</th>
+            <th>متن</th>
+            <th>تاریخ ثبت</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AllComment)
+        {
+            <tr>
+                <td>
+                    @item.products.Title
+                </td>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.Comment
+                </td>
+                <td>
+                    @item.CreateTime.ToShamsi()
+                </td>
+                <td>
+                    <a asp-page="Delete" asp-route-id="@item.Id" class="btn btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

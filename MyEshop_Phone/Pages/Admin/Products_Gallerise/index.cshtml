@@ -1,0 +1,65 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Gallerise.indexModel
+@{
+    ViewBag.Title = "گالری محصولات";
+}
+
+<h2>گالری محصول</h2>
+
+<form method="post" enctype="multipart/form-data" asp-page-handler="Add">
+    <input type="hidden" asp-for="ProductId" />
+    <div>
+        <label asp-for="Input.Title"></label>
+        <input asp-for="Input.Title" class="form-control" style="width:300px" />
+        <span asp-validation-for="Input.Title" class="text-danger"></span>
+    </div>
+    <div>
+        @* <label asp-for="Input.ImageFile"></label> *@
+        <label>عکس</label>
+        <input type="file" asp-for="Input.ImageFile" />
+        <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success" style="margin-top: 10px;">اضافه کردن</button>
+</form>
+
+<hr />
+
+<h3>لیست تصاویر</h3>
+<div id="gallery-list">
+    @foreach (var item in Model.Galleries)
+    {
+        <div id="gallery-@item.Id" style="margin-bottom:10px;">
+            <img src="/AdminPanel/Photo/Products/Gallerise/@(item.ImageName)" width="150" />
+            <p>@item.Title</p>
+            <a asp-page="Delete" asp-route-id="@(item.Id)" class="btn btn-danger">حذف</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+                $(".delete-btn").click(function () {
+            if (!confirm("آیا مطمئن هستید؟")) return;
+
+            var id = $(this).data("id");
+
+            $.ajax({
+                type: "POST",
+                url: "?handler=Delete",
+                data: { id: id },
+                success: function (res) {
+                    if (res.success) {
+                        $("#gallery-" + id).remove();
+                    } else {
+                        alert(res.message || "خطا در حذف تصویر");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("خطا: " + xhr.responseText);
+                }
+            });
+        });
+
+    </script>
+}

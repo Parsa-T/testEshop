@@ -1,0 +1,27 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products.DeleteModel
+@{
+    ViewBag.Title = "حذف محصول";
+}
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="DeleteProducts.Id" />
+    <label>عنوان گروه</label>
+    <input asp-for="DeleteProducts.products_Groups.GroupTitle" class="form-control" readonly />
+    <label>نام</label>
+    <input asp-for="DeleteProducts.Title" class="form-control" readonly />
+    <label>توضیح مختصر</label>
+    <textarea asp-for="DeleteProducts.ShortDescription" class="form-control" readonly></textarea>
+    <label>متن</label>
+    <textarea asp-for="DeleteProducts.Text" class="form-control" readonly></textarea>
+    <label>قیمت</label>
+    <input asp-for="DeleteProducts.Price" class="form-control" readonly />
+    <label>عکس</label>
+    <img src="/AdminPanel/Photo/Products/@(Model.DeleteProducts.ImageName)" class="thumbnail" style="max-width:120px" />
+    <input type="submit" value="حذف" class="btn btn-danger" style="margin: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
+</form>

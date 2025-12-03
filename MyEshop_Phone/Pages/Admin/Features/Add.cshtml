@@ -1,0 +1,17 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Features.AddModel
+@{
+    ViewBag.Title = "ویژگی جدید";
+}
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
+<form method="post">
+    <label>ویژگی</label>
+    <span asp-validation-for="AddFeatures.FeaturesTitle" class="text-danger"></span>
+    <input asp-for="AddFeatures.FeaturesTitle" class="form-control" style="width:300px" />
+    <input type="submit" value="ثبت" class="btn btn-success" style="margin-top: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
+</form>

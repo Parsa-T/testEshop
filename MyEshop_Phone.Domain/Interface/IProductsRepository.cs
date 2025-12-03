@@ -16,6 +16,8 @@ namespace MyEshop_Phone.Domain.Interface
         Task<_Products> GetProductsById(int id);
         Task UpdateProducts(_Products products);
         Task<_Products?> GetProductWithFeatures(int id);
+        Task Delete(_Products products);
+        Task<_Products> GetProductsIdinGroups(int id);
         Task Save();
     }
 }

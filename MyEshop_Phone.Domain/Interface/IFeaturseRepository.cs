@@ -12,6 +12,8 @@ namespace MyEshop_Phone.Domain.Interface
         Task AddFeaturse(_Features features);
         Task<_Features?> GetByTitleAsync(string title);
         Task<IEnumerable<_Features>> GetAll();
+        Task<_Features> GetByIdAsync(int id);
+        Task DeleteFeatures(_Features features);
         Task Save();
     }
 }

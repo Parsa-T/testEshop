@@ -1,0 +1,13 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Gallerise.DeleteModel
+@{
+    ViewBag.Title = "حذف عکس";
+}
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="DeleteGalleris.Id" />
+    <label>عنوان تصویر</label>
+    <input asp-for="DeleteGalleris.Title" class="form-control" readonly />
+    <label>عکس</label>
+    <img src="/AdminPanel/Photo/Products/Gallerise/@(Model.DeleteGalleris.ImageName)" class="thumbnail" style="max-width:120px" />
+    <input type="submit" value="حذف" class="btn btn-danger" />
+</form>

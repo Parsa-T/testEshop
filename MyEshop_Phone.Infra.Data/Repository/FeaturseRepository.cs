@@ -23,9 +23,19 @@ namespace MyEshop_Phone.Infra.Data.Repository
             await Save();
         }
 
+        public async Task DeleteFeatures(_Features features)
+        {
+            _db.Features.Remove(features);
+        }
+
         public async Task<IEnumerable<_Features>> GetAll()
         {
             return await _db.Features.ToListAsync();
+        }
+
+        public async Task<_Features> GetByIdAsync(int id)
+        {
+            return await _db.Features.SingleOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task<_Features?> GetByTitleAsync(string title)

@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\AdminPanel\Photo\Products\" />
+    <Folder Include="wwwroot\AdminPanel\Photo\Products\Gallerise\" />
     <Folder Include="wwwroot\AdminPanel\Photo\Users\" />
   </ItemGroup>
 

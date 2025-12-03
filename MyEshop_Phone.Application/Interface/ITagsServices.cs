@@ -1,4 +1,4 @@
-﻿using MyEshop_Phone.Domain.Model;
+﻿using MyEshop_Phone.Application.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace MyEshop_Phone.Application.Interface
 {
-    public interface IProductsCommentServices
+    public interface ITagsServices
     {
-        Task<int> GetCommentCount();
+        Task AddAsync(AddTagsForProductsDTO dTO);
     }
 }

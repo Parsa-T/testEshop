@@ -1,0 +1,15 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Comments.DeleteModel
+@{
+    ViewBag.Title = "حذف کامنت";
+}
+<form method="post">
+    <input type="hidden" asp-for="DeleteComment.Id" />
+    <label>نام</label>
+    <input asp-for="DeleteComment.Name" class="form-control" readonly />
+    <label>ایمیل</label>
+    <input asp-for="DeleteComment.Email" class="form-control" readonly />
+    <label>متن</label>
+    <input asp-for="DeleteComment.Comment" class="form-control" readonly />
+    <input type="submit" value="حذف" class="btn btn-danger" />
+</form>

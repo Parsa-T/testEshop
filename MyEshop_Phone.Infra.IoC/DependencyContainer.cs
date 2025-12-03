@@ -22,6 +22,8 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IProductsGroupeRepository, ProductsGroupsRepository>();
             services.AddScoped<IProductsFeaturseRepository, ProductsFeaturseRepository>();
             services.AddScoped<IFeaturseRepository, FeaturseRepository>();
+            services.AddScoped<IProductsTagsRepository, ProductsTagsRepository>();
+            services.AddScoped<IGalleriseRepository, GalleriseRepository>();
             //Application
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<IProductsServices, ProductsServices>();
@@ -29,6 +31,8 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IProductsGroupServices, ProductsGroupServices>();
             services.AddScoped<IProductsFeaturseServices, ProductsFeaturseServices>();
             services.AddScoped<IFeaturesServices, FeaturesServices>();
+            services.AddScoped<ITagsServices, TagsServices>();
+            services.AddScoped<IProductsGalleriseServices, ProductsGalleriseServices>();
         }
     }
 }

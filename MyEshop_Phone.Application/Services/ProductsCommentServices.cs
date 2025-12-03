@@ -1,5 +1,6 @@
 ﻿using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Domain.Interface;
+using MyEshop_Phone.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace MyEshop_Phone.Application.Services
         {
             _productsCommentRepository = repository;
         }
+
         public async Task<int> GetCommentCount()
         {
            return await _productsCommentRepository.CommentCount();

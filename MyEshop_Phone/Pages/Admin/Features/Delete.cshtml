@@ -1,0 +1,18 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Features.DeleteModel
+@{
+    ViewBag.Title = "حذف ویژگی";
+}
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
+<form method="post">
+    <input type="hidden" asp-for="DeleteFeatures.Id" />
+    <label>ویژگی</label>
+    <span asp-validation-for="DeleteFeatures.FeaturesTitle" class="text-danger"></span>
+    <input asp-for="DeleteFeatures.FeaturesTitle" class="form-control" readonly style="width:300px" />
+    <input type="submit" value="حذف" class="btn btn-danger" style="margin-top: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
+</form>

@@ -1,0 +1,59 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Tags.DitelseModel
+@{
+    ViewBag.Title = "تگ محصولات";
+}
+<p style="margin-top:10px">
+    <a asp-page="Add" class="btn btn-success">تگ جدید</a>
+</p>
+@Html.AntiForgeryToken()
+<table class="table">
+    <thead>
+        <tr>
+            <th>نام محصول</th>
+            <th>تگ</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DitelseTags)
+        {
+            <tr id="tags-@(item.Id)">
+                <td>@item.products.Title</td>
+                <td>@item.Tag</td>
+                <td>
+                    <button class="btn btn-danger" onclick="deleteTags(@item.Id)">
+                        حذف
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+                function deleteTags(id){
+            if(!confirm("آیا مطمئن هستید؟")) return;
+
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/Products_Tags/Ditelse?handler=Delete',
+                data: {
+                      tagsId : id,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (res) {
+                    if (res.success) {
+                        alert("حذف باموفقیت انجام شد!");
+                        location.reload();
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert("خطا در حذف");
+                }
+            });
+        }
+    </script>
+}

@@ -39,7 +39,7 @@ namespace MyEshop_Phone.Pages.Admin.Products_Features
                 return Page();
             }
             await _productsFeaturseServices.AddFeaturse(AddFeatures);
-            return RedirectToPage("/");
+            return RedirectToPage("Ditlse", new { id = AddFeatures.ProductsId });
         }
     }
 }
