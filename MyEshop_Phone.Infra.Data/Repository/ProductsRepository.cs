@@ -54,5 +54,10 @@ namespace MyEshop_Phone.Infra.Data.Repository
             _db.Products.Update(products);
             await Save();
         }
+
+        public async Task<_Products?> GetProductWithFeatures(int id)
+        {
+            return await _db.Products.Include(p => p.products_Features).ThenInclude(pf => pf.features).SingleOrDefaultAsync(p => p.Id == id);
+        }
     }
 }

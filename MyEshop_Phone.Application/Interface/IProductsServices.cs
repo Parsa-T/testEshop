@@ -16,6 +16,7 @@ namespace MyEshop_Phone.Application.Interface
         Task<int> RegisterProducts(_Products dTO);
         Task<ShowProductsDTO?> GetProductsForEdit(int id);
         Task EditProdutcs(ShowProductsDTO dTO);
+        Task<IEnumerable<ProductsDropdownDTO>> GetProductsDropDown();
         Task Save();
     }
 }

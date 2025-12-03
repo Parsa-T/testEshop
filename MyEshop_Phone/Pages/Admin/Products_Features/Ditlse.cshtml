@@ -1,0 +1,61 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Features.DitlseModel
+@{
+    ViewBag.Title = "نمایش ویژگی ها";
+}
+<br />
+<p>
+    <a asp-page="Add" class="btn btn-success">ویژگی جدید</a>
+</p>
+@Html.AntiForgeryToken()
+<table class="table">
+    <thead>
+        <tr>
+            <th>ویژگی</th>
+            <th>مقدار</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.product.Features)
+        {
+            <tr id="feature-@item.Id">
+                <td>
+                    @item.FeatureTitle
+                </td>
+                <td>@item.Value</td>
+                <td>
+                    <button class="btn btn-danger" onclick="deleteFeature(@item.Id)">
+                        حذف
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script>
+                function deleteFeature(id){
+            if(!confirm("آیا مطمئن هستید؟")) return;
+
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/Products_Features/Ditlse?handler=Delete',
+                data: {
+                    featureId : id,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (res) {
+                    if (res.success) {
+                        alert("حذف باموفقیت انجام شد!");
+                        location.reload();
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert("خطا در حذف");
+                }
+            });
+        }
+    </script>
+}

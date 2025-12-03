@@ -1,0 +1,25 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Products_Features.AddModel
+@{
+    ViewBag.Title = "ویژگی جدید محصول";
+}
+<style>
+    label {
+        font-family: system-ui;
+        font-size: medium;
+    }
+</style>
+<form method="post">
+    <label>انتخاب محصول</label>
+    <select asp-for="AddFeatures.ProductsId" asp-items="@(new SelectList(Model.AddFeatures.products,"Id","Title"))" class="form-control">
+
+    </select>
+    <label>عنوان ویژگی</label>
+    <select asp-for="AddFeatures.FeaturesId" asp-items="@(new SelectList(Model.AddFeatures.features,"Id","FeaturesTitle"))" class="form-control">
+
+    </select>
+    <label>مقدار</label>
+    <span asp-validation-for="AddFeatures.Value" class="text-danger"></span>
+    <input asp-for="AddFeatures.Value" class="form-control" />
+    <input type="submit" value="ثبت" class="btn btn-success" style="margin: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
+</form>

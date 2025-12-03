@@ -20,11 +20,15 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IProductsCommentRepository, ProductCommentRepository>();
             services.AddScoped<IProductsGroupeRepository, ProductsGroupsRepository>();
+            services.AddScoped<IProductsFeaturseRepository, ProductsFeaturseRepository>();
+            services.AddScoped<IFeaturseRepository, FeaturseRepository>();
             //Application
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<IProductsServices, ProductsServices>();
             services.AddScoped<IProductsCommentServices, ProductsCommentServices>();
             services.AddScoped<IProductsGroupServices, ProductsGroupServices>();
+            services.AddScoped<IProductsFeaturseServices, ProductsFeaturseServices>();
+            services.AddScoped<IFeaturesServices, FeaturesServices>();
         }
     }
 }

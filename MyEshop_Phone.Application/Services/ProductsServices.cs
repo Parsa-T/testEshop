@@ -74,6 +74,16 @@ namespace MyEshop_Phone.Application.Services
             return await _productsRepository.ProductsCount();
         }
 
+        public async Task<IEnumerable<ProductsDropdownDTO>> GetProductsDropDown()
+        {
+            var product = await _productsRepository.GetAll();
+            return product.Select(p=>new ProductsDropdownDTO
+            {
+                Id = p.Id,
+                Title = p.Title
+            }).ToList();
+        }
+
         public async Task<ShowProductsDTO?> GetProductsForEdit(int id)
         {
             var product = await _productsRepository.GetProductsById(id);
