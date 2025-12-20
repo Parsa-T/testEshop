@@ -37,6 +37,7 @@ namespace MyEshop_Phone.Domain.Model
         public ICollection<_Products_Features> products_Features { get; set; }
         public ICollection<_Products_Tags> products_Tags { get; set; }
         public ICollection<_Products_Galleries> products_Galleries { get; set; }
+        public ICollection<_Users> users { get; set; }
         #endregion
     }
 }

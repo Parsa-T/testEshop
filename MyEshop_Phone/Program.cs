@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using MyEshop_Phone.Application.Interface;
+using MyEshop_Phone.Application.Services;
 using MyEshop_Phone.Infra.Data.Context;
 using MyEshop_Phone.Infra.IoC;
 
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 
 
 #region Services
+builder.Services.AddHttpClient<ILocationServices,LocationServices>();
 RegisterServices(builder.Services);
 static void RegisterServices(IServiceCollection services)
 {

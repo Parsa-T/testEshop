@@ -25,5 +25,18 @@ namespace MyEshop_Phone.Infra.Data.Context
         public DbSet<_Products_Groups> Products_Groups { get; set; }
         public DbSet<_Products_Tags> Products_Tags { get; set; }
         public DbSet<_Users> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<_Users>()
+                .HasOne(u=>u.products)
+                .WithMany(p=>p.users)
+                .HasForeignKey(u=>u.ProductsId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<_Users>()
+                .Property(x => x.ProductsId)
+                .IsRequired(false);
+        }
     }
 }

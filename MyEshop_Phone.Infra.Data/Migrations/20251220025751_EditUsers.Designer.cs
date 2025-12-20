@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEshop_Phone.Infra.Data.Context;
 
@@ -11,9 +12,11 @@ using MyEshop_Phone.Infra.Data.Context;
 namespace MyEshopPhone.Infra.Data.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251220025751_EditUsers")]
+    partial class EditUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -275,13 +278,6 @@ namespace MyEshopPhone.Infra.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CityName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Family")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -300,18 +296,11 @@ namespace MyEshopPhone.Infra.Data.Migrations
                     b.Property<int>("PostalCode")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductsId")
+                    b.Property<int>("ProductsId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("StateId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StateName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UrlPhoto")
                         .IsRequired()
@@ -428,7 +417,8 @@ namespace MyEshopPhone.Infra.Data.Migrations
                     b.HasOne("MyEshop_Phone.Domain.Model._Products", "products")
                         .WithMany("users")
                         .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("products");
                 });

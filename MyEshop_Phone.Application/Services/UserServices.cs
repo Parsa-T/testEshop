@@ -44,6 +44,7 @@ namespace MyEshop_Phone.Application.Services
                 Number = user.Number,
                 Name = user.Name,
                 RegisterDate = user.RegisterDate,
+                PostalCode = user.PostalCode,
             };
         }
 

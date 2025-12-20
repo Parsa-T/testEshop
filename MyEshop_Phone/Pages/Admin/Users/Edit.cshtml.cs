@@ -35,6 +35,7 @@ namespace MyEshop_Phone.Pages.Admin.Users
             users.Name = EditUser.Name;
             users.IsAdmin = EditUser.IsAdmin;
             users.Family = EditUser.Family;
+            users.PostalCode = EditUser.PostalCode;
             await _userServices.SaveAsync();
             if (EditUser.imgUp?.Length > 0)
             {

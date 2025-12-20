@@ -12,6 +12,17 @@
 
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="UserAdd.UrlPhoto" value="test" />
+    <select asp-for="UserAdd.StateId" id="state" class="form-control" style="margin-top:20px">
+        <option value="">انتخاب استان</option>
+        @foreach (var state in Model.States)
+        {
+            <option value="@state.Id">@state.Name</option>
+        }
+    </select>
+
+    <select asp-for="UserAdd.CityId" id="city" class="form-control" style="margin-top:20px">
+        <option value="">انتخاب شهرستان</option>
+    </select>
     <label>نام</label>
     <span asp-validation-for="UserAdd.Name" class="text-danger"></span>
     <input asp-for="UserAdd.Name" class="form-control" />
@@ -24,8 +35,29 @@
     <label>آدرس</label>
     <span asp-validation-for="UserAdd.Address" class="text-danger"></span>
     <textarea asp-for="UserAdd.Address" class="form-control"></textarea><br />
+    <label>کدپستی</label>
+    <span asp-validation-for="UserAdd.PostalCode" class="text-danger"></span>
+    <input asp-for="UserAdd.PostalCode" class="form-control" />
     <label>پروفایل</label><span asp-validation-for="UserAdd.imgUp" class="text-danger"></span>
     <input asp-for="UserAdd.imgUp" /><br />
     <label>کاربر ادمین است</label> <input asp-for="UserAdd.IsAdmin" /><br />
     <input type="submit" value="ثبت" class="btn btn-success" style="margin: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
 </form>
+
+@section Scripts{
+    <script>
+        $('#state').change(function () {
+            var stateId = $(this).val();
+
+            $('#city').empty();
+
+            $.get('?handler=Cities', { stateId: stateId }, function (data) {
+                $('#city').append('<option value="">انتخاب شهرستان</option>');
+                data.forEach(x => {
+                    $('#city').append(`<option value="${x.id}">${x.name}</option>`);
+                });
+            });
+        });
+    </script>
+
+}

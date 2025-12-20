@@ -30,5 +30,24 @@ namespace MyEshop_Phone.Application.DTO
         public IFormFile imgUp { get; set; }
         public DateTime RegisterDate { get; set; }
         public bool IsAdmin { get; set; }
+        [Display(Name ="کدپستی")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public int PostalCode { get; set; }
+        public int StateId { get; set; }
+        public string StateName { get; set; }
+        public int CityId { get; set; }
+        public string CityName { get; set; }
+        public int? ProductsId { get; set; }
+    }
+    public class StateDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class CityDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

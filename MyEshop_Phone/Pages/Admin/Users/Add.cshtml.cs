@@ -9,17 +9,36 @@ namespace MyEshop_Phone.Pages.Admin.Users
     public class AddModel : PageModel
     {
         IUserServices _userServices;
-        public AddModel(IUserServices user)
+        ILocationServices _locationServices;
+        public AddModel(IUserServices user,ILocationServices location)
         {
             _userServices = user;
+            _locationServices = location;
         }
+        public List<StateDto> States { get; set; } = new();
         [BindProperty]
         public AddOrEditUsersDTO UserAdd { get; set; }
-        public void OnGet()
+        public async Task OnGet()
         {
+            States = await _locationServices.GetStatesAsync();
+        }
+        public async Task<JsonResult> OnGetCitiesAsync(int stateId)
+        {
+            var cities = await _locationServices.GetCitiesAsync(stateId);
+            return new JsonResult(cities);
         }
         public async Task<IActionResult> OnPost()
         {
+            ModelState.Remove("UserAdd.ProductsId");
+            ModelState.Remove("UserAdd.StateName");
+            ModelState.Remove("UserAdd.CityName");
+            if (!ModelState.IsValid)
+                return Page();
+            var states = await _locationServices.GetStatesAsync();
+            var state = states.First(x => x.Id == UserAdd.StateId);
+
+            var cities = await _locationServices.GetCitiesAsync(UserAdd.StateId);
+            var city = cities.First(x => x.Id == UserAdd.CityId);
             _Users user = new _Users()
             {
                 Address = UserAdd.Address,
@@ -29,9 +48,12 @@ namespace MyEshop_Phone.Pages.Admin.Users
                 RegisterDate = DateTime.Now,
                 IsAdmin = UserAdd.IsAdmin,
                 UrlPhoto = UserAdd.Name,
+                CityName = city.Name,
+                StateName = state.Name,
+                PostalCode = UserAdd.PostalCode,
+                CityId = city.Id,
+                StateId = state.Id,
             };
-            if(!ModelState.IsValid)
-                return Page();
 
             await _userServices.AddUsers(user);
             await _userServices.SaveAsync();
