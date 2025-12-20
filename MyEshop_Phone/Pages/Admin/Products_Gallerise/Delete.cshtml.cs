@@ -21,12 +21,14 @@ namespace MyEshop_Phone.Pages.Admin.Products_Gallerise
         public async Task<IActionResult> OnPost()
         {
             var gp = await _galleriseRepository.GetByIdAsync(DeleteGalleris.Id);
+            if(gp==null)
+                return NotFound();
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", "Gallerise", gp.ImageName);
             if(System.IO.File.Exists(filePath))
                 System.IO.File.Delete(filePath);
             await _galleriseRepository.DeleteAsync(gp);
             await _galleriseRepository.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToPage("/Admin/Index");
         }
     }
 }

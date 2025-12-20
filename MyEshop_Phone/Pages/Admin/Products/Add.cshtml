@@ -26,12 +26,21 @@
     <textarea asp-for="AddProduct.ShortDescription" class="form-control"></textarea>
     <label>متن</label>
     <span asp-validation-for="AddProduct.Text" class="text-danger"></span>
-    <textarea asp-for="AddProduct.Text" class="form-control"></textarea>
+    <textarea asp-for="AddProduct.Text" id="Text" class="form-control"></textarea>
     <label>قیمت</label>
     <span asp-validation-for="AddProduct.Price" class="text-danger"></span>
-    <input asp-for="AddProduct.Price" class="form-control" />
+    <input asp-for="AddProduct.Price" placeholder="قیمت را به تومان وارد کنید" class="form-control" />
+    <p>قیمت را به تومان وارد کنید</p>
     <label>عکس</label>
     <span asp-validation-for="AddProduct.imgUp" class="text-danger"></span>
     <input asp-for="AddProduct.imgUp" />
     <input type="submit" value="ثبت" class="btn btn-success" style="margin: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
 </form>
+
+@section Scripts{
+    <script src="~/AdminPanel/ckeditor/ckeditor.js"></script>
+    <script src="~/AdminPanel/ckeditor/adapters/jquery.js"></script>
+    <script>
+        CKEDITOR.replace('Text');
+    </script>
+}

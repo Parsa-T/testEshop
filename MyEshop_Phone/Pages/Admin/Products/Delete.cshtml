@@ -17,8 +17,10 @@
     <input asp-for="DeleteProducts.Title" class="form-control" readonly />
     <label>توضیح مختصر</label>
     <textarea asp-for="DeleteProducts.ShortDescription" class="form-control" readonly></textarea>
-    <label>متن</label>
-    <textarea asp-for="DeleteProducts.Text" class="form-control" readonly></textarea>
+    @* <label>متن</label>
+    <textarea id="Text"  class="form-control" readonly>
+        @Html.d
+    </textarea> *@
     <label>قیمت</label>
     <input asp-for="DeleteProducts.Price" class="form-control" readonly />
     <label>عکس</label>

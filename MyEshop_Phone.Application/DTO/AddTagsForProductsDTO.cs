@@ -13,6 +13,7 @@ namespace MyEshop_Phone.Application.DTO
         public int ProductsId { get; set; }
         public IEnumerable<ProductsDropdownDTO> products { get; set; }
         [Display(Name = "تگ محصول")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Tag { get; set; }
     }
 }
