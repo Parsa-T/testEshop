@@ -30,6 +30,7 @@ namespace MyEshop_Phone.Pages.Admin.Products
                 Title = AddProduct.Title,
                 ShortDescription = AddProduct.ShortDescription,
                 ProductGroupsId = AddProduct.ProductGroupsId,
+                Count = AddProduct.Count,
             };
             await _productsServices.RegisterProducts(product);
             await _productsServices.Save();

@@ -16,7 +16,7 @@ namespace MyEshop_Phone.Application.DTO
         [Display(Name = "نام محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Title { get; set; }
-        [Display(Name = "توضیح مختصر")]
+        [Display(Name = "برند")]
         public string ShortDescription { get; set; }
         [Display(Name = "توضیح محصول")]
         public string Text { get; set; }
@@ -31,6 +31,9 @@ namespace MyEshop_Phone.Application.DTO
         public IFormFile imgUp { get; set; }
         [Display(Name = "تاریخ ایجاد")]
         public DateTime CreateTime { get; set; }
+        [Display(Name = "تعداد محصول")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+        public int? Count { get; set; }
         public IEnumerable<AddOrEditGroupsDTO> ShowGroups { get; set; }
     }
 }

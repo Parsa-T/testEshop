@@ -1,0 +1,44 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.ProductColor.DeleteModel
+@{
+    ViewBag.Title = "حذف و مدیریت رنگ ها";
+}
+<p style="margin-top:10px">
+    <a asp-page="Add" class="btn btn-success">اضافه کردن رنگ به محصول جدید</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>نام محصول</th>
+            <th>رنگ ها</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.ColorProduct)
+        {
+            <tr>
+                <td>@item.ProductTitle</td>
+
+                <td style="display:flex;gap:8px">
+                    @foreach (var color in item.Colors)
+                    {
+                        <span style="
+                            background-color:@color.Name;
+                            width:30px;
+                            height:30px;
+                            border-radius:50%;
+                            display:inline-block;
+                            border:1px solid #ccc;
+                                                "></span>
+                    }
+                </td>
+
+                <td>
+                    <a asp-page="Delete02" class="btn btn-danger">صفحه حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

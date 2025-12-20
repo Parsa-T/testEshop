@@ -32,6 +32,7 @@ namespace MyEshop_Phone.Application.Services
             products.ProductGroupsId = dTO.ProductGroupsId;
             products.Text = dTO.Text;
             products.Title = dTO.Title;
+            products.Count = dTO.Count;
             await _productsRepository.UpdateProducts(products);
 
         }
@@ -100,6 +101,7 @@ namespace MyEshop_Phone.Application.Services
                 ShortDescription = product.ShortDescription,
                 Text = product.Text,
                 Title = product.Title,
+                Count = product.Count,
                 ShowGroups = group.Select(g => new AddOrEditGroupsDTO
                 {
                     GroupTitle= g.GroupTitle,

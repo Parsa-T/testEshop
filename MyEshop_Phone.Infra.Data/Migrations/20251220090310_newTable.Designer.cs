@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEshop_Phone.Infra.Data.Context;
 
@@ -11,9 +12,11 @@ using MyEshop_Phone.Infra.Data.Context;
 namespace MyEshopPhone.Infra.Data.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251220090310_newTable")]
+    partial class newTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,23 @@ namespace MyEshopPhone.Infra.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MyEshop_Phone.Domain.Model._Color", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("colors");
+                });
 
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._Features", b =>
                 {
@@ -100,6 +120,9 @@ namespace MyEshopPhone.Infra.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("Count")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
@@ -130,6 +153,30 @@ namespace MyEshopPhone.Infra.Data.Migrations
                     b.HasIndex("ProductGroupsId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("MyEshop_Phone.Domain.Model._ProductsColor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ColorId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("productsColors");
                 });
 
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._Products_Features", b =>
@@ -365,6 +412,24 @@ namespace MyEshopPhone.Infra.Data.Migrations
                     b.Navigation("products_Groups");
                 });
 
+            modelBuilder.Entity("MyEshop_Phone.Domain.Model._ProductsColor", b =>
+                {
+                    b.HasOne("MyEshop_Phone.Domain.Model._Color", "color")
+                        .WithMany("productsColors")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("MyEshop_Phone.Domain.Model._Products", "products")
+                        .WithMany("productsColors")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("color");
+
+                    b.Navigation("products");
+                });
+
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._Products_Features", b =>
                 {
                     b.HasOne("MyEshop_Phone.Domain.Model._Features", "features")
@@ -433,6 +498,11 @@ namespace MyEshopPhone.Infra.Data.Migrations
                     b.Navigation("products");
                 });
 
+            modelBuilder.Entity("MyEshop_Phone.Domain.Model._Color", b =>
+                {
+                    b.Navigation("productsColors");
+                });
+
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._Features", b =>
                 {
                     b.Navigation("products_Features");
@@ -446,6 +516,8 @@ namespace MyEshopPhone.Infra.Data.Migrations
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._Products", b =>
                 {
                     b.Navigation("orderDetails");
+
+                    b.Navigation("productsColors");
 
                     b.Navigation("products_Comments");
 

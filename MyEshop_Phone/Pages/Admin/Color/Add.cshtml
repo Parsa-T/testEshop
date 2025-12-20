@@ -1,0 +1,25 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.Color.AddModel
+@{
+    ViewBag.Title = "رنگ جدید";
+}
+<style>
+    form{
+        margin:10px;
+        padding:10px;
+        font-family: system-ui;
+        font-size: medium;
+    }
+    #submit{
+        margin:10px;
+        padding:10px;
+    }
+    #color{
+        margin-right:50px;
+    }
+</style>
+<form method="post">
+    <label>رنگ جدید را انتخاب کنید : </label><br />
+    <input id="color" type="color" asp-for="AddColor.Name" /><br />
+    <input id="submit" type="submit" onclick="success()" class="btn btn-success" value="ثبت" />
+</form>

@@ -18,12 +18,14 @@
     </select><br />
     <label>نام</label>
     <input asp-for="EditProducts.Title" class="form-control" />
-    <label>توضیح مختصر</label>
+    <label>برند</label>
     <textarea asp-for="EditProducts.ShortDescription" class="form-control"></textarea>
     <label>متن</label>
     <textarea asp-for="EditProducts.Text" id="Text" class="form-control"></textarea>
     <label>قیمت</label>
     <input asp-for="EditProducts.Price" class="form-control" />
+    <label>تعداد محصول</label>
+    <input asp-for="EditProducts.Count" class="form-control" />
     <label>عکس</label>
     <input asp-for="EditProducts.imgUp" />
     <input type="submit" value="ویرایش" class="btn btn-warning" style="margin: 10px;padding: 10px;width: 72px;font-family: system-ui;font-size: medium;" />

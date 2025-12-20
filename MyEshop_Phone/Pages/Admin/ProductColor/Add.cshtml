@@ -1,0 +1,47 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.ProductColor.AddModel
+@{
+    ViewBag.Title = "اضافه کردن رنگ به محصولات";
+}
+<form method="post">
+    <label>انتخاب محصول</label>
+    <select asp-for="ProducColor.ProductId" class="form-control" style="margin-top:20px">
+        @foreach (var item in Model.ProducColor.productsShows)
+        {
+            <option value="@item.Id">@item.Title</option>
+        }
+    </select>
+
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>انتخاب رنگ ها</th>
+            </tr>
+        </thead>
+
+        <tbody style="display:flex;margin:10px">
+            @foreach (var item in Model.ProducColor.colors)
+            {
+                <tr style="margin-left: 5px;">
+                    <td style="
+                        background-color:@item.Name;
+                        width:50px;
+                        height:50px;
+                        border-radius:50%;
+                        position:relative;
+                        ">
+                        <input type="checkbox"
+                               name="ProducColor.SelectedColorIds"
+                               value="@item.Id"
+                               style="position:absolute;top:15px;left:15px;" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <input id="submit" type="submit" class="btn btn-success" value="ثبت" />
+    <a asp-page="Delete" class="btn btn-primary">نمایش رنگ محصولات</a>
+</form>

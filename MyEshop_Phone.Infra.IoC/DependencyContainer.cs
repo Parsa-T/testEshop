@@ -16,7 +16,7 @@ namespace MyEshop_Phone.Infra.IoC
         public static void RegisterServices(IServiceCollection services)
         {
             //Data & Domain
-            services.AddScoped<IUserRepository,UserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<IProductsCommentRepository, ProductCommentRepository>();
             services.AddScoped<IProductsGroupeRepository, ProductsGroupsRepository>();
@@ -24,6 +24,8 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IFeaturseRepository, FeaturseRepository>();
             services.AddScoped<IProductsTagsRepository, ProductsTagsRepository>();
             services.AddScoped<IGalleriseRepository, GalleriseRepository>();
+            services.AddScoped<IColorRepository, ColorRepository>();
+            services.AddScoped<IProductColorRepository, ProductColorRepository>();
             //Application
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<IProductsServices, ProductsServices>();
@@ -33,6 +35,9 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IFeaturesServices, FeaturesServices>();
             services.AddScoped<ITagsServices, TagsServices>();
             services.AddScoped<IProductsGalleriseServices, ProductsGalleriseServices>();
+            services.AddScoped<IProductColorServices, ProductColorServices>();
+            //Application and Data
+            services.AddScoped<IPColorServices, PColorRepository>();
         }
     }
 }

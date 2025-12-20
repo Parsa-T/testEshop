@@ -17,7 +17,7 @@ namespace MyEshop_Phone.Domain.Model
         [Display(Name ="نام محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Title { get; set; }
-        [Display(Name ="توضیح مختصر")]
+        [Display(Name ="برند")]
         public string ShortDescription { get; set; }
         [Display(Name ="توضیح محصول")]
         public string Text { get; set; }
@@ -29,6 +29,8 @@ namespace MyEshop_Phone.Domain.Model
         public string ImageName { get; set; }
         [Display(Name ="تاریخ ایجاد")]
         public DateTime CreateTime { get; set; }
+        [Display(Name ="تعداد محصول")]
+        public int? Count { get; set; }
         #region Rel
         public ICollection<_OrderDetails> orderDetails { get; set; }
         public ICollection<_Products_comment> products_Comments { get; set; }
@@ -38,6 +40,7 @@ namespace MyEshop_Phone.Domain.Model
         public ICollection<_Products_Tags> products_Tags { get; set; }
         public ICollection<_Products_Galleries> products_Galleries { get; set; }
         public ICollection<_Users> users { get; set; }
+        public ICollection<_ProductsColor> productsColors { get; set; }
         #endregion
     }
 }

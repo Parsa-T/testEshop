@@ -1,0 +1,57 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.ProductColor.Delete02Model
+@{
+    ViewBag.Title = "حذف رنگ ها";
+}
+<p style="margin-top:10px">
+    <a asp-page="Add" class="btn btn-success">اضافه کردن رنگ به محصولات</a>
+</p>
+@Html.AntiForgeryToken()
+<table class="table">
+    <thead>
+        <tr>
+            <th>عنوان محصول</th>
+            <th>رنگ محصول</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DeleteColor)
+        {
+            <tr>
+                <td>@item.products.Title</td>
+                <td style="background-color:@item.color.Name;width: 50px;height: 50px;border-radius: 50%;"></td>
+                <td>
+                    <button class="btn btn-danger" onclick="deleteColor(@item.Id)">
+                        حذف
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script>
+        function deleteColor(id){
+            if(!confirm("آیا مطمئن هستید؟")) return;
+
+            $.ajax({
+                type:'POST',
+                url: '/Admin/ProductColor/Delete02?handler=Delete',
+                data:{
+                    colorId:id,
+                     __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (res) {
+                    if (res.success) {
+                        alert("حذف باموفقیت انجام شد!");
+                        location.reload();
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert("خطا در حذف");
+                }
+            });
+        }
+    </script>
+}

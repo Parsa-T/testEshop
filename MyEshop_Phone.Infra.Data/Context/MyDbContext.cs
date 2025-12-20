@@ -25,6 +25,8 @@ namespace MyEshop_Phone.Infra.Data.Context
         public DbSet<_Products_Groups> Products_Groups { get; set; }
         public DbSet<_Products_Tags> Products_Tags { get; set; }
         public DbSet<_Users> Users { get; set; }
+        public DbSet<_Color> colors { get; set; }
+        public DbSet<_ProductsColor> productsColors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,9 +36,26 @@ namespace MyEshop_Phone.Infra.Data.Context
                 .WithMany(p=>p.users)
                 .HasForeignKey(u=>u.ProductsId)
                 .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<_Users>()
                 .Property(x => x.ProductsId)
                 .IsRequired(false);
+
+            modelBuilder.Entity<_ProductsColor>()
+                .HasOne(c=>c.products)
+                .WithMany(p=>p.productsColors)
+                .HasForeignKey(x=>x.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<_ProductsColor>()
+                .HasOne(pc => pc.color)
+                .WithMany(c => c.productsColors)
+                .HasForeignKey(x => x.ColorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<_ProductsColor>()
+            //    .Property(x=>x.ColorId)
+            //    .IsRequired(false);
         }
     }
 }
