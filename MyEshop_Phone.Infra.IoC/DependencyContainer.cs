@@ -26,6 +26,7 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IGalleriseRepository, GalleriseRepository>();
             services.AddScoped<IColorRepository, ColorRepository>();
             services.AddScoped<IProductColorRepository, ProductColorRepository>();
+            services.AddScoped<ISubMenuGroupsRepository, SubMenuGroupsRepository>();
             //Application
             services.AddScoped<IUserServices, UserServices>();
             services.AddScoped<IProductsServices, ProductsServices>();
@@ -36,6 +37,7 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<ITagsServices, TagsServices>();
             services.AddScoped<IProductsGalleriseServices, ProductsGalleriseServices>();
             services.AddScoped<IProductColorServices, ProductColorServices>();
+            services.AddScoped<ISubGroupsServices, SubGroupsServices>();
             //Application and Data
             services.AddScoped<IPColorServices, PColorRepository>();
         }

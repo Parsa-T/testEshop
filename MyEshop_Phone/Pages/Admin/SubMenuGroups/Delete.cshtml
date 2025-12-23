@@ -1,0 +1,13 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.SubMenuGroups.DeleteModel
+@{
+    ViewBag.Title = "حذف زیر منو ";
+}
+<form method="post">
+    <input asp-for="DeleteSubMenu.Id" type="hidden" />
+    <label>عنوان گروه</label>
+    <input asp-for="DeleteSubMenu.groups.GroupTitle" class="form-control" readonly />
+    <label>برند</label>
+    <input asp-for="DeleteSubMenu.Title" class="form-control" readonly />
+    <input type="submit" class="btn btn-danger" value="حذف" style="margin-top:10px" />
+</form>

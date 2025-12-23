@@ -1,0 +1,15 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.SubMenuGroups.EditModel
+@{
+    ViewBag.Title = "ویرایش زیر منو";
+}
+<form method="post">
+    <input asp-for="EditSubMenu.Id" type="hidden" />
+    <label>عنوان گروه</label>
+    <select asp-for="EditSubMenu.Products_GroupsId"
+            asp-items="@(new SelectList(Model.EditSubMenu.ShowAllGroups,"Id","GroupTitle"))" class="form-control" style="margin-top:20px">
+    </select><br />
+    <label>برند</label>
+    <input asp-for="EditSubMenu.Title" class="form-control" />
+    <input type="submit" class="btn btn-warning" value="ویرایش" style="margin-top:10px" />
+</form>

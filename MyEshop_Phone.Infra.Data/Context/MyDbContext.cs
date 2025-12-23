@@ -27,6 +27,7 @@ namespace MyEshop_Phone.Infra.Data.Context
         public DbSet<_Users> Users { get; set; }
         public DbSet<_Color> colors { get; set; }
         public DbSet<_ProductsColor> productsColors { get; set; }
+        public DbSet<_SubmenuGroups> submenuGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

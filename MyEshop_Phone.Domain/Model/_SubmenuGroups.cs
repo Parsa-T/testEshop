@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 
 namespace MyEshop_Phone.Domain.Model
 {
-    public class _Products_Groups
+    public class _SubmenuGroups
     {
         [Key]
         public int Id { get; set; }
-        [Display(Name = "عنوان محصول")]
+        public int Products_GroupsId { get; set; }
+        [Display(Name = "عنوان")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string GroupTitle { get; set; }
+        public string Title { get; set; }
         #region Rel
-        public ICollection<_Products> products { get; set; }
-        public ICollection<_SubmenuGroups> submenuGroups { get; set; }
+        [ForeignKey("Products_GroupsId")]
+        public virtual _Products_Groups groups { get; set; }
         #endregion
     }
 }
