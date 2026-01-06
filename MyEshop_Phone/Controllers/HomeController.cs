@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using MyEshop_Phone.Application.DTO;
+using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Models;
 
 namespace MyEshop_Phone.Controllers;
@@ -17,8 +19,8 @@ public class HomeController : Controller
     {
         return View();
     }
-
-    public IActionResult Privacy()
+    [Route("AboutUs")]
+    public IActionResult AboutUs()
     {
         return View();
     }

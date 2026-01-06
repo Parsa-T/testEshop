@@ -16,6 +16,10 @@
     <select asp-for="EditProducts.ProductGroupsId"
             asp-items="@(new SelectList(Model.EditProducts.ShowGroups,"Id","GroupTitle"))" class="form-control" style="margin-top:20px">
     </select><br />
+    <label>زیر منو</label>
+    <select asp-for="EditProducts.SubmenuGroupsId"
+            asp-items="@(new SelectList(Model.EditProducts.ShowSubGroups,"Id","Title"))" class="form-control" style="margin-top:20px">
+    </select><br />
     <label>نام</label>
     <input asp-for="EditProducts.Title" class="form-control" />
     <label>برند</label>
@@ -28,7 +32,9 @@
     <input asp-for="EditProducts.Count" class="form-control" />
     <label>عکس</label>
     <input asp-for="EditProducts.imgUp" />
-    <input type="submit" value="ویرایش" class="btn btn-warning" style="margin: 10px;padding: 10px;width: 72px;font-family: system-ui;font-size: medium;" />
+    <label style="margin-top:10px">محصول پیشنهادی</label>
+    <input asp-for="EditProducts.RecommendedProducts" />
+    <input type="submit" value="ویرایش" class="btn btn-warning" style="margin: 10px;padding: 10px;width: 72px;font-family: system-ui;font-size: medium;margin-top:10px" />
 </form>
 @section Scripts {
     <script src="~/AdminPanel/ckeditor/ckeditor.js"></script>

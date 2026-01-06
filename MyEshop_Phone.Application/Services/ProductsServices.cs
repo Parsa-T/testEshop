@@ -5,6 +5,7 @@ using MyEshop_Phone.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,10 +15,17 @@ namespace MyEshop_Phone.Application.Services
     {
         IProductsRepository _productsRepository;
         IProductsGroupeRepository _productsGroupeRepository;
-        public ProductsServices(IProductsRepository repository, IProductsGroupeRepository productsGroupeRepository)
+        ISubGroupsServices _subGroupsRepository;
+        public ProductsServices(IProductsRepository repository, IProductsGroupeRepository productsGroupeRepository,ISubGroupsServices subGroupsServices)
         {
             _productsRepository = repository;
             _productsGroupeRepository = productsGroupeRepository;
+            _subGroupsRepository = subGroupsServices;
+        }
+
+        public async Task<IEnumerable<_Products>> BestSeller()
+        {
+            return await _productsRepository.BestSeller();
         }
 
         public async Task EditProdutcs(ShowProductsDTO dTO)
@@ -33,6 +41,8 @@ namespace MyEshop_Phone.Application.Services
             products.Text = dTO.Text;
             products.Title = dTO.Title;
             products.Count = dTO.Count;
+            products.SubmenuGroupsId = dTO.SubmenuGroupsId;
+            products.RecommendedProducts = dTO.RecommendedProducts;
             await _productsRepository.UpdateProducts(products);
 
         }
@@ -59,14 +69,21 @@ namespace MyEshop_Phone.Application.Services
         public async Task<ShowProductsDTO> GetAllProducts()
         {
             var products = await _productsGroupeRepository.GetAllGroups();
+            var subMenu = await _subGroupsRepository.ShowSubMenuGroups();
             var list = products.Select(p => new AddOrEditGroupsDTO
             {
                 GroupTitle = p.GroupTitle,
                 Id = p.Id,
             }).ToList();
+            var list2 = subMenu.Select(sg => new ShowSubMenuDTO
+            {
+                Id = sg.Id,
+                Title = sg.Title,
+            }).ToList();
             return new ShowProductsDTO
             {
                 ShowGroups = list,
+                ShowSubGroups = list2,
             };
         }
 
@@ -91,6 +108,7 @@ namespace MyEshop_Phone.Application.Services
             if(product==null)
                 return null;
             var group = await _productsGroupeRepository.GetAllGroups();
+            var sub = await _subGroupsRepository.ShowSubMenuGroups();
             return new ShowProductsDTO
             {
                 CreateTime = product.CreateTime,
@@ -102,10 +120,17 @@ namespace MyEshop_Phone.Application.Services
                 Text = product.Text,
                 Title = product.Title,
                 Count = product.Count,
+                RecommendedProducts = product.RecommendedProducts,
+                SubmenuGroupsId = product.SubmenuGroupsId,
                 ShowGroups = group.Select(g => new AddOrEditGroupsDTO
                 {
                     GroupTitle= g.GroupTitle,
                     Id = g.Id,
+                }).ToList(),
+                ShowSubGroups = sub.Select(sg=> new ShowSubMenuDTO
+                {
+                    Id= sg.Id,
+                    Title = sg.Title,
                 }).ToList()
             };
         }
@@ -127,9 +152,24 @@ namespace MyEshop_Phone.Application.Services
             return dTO.Id;
         }
 
+        public async Task<IEnumerable<_Products>> ReSearch(string search)
+        {
+            return await _productsRepository.SearchProduct(search);
+        }
+
         public async Task Save()
         {
             await _productsRepository.Save();
+        }
+
+        public async Task<IEnumerable<_Products>> ShowProtectionPhone()
+        {
+            return await _productsRepository.ProtectionPhone();
+        }
+
+        public async Task<IEnumerable<_Products>> ShowRecommendedProducts()
+        {
+            return await _productsRepository.RecommendedProducts();
         }
     }
 }

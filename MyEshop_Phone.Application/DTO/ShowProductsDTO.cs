@@ -13,6 +13,8 @@ namespace MyEshop_Phone.Application.DTO
         public int Id { get; set; }
         [Display(Name = "عنوان گروه")]
         public int ProductGroupsId { get; set; }
+        [Display(Name = "زیر منو")]
+        public int? SubmenuGroupsId { get; set; }
         [Display(Name = "نام محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Title { get; set; }
@@ -34,6 +36,9 @@ namespace MyEshop_Phone.Application.DTO
         [Display(Name = "تعداد محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public int? Count { get; set; }
+        [Display(Name ="محصول پیشنهادی")]
+        public bool RecommendedProducts { get; set; }
         public IEnumerable<AddOrEditGroupsDTO> ShowGroups { get; set; }
+        public IEnumerable<ShowSubMenuDTO> ShowSubGroups { get; set; }
     }
 }

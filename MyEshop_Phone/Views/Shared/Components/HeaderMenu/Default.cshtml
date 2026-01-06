@@ -1,0 +1,27 @@
+﻿@using MyEshop_Phone.Application.DTO
+@model IEnumerable<ShowGroupsSubGroupDTO>
+
+@if (Model == null || !Model.Any())
+{
+    return;
+}
+
+@foreach (var item in Model.GroupBy(x => new { x.Id, x.GroupTitle }))
+{
+    <div class="nav-dropdown" data-nav-dropdown>
+        <a href="{{base}}/pages/products.html?cat=case" class="secondary-nav-link secondary-nav-link--underline nav-dropdown-trigger" aria-expanded="false" aria-controls="dropdown-case" aria-haspopup="true">
+            @item.Key.GroupTitle
+            <span class="material-icon nav-caret" aria-hidden="true">expand_more</span>
+        </a>
+        <div id="dropdown-case" class="nav-dropdown-panel" aria-hidden="true">
+            <div class="nav-dropdown-section">
+                <div class="nav-dropdown-links">
+                    @foreach (var sub in item)
+                    {
+                        <a href="{{base}}/pages/products.html?cat=case&material=silicone" class="nav-dropdown-link">@sub.Title</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

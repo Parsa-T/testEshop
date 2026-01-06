@@ -16,4 +16,10 @@ namespace MyEshop_Phone.Application.DTO
         public string Title { get; set; }
         public IEnumerable<AddOrEditGroupsDTO> ShowAllGroups { get; set; }
     }
+    public class ShowSubMenuDTO
+    {
+        public int Id { get; set; }
+        [Display(Name = "عنوان")]
+        public string Title { get; set; }
+    }
 }

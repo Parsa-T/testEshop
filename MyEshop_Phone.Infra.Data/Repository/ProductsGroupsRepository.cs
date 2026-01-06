@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyEshop_Phone.Application.DTO;
+using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Domain.Interface;
 using MyEshop_Phone.Domain.Model;
 using MyEshop_Phone.Infra.Data.Context;
@@ -42,6 +44,29 @@ namespace MyEshop_Phone.Infra.Data.Repository
         public async Task Save()
         {
             await _db.SaveChangesAsync();
+        }
+    }
+    public class GroupsSubMenuRepository : IGroupsSubMenuServices
+    {
+        MyDbContext _db;
+        public GroupsSubMenuRepository(MyDbContext context)
+        {
+            _db= context;
+        }
+        public async Task<List<ShowGroupsSubGroupDTO>> ShowAll()
+        {
+            return await (
+                from p in _db.Products_Groups
+                join pg in _db.submenuGroups
+                on p.Id equals pg.Products_GroupsId
+                select new ShowGroupsSubGroupDTO
+                {
+                    Id = p.Id,
+                    GroupTitle = p.GroupTitle,
+                    SubId = pg.Id,
+                    Title = pg.Title,
+                }
+                ).ToListAsync();
         }
     }
 }

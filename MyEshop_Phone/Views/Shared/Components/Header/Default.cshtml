@@ -1,0 +1,72 @@
+﻿@using MyEshop_Phone.Application.DTO
+@model IEnumerable<ShowGroupsSubGroupDTO>
+
+@if (Model == null || !Model.Any())
+{
+    return;
+}
+<!-- منوی موبایل (دراور) -->
+<div class="md:hidden">
+    <!-- لایه تار (Overlay) -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/40 z-[99] hidden opacity-0 transition-opacity duration-300" aria-hidden="true"></div>
+    <!-- محتوای منو -->
+    <div id="mobile-menu" class="fixed right-0 top-0 h-full w-4/5 max-w-[300px] bg-[#F8FAFC] shadow-2xl transform translate-x-full z-[100] transition-transform duration-300" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="mobile-menu-title">
+        <div class="p-3 flex justify-between items-center bg-white border-b border-gray-200">
+            <div class="flex items-center gap-2">
+                <span class="material-icon text-[#2563EB] text-xl" aria-hidden="true">storefront</span>
+                <h2 id="mobile-menu-title" class="font-black text-sm text-[#1D1B20]">ماهان شاپ</h2>
+            </div>
+            <button id="close-menu-btn" type="button" class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors" aria-label="بستن منو">
+                <span class="material-icon text-base" aria-hidden="true">close</span>
+            </button>
+        </div>
+        <div class="p-4 overflow-y-auto h-[calc(100%-64px)]">
+            <nav class="flex flex-col gap-1">
+                <a href="{{base}}/index.html" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="home">
+                    <span class="material-icon text-gray-500 text-base" aria-hidden="true">home</span>
+                    <span>خانه</span>
+                </a>
+                <a href="{{base}}/pages/products.html" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="products">
+                    <span class="material-icon text-gray-500 text-base" aria-hidden="true">category</span>
+                    <span>همه محصولات</span>
+                </a>
+                <div class="border-t border-gray-200 my-2 mx-2"></div>
+                <span class="text-xs font-bold text-gray-400 px-3 mb-1">دسته‌بندی</span>
+                @foreach (var item in Model.GroupBy(x => new { x.Id, x.GroupTitle }))
+                {
+                    <div class="mobile-dropdown">
+                        <div class="mobile-dropdown-header mobile-nav-link flex items-center justify-between p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] transition-colors cursor-pointer">
+                            <div class="flex items-center gap-2.5">
+                                <span class="material-icon text-gray-500 text-base" aria-hidden="true">smartphone</span>
+                                <span>@item.Key.GroupTitle</span>
+                            </div>
+                            <span class="material-icon mobile-dropdown-arrow" aria-hidden="true">expand_more</span>
+                        </div>
+                        <div class="mobile-dropdown-content mobile-submenu hidden">
+                            @foreach (var sub in item)
+                            {
+                                <a href="{{base}}/pages/products.html?cat=case&material=silicone" class="flex items-center gap-2.5 p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-colors pr-8 text-sm">
+                                    <span class="material-icon text-sm" aria-hidden="true">circle</span>
+                                    <span>@sub.Title</span>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="border-t border-gray-200 my-2 mx-2"></div>
+                <a href="{{base}}/pages/about-us.html#contact" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="contact">
+                    <span class="material-icon text-gray-500 text-base" aria-hidden="true">contact_support</span>
+                    <span>ارتباط با ما</span>
+                </a>
+
+                <div class="border-t border-gray-200 my-2 mx-2"></div>
+                <a href="{{base}}/pages/favorites.html" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="favorites">
+                    <span class="material-icon text-gray-500 text-base" aria-hidden="true">favorite_border</span>
+                    <span>محبوب‌ها</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+</div>
+        </header>

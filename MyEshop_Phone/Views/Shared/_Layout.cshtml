@@ -1,49 +1,275 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MyEshop_Phone</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MyEshop_Phone.styles.css" asp-append-version="true" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>@ViewData["Title"]</title>
+    <meta content="ماهان شاپ؛ فروشگاه آنلاین لوازم جانبی موبایل با تنوع بالا، ارسال سریع و ضمانت اصالت." name="description" />
+    <meta content="#F8FAFC" name="theme-color" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <link href="/Layout/assets/css/style.css" rel="stylesheet">
+    </link></link>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MyEshop_Phone</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+<body class="bg-[#F8FAFC] text-gray-900 overflow-x-hidden" data-auth="guest">
+    <div aria-hidden="true" id="top"></div>
+    <!-- هدر اصلی: ناوبری، جستجو و وضعیت ورود کاربر -->
+    @* <div data-include="header"></div> *@
+    <header id="navbar" class="fixed top-0 z-50 bg-[#F8FAFC]/90 backdrop-blur-md border-b border-gray-200/50 transition-all duration-300">
+
+        <!-- ردیف بالا: لوگو، جستجو و اکشن‌های کاربر -->
+        <div id="navbar-top" class="max-w-7xl mx-auto px-4 pt-3 pb-3 md:pb-0">
+            <div id="navbar-row" class="flex flex-wrap md:flex-nowrap items-center justify-between gap-4">
+
+                <!-- منوی موبایل (چپ)، لوگو (وسط) -->
+                <div id="navbar-menu" class="flex items-center shrink-0 md:hidden">
+                    <!-- دکمه باز کردن منو -->
+                    <button id="mobile-menu-toggle" type="button" class="md:hidden nav-icon-btn ripple p-2 rounded-lg text-gray-700" aria-label="باز کردن منو" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="material-icon" aria-hidden="true">menu</span>
+                    </button>
+                </div>
+
+                <!-- لوگو -->
+                <a id="navbar-logo" href="/" class="flex items-center gap-2 group logo-container select-none whitespace-nowrap" aria-label="رفتن به صفحه اصلی">
+                    <span class="material-icon navbar-brand-icon text-[#2563EB] text-lg sm:text-xl md:text-2xl leading-none" aria-hidden="true">storefront</span>
+                    <span class="navbar-brand-text font-black text-gray-800 text-base sm:text-lg md:text-2xl leading-none">ماهان شاپ</span>
+                </a>
+
+                <!-- جستجو: مسیر و پارامترها توسط بک‌اند تنظیم شوند -->
+                <div id="navbar-search" class="order-last md:order-none w-full md:max-w-xl mx-auto md:mx-6 transition-all duration-300">
+                    <form class="relative group search-container" role="search" action="/Search" method="get">
+                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                            <span class="material-icon text-gray-500 group-focus-within:text-[#2563EB] transition-colors" aria-hidden="true">search</span>
+                        </div>
+                        <input type="search"
+                               name="q"
+                               enterkeyhint="search"
+                               aria-label="جستجوی محصولات"
+                               class="w-full h-12 pr-12 pl-4 rounded-full bg-[#EFF6FF] border border-transparent hover:bg-[#DBEAFE]/50 focus:bg-white focus:border-[#2563EB] focus:shadow-[0_4px_12px_rgba(37,99,235,0.15)] outline-none transition-all duration-300 placeholder-gray-500 text-sm md:text-base"
+                               placeholder="جستجو در بین هزاران محصول...">
+                    </form>
+                </div>
+
+                <!-- اکشن‌های کاربر: علاقه‌مندی، سبد خرید، حساب -->
+                <nav id="navbar-actions" class="flex items-center gap-2 md:gap-3 shrink-0" aria-label="ابزارهای کاربری">
+
+                    <!-- علاقه‌مندی‌ها -->
+                    <a href="{{base}}/pages/favorites.html" class="hidden md:flex nav-icon-btn ripple w-10 h-10 rounded-lg items-center justify-center text-gray-600" title="علاقه‌مندی‌ها" aria-label="علاقه‌مندی‌ها">
+                        <span class="material-icon" aria-hidden="true">favorite_border</span>
+                    </a>
+
+                    <!-- ورود (موبایل) -->
+                    <a href="{{base}}/pages/login.html" class="md:hidden nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="ورود" aria-label="ورود">
+                        <span class="material-icon" aria-hidden="true">login</span>
+                    </a>
+
+                    <!-- سبد خرید -->
+                    <div id="cart-menu-wrapper" class="relative">
+                        <a href="{{base}}/pages/cart.html" id="cart-btn" class="nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="سبد خرید" aria-label="سبد خرید" aria-haspopup="dialog" aria-controls="cart-menu" aria-expanded="false">
+                            <span class="material-icon" aria-hidden="true">shopping_cart</span>
+                            <span id="cart-count-badge" class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white hidden z-10" aria-live="polite" aria-atomic="true">0</span>
+                        </a>
+                        <div id="cart-menu" class="cart-menu" role="dialog" aria-label="سبد خرید" aria-hidden="true" data-cart-menu tabindex="-1">
+                            <div class="cart-menu-panel">
+                                <div class="cart-menu-header">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-icon text-xl text-[#2563EB]" aria-hidden="true">shopping_cart</span>
+                                        <div>
+                                            <h4>سبد خرید</h4>
+                                            <p class="text-xs text-gray-500" data-cart-menu-status>نمایش خلاصه سفارش</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-semibold text-[#2563EB]" data-cart-menu-count>۰ کالا</span>
+                                </div>
+                                <div class="cart-menu-items" data-cart-menu-items>
+                                    <p class="text-xs text-gray-500 text-center">هنوز کالایی به سبد اضافه نشده است.</p>
+                                </div>
+                                <div class="cart-menu-footer">
+                                    <div class="cart-menu-total">
+                                        <span>جمع</span>
+                                        <strong data-cart-menu-total>۰ تومان</strong>
+                                    </div>
+                                    <div class="cart-menu-actions">
+                                        <a href="{{base}}/pages/cart.html" class="primary" aria-label="رفتن به صفحه سبد خرید">مشاهده سبد خرید</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- جداکننده (نمایش در دسکتاپ) -->
+                    <div class="hidden md:block w-px h-6 bg-gray-300 mx-1"></div>
+
+                    <!-- وضعیت ورود: بک‌اند مقدار data-auth را روی body تنظیم کند -->
+                    <!--
+                    <a href="{{base}}/pages/profile.html" class="auth-only hidden md:flex items-center gap-2 pl-1 pr-1 py-1 rounded-full hover:bg-[#EFF6FF] transition-all group profile-section" aria-label="حساب کاربری">
+                        <div class="w-8 h-8 bg-[#DBEAFE] rounded-full flex items-center justify-center text-[#1E3A8A]">
+                            <span class="material-icon text-lg" aria-hidden="true">person</span>
+                        </div>
+                        <span class="text-sm font-bold text-gray-700 group-hover:text-[#2563EB]">حساب کاربری</span>
+                    </a>
+
+                    <a href="{{base}}/pages/profile.html" class="auth-only md:hidden nav-icon-btn ripple w-10 h-10 rounded-full hover:bg-[#EFF6FF] flex items-center justify-center text-gray-600 hover:text-[#2563EB] transition-colors" aria-label="حساب کاربری">
+                        <span class="material-icon" aria-hidden="true">person</span>
+                    </a>
+                    -->
+
+                    <div class="guest-only hidden md:flex header-cta-group">
+                        <a href="{{base}}/pages/login.html" class="header-cta header-cta--ghost" aria-label="ورود">
+                            <span class="material-icon text-lg" aria-hidden="true">login</span>
+                            <span>ورود</span>
+                        </a>
+                        <a href="{{base}}/pages/register.html" class="header-cta header-cta--primary" aria-label="ثبت نام">
+                            <span class="material-icon text-lg" aria-hidden="true">person_add</span>
+                            <span>ثبت نام</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+            <!-- ردیف پایین: دسته‌بندی‌ها -->
+            <div id="navbar-bottom" class="border-t border-gray-100/80 md:border-none hidden md:block transition-all duration-300">
+                <nav class="secondary-nav flex items-center justify-center w-full gap-1 md:gap-5 overflow-x-auto no-scrollbar py-2 md:py-2 mask-image-fade" aria-label="دسته‌بندی‌ها">
+                    <a href="/" class="secondary-nav-link" data-nav-id="home">
+                        <span class="material-icon text-lg" aria-hidden="true">home</span>
+                        خانه
+                    </a>
+                    <a href="{{base}}/pages/products.html" class="secondary-nav-link" data-nav-id="products">
+                        <span class="material-icon text-lg" aria-hidden="true">apps</span>
+                        تمام محصولات
+                    </a>
+                    <div class="w-px h-4 bg-gray-300 mx-1 shrink-0 hidden md:block"></div>
+                    @await Component.InvokeAsync("HeaderMenu")
+                    <div class="w-px h-4 bg-gray-300 mx-1 shrink-0 hidden md:block"></div>
+                    <a href="/AboutUs" class="secondary-nav-link" data-nav-id="contact">
+                        <span class="material-icon text-lg" aria-hidden="true">contact_support</span>
+                        ارتباط با ما
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    @await Component.InvokeAsync("Header")
+
+    @RenderBody()
+    @* <div data-include="footer"></div> *@
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-shell">
+            <div class="footer-top">
+                <div class="footer-contact">
+                    <div class="footer-brand">
+                        <span class="material-icon footer-brand-icon" aria-hidden="true">storefront</span>
+                        <div class="footer-brand-text">
+                            <div class="footer-brand-title">ماهان شاپ</div>
+                            <div class="footer-brand-sub">فروشگاه آنلاین لوازم جانبی موبایل</div>
+                        </div>
+                    </div>
+
+                    <span class="footer-divider" aria-hidden="true"></span>
+
+                    <div class="footer-contact-item">
+                        <span class="material-icon" aria-hidden="true">call</span>
+                        <div class="footer-contact-text">
+                            <span class="footer-contact-title">تماس با پشتیبانی</span>
+                            <a class="footer-contact-link" href="tel:09121234567" dir="ltr">۰۹۱۲ ۱۲۳ ۴۵۶۷</a>
+                        </div>
+                    </div>
+
+                    <span class="footer-divider" aria-hidden="true"></span>
+
+                    <div class="footer-contact-item">
+                        <span class="material-icon" aria-hidden="true">location_on</span>
+                        <div class="footer-contact-text">
+                            <span class="footer-contact-title">نشانی</span>
+                            <span class="footer-contact-desc">تهران، میدان آزادی، خیابان آزادی، پلاک ۱۱۰</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-badge footer-badge--desktop">
+                    <div class="footer-enamad" aria-label="نماد اعتماد الکترونیکی">
+                        <div class="footer-enamad-mark">e</div>
+                        <div class="footer-enamad-lines">
+                            <span>نماد اعتماد</span>
+                            <span class="footer-enamad-sub">برای فروشگاه ماهان</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MyEshop_Phone - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="footer-links">
+                <div class="footer-links-grid">
+                    <details class="footer-accordion">
+                        <summary class="footer-summary">
+                            <span>اطلاعات</span>
+                            <span class="footer-summary-icon" aria-hidden="true">
+                                <span class="material-icon icon-arrow">expand_more</span>
+                            </span>
+                        </summary>
+                        <ul class="footer-links-list">
+                            <li><a href="/">صفحه اصلی</a></li>
+                            <li><a href="/AboutUs">درباره ما</a></li>
+                        </ul>
+                    </details>
+
+                    <details class="footer-accordion">
+                        <summary class="footer-summary">
+                            <span>خرید و سفارش</span>
+                            <span class="footer-summary-icon" aria-hidden="true">
+                                <span class="material-icon icon-arrow">expand_more</span>
+                            </span>
+                        </summary>
+                        <ul class="footer-links-list">
+                            <li><a href="{{base}}/pages/products.html">تمام محصولات</a></li>
+                            <li><a href="{{base}}/pages/favorites.html">محبوب‌ها</a></li>
+                            <li><a href="{{base}}/pages/cart.html">سبد خرید</a></li>
+                        </ul>
+                    </details>
+
+                    <details class="footer-accordion">
+                        <summary class="footer-summary">
+                            <span>دسترسی سریع</span>
+                            <span class="footer-summary-icon" aria-hidden="true">
+                                <span class="material-icon icon-arrow">expand_more</span>
+                            </span>
+                        </summary>
+                        <ul class="footer-links-list">
+                            <li><a href="{{base}}/pages/products.html?cat=case">قاب گوشی</a></li>
+                            <li><a href="{{base}}/pages/products.html?cat=phone">گوشی هوشمند</a></li>
+                            <li><a href="{{base}}/pages/products.html?cat=charger">شارژ</a></li>
+                            <li><a href="{{base}}/pages/products.html?cat=airpod">کاور ایرپاد</a></li>
+                            <li><a href="{{base}}/pages/products.html?cat=glass">گلس و محافظ</a></li>
+                            <li><a href="{{base}}/pages/products.html?cat=gadget">گجت</a></li>
+                            <li><a href="{{base}}/pages/products.html?cat=accessory">اکسسوری</a></li>
+                        </ul>
+                    </details>
+
+                    <div class="footer-badge footer-badge--mobile">
+                        <div class="footer-enamad" aria-label="نماد اعتماد الکترونیکی">
+                            <div class="footer-enamad-mark">e</div>
+                            <div class="footer-enamad-lines">
+                                <span>نماد اعتماد</span>
+                                <span class="footer-enamad-sub">برای فروشگاه ماهان</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                کلیه حقوق این وب‌سایت متعلق به ماهان شاپ است - Copyright 2015-2026 © MahanShop. All rights reserved.
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <script defer="" src="/Layout/assets/js/layout.js"></script>
+    <script defer="" src="/Layout/assets/js/script.js"></script>
+
 </body>
 </html>
+

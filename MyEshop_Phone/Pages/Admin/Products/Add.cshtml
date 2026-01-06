@@ -18,6 +18,18 @@
             </option>
         }
     </select><br />
+    <label>انتخاب زیر منو</label>
+    <select asp-for="AddProduct.SubmenuGroupsId" class="form-control" style="margin-top:20px">
+        <option>
+            ----
+        </option>
+        @foreach (var item in Model.AddProduct.ShowSubGroups)
+        {
+            <option value="@item.Id">
+                @item.Title
+            </option>
+        }
+    </select><br />
     <label>نام</label>
     <span asp-validation-for="AddProduct.Title" class="text-danger"></span>
     <input asp-for="AddProduct.Title" class="form-control" />
@@ -37,7 +49,9 @@
     <label>عکس</label>
     <span asp-validation-for="AddProduct.imgUp" class="text-danger"></span>
     <input asp-for="AddProduct.imgUp" />
-    <input type="submit" value="ثبت" class="btn btn-success" style="margin: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;" />
+    <label style="margin-top:20px">محصول پیشنهادی</label>
+    <input asp-for="AddProduct.RecommendedProducts" /><br />
+    <input type="submit" value="ثبت" class="btn btn-success" style="margin: 10px;padding: 10px;width: 50px;font-family: system-ui;font-size: medium;margin-top:10px" />
 </form>
 
 @section Scripts {

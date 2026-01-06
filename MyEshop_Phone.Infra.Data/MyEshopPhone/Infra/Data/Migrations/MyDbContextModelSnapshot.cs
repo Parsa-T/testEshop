@@ -133,9 +133,15 @@ namespace MyEshopPhone.Infra.Data.Migrations
                     b.Property<int>("ProductGroupsId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("RecommendedProducts")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ShortDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SubmenuGroupsId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -148,6 +154,8 @@ namespace MyEshopPhone.Infra.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductGroupsId");
+
+                    b.HasIndex("SubmenuGroupsId");
 
                     b.ToTable("Products");
                 });
@@ -427,7 +435,14 @@ namespace MyEshopPhone.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MyEshop_Phone.Domain.Model._SubmenuGroups", "submenuGroups")
+                        .WithMany("products")
+                        .HasForeignKey("SubmenuGroupsId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("products_Groups");
+
+                    b.Navigation("submenuGroups");
                 });
 
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._ProductsColor", b =>
@@ -570,6 +585,11 @@ namespace MyEshopPhone.Infra.Data.Migrations
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._Products_comment", b =>
                 {
                     b.Navigation("Children");
+                });
+
+            modelBuilder.Entity("MyEshop_Phone.Domain.Model._SubmenuGroups", b =>
+                {
+                    b.Navigation("products");
                 });
 
             modelBuilder.Entity("MyEshop_Phone.Domain.Model._Users", b =>

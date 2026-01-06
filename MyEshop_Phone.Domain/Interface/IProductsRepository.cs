@@ -18,6 +18,10 @@ namespace MyEshop_Phone.Domain.Interface
         Task<_Products?> GetProductWithFeatures(int id);
         Task Delete(_Products products);
         Task<_Products> GetProductsIdinGroups(int id);
+        Task<IEnumerable<_Products>> RecommendedProducts();
+        Task<IEnumerable<_Products>> BestSeller(int take = 7);
+        Task<IEnumerable<_Products>> ProtectionPhone(int take = 7);
+        Task<IEnumerable<_Products>> SearchProduct(string search);
         Task Save();
     }
 }

@@ -57,6 +57,15 @@ namespace MyEshop_Phone.Infra.Data.Context
             //modelBuilder.Entity<_ProductsColor>()
             //    .Property(x=>x.ColorId)
             //    .IsRequired(false);
+
+            modelBuilder.Entity<_Products>()
+                .HasOne(p=>p.submenuGroups)
+                .WithMany(sg=>sg.products)
+                .HasForeignKey(p=>p.SubmenuGroupsId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<_Products>()
+                .Property(x=>x.SubmenuGroupsId)
+                .IsRequired(false);
         }
     }
 }

@@ -14,4 +14,11 @@ namespace MyEshop_Phone.Application.DTO
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string GroupTitle { get; set; }
     }
+    public class ShowGroupsSubGroupDTO
+    {
+        public int Id { get; set; }
+        public string GroupTitle { get; set; }
+        public int SubId { get; set; }
+        public string Title { get; set; }
+    }
 }

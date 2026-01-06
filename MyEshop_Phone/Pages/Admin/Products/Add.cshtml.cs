@@ -31,6 +31,8 @@ namespace MyEshop_Phone.Pages.Admin.Products
                 ShortDescription = AddProduct.ShortDescription,
                 ProductGroupsId = AddProduct.ProductGroupsId,
                 Count = AddProduct.Count,
+                SubmenuGroupsId = AddProduct.SubmenuGroupsId,
+                RecommendedProducts = AddProduct.RecommendedProducts,
             };
             await _productsServices.RegisterProducts(product);
             await _productsServices.Save();

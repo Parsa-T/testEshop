@@ -14,6 +14,8 @@ namespace MyEshop_Phone.Domain.Model
         public int Id { get; set; }
         [Display(Name ="عنوان گروه")]
         public int ProductGroupsId { get; set; }
+        [Display(Name ="زیر منو")]
+        public int? SubmenuGroupsId { get; set; }
         [Display(Name ="نام محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Title { get; set; }
@@ -31,11 +33,15 @@ namespace MyEshop_Phone.Domain.Model
         public DateTime CreateTime { get; set; }
         [Display(Name ="تعداد محصول")]
         public int? Count { get; set; }
+        [Display(Name ="محصولات پیشنهادی")]
+        public bool RecommendedProducts { get; set; }
         #region Rel
         public ICollection<_OrderDetails> orderDetails { get; set; }
         public ICollection<_Products_comment> products_Comments { get; set; }
         [ForeignKey("ProductGroupsId")]
         public virtual _Products_Groups products_Groups { get; set; }
+        [ForeignKey("SubmenuGroupsId")]
+        public virtual _SubmenuGroups submenuGroups { get; set; }
         public ICollection<_Products_Features> products_Features { get; set; }
         public ICollection<_Products_Tags> products_Tags { get; set; }
         public ICollection<_Products_Galleries> products_Galleries { get; set; }

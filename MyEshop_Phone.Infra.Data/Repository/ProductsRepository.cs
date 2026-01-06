@@ -70,5 +70,25 @@ namespace MyEshop_Phone.Infra.Data.Repository
         {
            return await _db.Products.Include(p => p.products_Groups).SingleOrDefaultAsync(pr => pr.Id == id);
         }
+
+        public async Task<IEnumerable<_Products>> RecommendedProducts()
+        {
+            return await _db.Products.Where(p=>p.RecommendedProducts==true).ToListAsync();
+        }
+
+        public async Task<IEnumerable<_Products>> BestSeller(int take = 7)
+        {
+            return _db.Products.OrderByDescending(p=>p.CreateTime).Take(take);
+        }
+
+        public async Task<IEnumerable<_Products>> ProtectionPhone(int take = 7)
+        {
+            return await _db.Products.Where(p => EF.Functions.Like(p.Title, "%قاب%")).OrderByDescending(p=>p.CreateTime).Take(take).ToListAsync();
+        }
+
+        public async Task<IEnumerable<_Products>> SearchProduct(string search)
+        {
+            return _db.Products.Where(p => p.Title.Contains(search) || p.ShortDescription.Contains(search) || p.Text.Contains(search)).Distinct();
+        }
     }
 }

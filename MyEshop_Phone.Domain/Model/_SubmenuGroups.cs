@@ -19,6 +19,7 @@ namespace MyEshop_Phone.Domain.Model
         #region Rel
         [ForeignKey("Products_GroupsId")]
         public virtual _Products_Groups groups { get; set; }
+        public ICollection<_Products> products { get; set; }
         #endregion
     }
 }

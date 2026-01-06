@@ -16,4 +16,8 @@ namespace MyEshop_Phone.Application.Interface
         Task RemoveGroups(_Products_Groups groups);
         Task Save();
     }
+    public interface IGroupsSubMenuServices
+    {
+        Task<List<ShowGroupsSubGroupDTO>> ShowAll();
+    }
 }
