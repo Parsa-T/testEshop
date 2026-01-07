@@ -34,6 +34,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
         {
             await _db.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<_ProductsColor>> ShowColorByID(int id)
+        {
+            return await _db.productsColors.Where(pc => pc.ProductId == id).Include(p=>p.color).ToListAsync();
+        }
     }
     public class PColorRepository : IPColorServices
     {
@@ -46,7 +51,7 @@ namespace MyEshop_Phone.Infra.Data.Repository
         public async Task<bool> Delete(int id)
         {
             var result = await _db.productsColors.FindAsync(id);
-            if(result==null)
+            if (result == null)
                 return false;
             _db.productsColors.Remove(result);
             await _db.SaveChangesAsync();
@@ -72,7 +77,7 @@ namespace MyEshop_Phone.Infra.Data.Repository
 
         public async Task<List<ProductWithColorsDto>> GetProductsWithColorsAsync(string? search)
         {
-            var query = _db.productsColors.Include(p=>p.products).Include(c=>c.color).AsQueryable();
+            var query = _db.productsColors.Include(p => p.products).Include(c => c.color).AsQueryable();
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(pc => pc.products.Title.Contains(search));

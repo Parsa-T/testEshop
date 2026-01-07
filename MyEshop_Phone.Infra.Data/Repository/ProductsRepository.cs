@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyEshop_Phone.Application.DTO;
+using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Domain.Interface;
 using MyEshop_Phone.Domain.Model;
 using MyEshop_Phone.Infra.Data.Context;
@@ -68,27 +69,48 @@ namespace MyEshop_Phone.Infra.Data.Repository
 
         public async Task<_Products> GetProductsIdinGroups(int id)
         {
-           return await _db.Products.Include(p => p.products_Groups).SingleOrDefaultAsync(pr => pr.Id == id);
+            return await _db.Products.Include(p => p.products_Groups).SingleOrDefaultAsync(pr => pr.Id == id);
         }
 
         public async Task<IEnumerable<_Products>> RecommendedProducts()
         {
-            return await _db.Products.Where(p=>p.RecommendedProducts==true).ToListAsync();
+            return await _db.Products.Where(p => p.RecommendedProducts == true).ToListAsync();
         }
 
         public async Task<IEnumerable<_Products>> BestSeller(int take = 7)
         {
-            return _db.Products.OrderByDescending(p=>p.CreateTime).Take(take);
+            return _db.Products.OrderByDescending(p => p.CreateTime).Take(take);
         }
 
         public async Task<IEnumerable<_Products>> ProtectionPhone(int take = 7)
         {
-            return await _db.Products.Where(p => EF.Functions.Like(p.Title, "%قاب%")).OrderByDescending(p=>p.CreateTime).Take(take).ToListAsync();
+            return await _db.Products.Where(p => EF.Functions.Like(p.Title, "%قاب%")).OrderByDescending(p => p.CreateTime).Take(take).ToListAsync();
         }
 
         public async Task<IEnumerable<_Products>> SearchProduct(string search)
         {
             return _db.Products.Where(p => p.Title.Contains(search) || p.ShortDescription.Contains(search) || p.Text.Contains(search)).Distinct();
+        }
+
+        public async Task<IEnumerable<_Products>> ShowAllProducts()
+        {
+            return await _db.Products.Include(pg => pg.products_Groups).Include(sub => sub.submenuGroups).ToListAsync();
+        }
+    }
+    public class QueriProductsRepository : IQueriProductsServices
+    {
+        MyDbContext _db;
+        public QueriProductsRepository(MyDbContext context)
+        {
+            _db = context;
+        }
+        public async Task<_Products> ShowSingleProducts(int id)
+        {
+            var product = await _db.Products
+                 .Include(pg => pg.products_Galleries)
+                 .Include(pf => pf.products_Features)
+                 .SingleOrDefaultAsync(p => p.Id == id);
+            return product;
         }
     }
 }

@@ -22,6 +22,7 @@ namespace MyEshop_Phone.Domain.Interface
         Task<IEnumerable<_Products>> BestSeller(int take = 7);
         Task<IEnumerable<_Products>> ProtectionPhone(int take = 7);
         Task<IEnumerable<_Products>> SearchProduct(string search);
+        Task<IEnumerable<_Products>> ShowAllProducts();
         Task Save();
     }
 }

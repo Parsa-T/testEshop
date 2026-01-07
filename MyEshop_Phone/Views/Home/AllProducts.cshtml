@@ -1,6 +1,5 @@
 ﻿@using MyEshop_Phone.Domain.Model
 @model IEnumerable<_Products>
-
 <main id="main-content" class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-6 md:pb-8">
     <div class="lg:grid lg:grid-cols-12 lg:gap-8">
 
@@ -18,8 +17,10 @@
                 <!-- Search in filters -->
                 <div class="p-3 border-b border-gray-200 hidden lg:block filter-search">
                     <div class="search-shell relative w-full">
-                        <input type="search" id="filter-search" placeholder="جستجو در محصولات..." class="search-input text-sm pr-3 pl-10 py-2 w-full">
-                        <span class="material-icon search-icon absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">search</span>
+                        <form action="/Search" method="get">
+                            <input type="search" name="q" id="filter-search" placeholder="جستجو در محصولات..." class="search-input text-sm pr-3 pl-10 py-2 w-full">
+                            <span class="material-icon search-icon absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">search</span>
+                        </form>
                     </div>
                 </div>
 
@@ -33,27 +34,12 @@
                             <button data-category="all" class="category-filter-btn" type="button">
                                 <span class="category-label">تمام محصولات</span>
                             </button>
-                            <button data-category="accessory" class="category-filter-btn" type="button">
-                                <span class="category-label">اکسسوری</span>
-                            </button>
-                            <button data-category="case" class="category-filter-btn" type="button">
-                                <span class="category-label">قاب گوشی</span>
-                            </button>
-                            <button data-category="phone" class="category-filter-btn" type="button">
-                                <span class="category-label">گوشی هوشمند</span>
-                            </button>
-                            <button data-category="charger" class="category-filter-btn" type="button">
-                                <span class="category-label">شارژ</span>
-                            </button>
-                            <button data-category="airpod" class="category-filter-btn" type="button">
-                                <span class="category-label">کاور ایرپاد</span>
-                            </button>
-                            <button data-category="glass" class="category-filter-btn" type="button">
-                                <span class="category-label">گلس و محافظ</span>
-                            </button>
-                            <button data-category="gadget" class="category-filter-btn" type="button">
-                                <span class="category-label">گجت</span>
-                            </button>
+                            @foreach (var item in Model)
+                            {
+                                <button data-category="accessory" class="category-filter-btn" type="button">
+                                    <span class="category-label">@item.products_Groups.GroupTitle</span>
+                                </button>
+                            }
                         </div>
                     </details>
 
@@ -62,7 +48,22 @@
                             <span>فیلترها</span>
                             <span class="material-icon">expand_more</span>
                         </summary>
-                        <div id="dynamic-filters" class="dynamic-filters"></div>
+                        @foreach (var item in Model)
+                        {
+                            <div id="dynamic-filters" class="dynamic-filters">
+                                <details class="filter-subgroup" open="">
+                                    <summary class="filter-subgroup-summary">
+                                        <span>برند</span>
+                                        <span class="material-icon">expand_more</span>
+                                    </summary><div class="filter-options">
+                                        <label class="filter-option">
+                                            <input type="checkbox" class="filter-input" value="apple" data-filter-key="brand" data-normalized="apple">
+                                            <span>@item.submenuGroups.Title</span>
+                                        </label>
+                                    </div>
+                                </details>
+                            </div>
+                        }
                         <div id="dynamic-filters-empty" class="filter-empty hidden">
                             <p>برای این دسته فیلتر دیگری ثبت نشده است.</p>
                         </div>
@@ -120,8 +121,8 @@
                 <div class="products-header-main flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="products-header-sort flex items-center gap-3 flex-1 min-w-[220px]">
                         <span class="material-icon text-[#2563EB] text-2xl">sort</span>
-                        <label for="sort-by" class="font-semibold text-sm text-gray-700">تعداد "@Model.Count()" با عبارت "@ViewBag.Name" یافت شد.</label>
-                        @* <div class="relative flex-1 sm:flex-none sm:w-56">
+                        <label for="sort-by" class="font-semibold text-sm text-gray-700">مرتب‌سازی</label>
+                        <div class="relative flex-1 sm:flex-none sm:w-56">
                             <select id="sort-by" class="sort-select bg-white border border-gray-200 text-gray-900 text-sm rounded-2xl focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] block w-full pr-3 pl-10 py-2.5 appearance-none shadow-sm hover:shadow-md transition">
                                 <option value="newest">جدیدترین</option>
                                 <option value="oldest">قدیمی‌ترین</option>
@@ -129,7 +130,7 @@
                                 <option value="price-desc">قیمت: از زیاد به کم</option>
                             </select>
                             <span class="material-icon absolute left-3 top-1/2 -translate-y-1/2 text-[#2563EB] pointer-events-none text-lg">unfold_more</span>
-                        </div> *@
+                        </div>
                     </div>
                 </div>
                 <div class="filters-toolbar flex flex-col gap-3">
@@ -178,9 +179,7 @@
                             </div>
 
                             <div class="mt-4">
-                                <a href="/Product/@item.Id">
-                                    <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
-                                </a>
+                                <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
                                 <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: @item.ShortDescription</p>
                             </div>
 
@@ -192,7 +191,7 @@
                                     </div>
                                 </div>
 
-                                <div class="flex items-center gap-2" style="margin-top:40px">
+                                <div class="flex items-center gap-2">
                                     <button class="nav-icon-btn ripple product-like-btn w-10 h-10 rounded-2xl bg-white border border-gray-100 text-gray-700 flex items-center justify-center hover:bg-[#EFF6FF] transition" type="button" aria-label="افزودن به علاقه‌مندی">
                                         <span class="material-icon text-[22px]">favorite_border</span>
                                     </button>

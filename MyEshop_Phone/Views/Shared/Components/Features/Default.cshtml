@@ -1,0 +1,6 @@
+﻿@using MyEshop_Phone.Domain.Model
+@model IEnumerable<_Products_Features>
+@foreach (var item in Model)
+{
+    <div class="pd-spec"><span class="pd-spec__k">@item.features.FeaturesTitle</span><span class="pd-spec__v">@item.Value</span></div>
+}

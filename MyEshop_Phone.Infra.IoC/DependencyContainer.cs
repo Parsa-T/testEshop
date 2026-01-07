@@ -41,6 +41,7 @@ namespace MyEshop_Phone.Infra.IoC
             //Application and Data
             services.AddScoped<IPColorServices, PColorRepository>();
             services.AddScoped<IGroupsSubMenuServices, GroupsSubMenuRepository>();
+            services.AddScoped<IQueriProductsServices, QueriProductsRepository>();
         }
     }
 }

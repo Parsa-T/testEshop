@@ -61,5 +61,10 @@ namespace MyEshop_Phone.Infra.Data.Repository
         {
             return await _db.Products_Features.Include(pf => pf.products).Include(pf => pf.features).ToListAsync();
         }
+
+        public async Task<IEnumerable<_Products_Features>> ShowfeatureById(int id)
+        {
+            return await _db.Products_Features.Where(pf => pf.ProductsId == id).Include(p=>p.features).ToListAsync();
+        }
     }
 }

@@ -8,7 +8,7 @@
     </div>
     <!-- کارت‌ها توسط بک‌اند رندر شوند؛ data-* برای سبد/علاقه‌مندی استفاده می‌شود -->
     <div aria-label="اسلایدر قاب و محافظ‌های جدید" aria-live="off" aria-roledescription="carousel" class="products-row drag-scroll flex gap-3 md:gap-6 overflow-x-auto no-scrollbar pb-8 px-2 snap-x snap-mandatory" role="region" tabindex="0">
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
             <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-3.5 md:p-4 border border-gray-100 group shrink-0 snap-start w-[44vw] min-w-[44vw] sm:w-[270px] sm:min-w-[270px] md:w-[300px] md:min-w-[300px]" data-brand="Spigen" data-category="case" data-compare-price="850000" data-currency="IRR" data-image="https://placehold.co/900x900/1f2937/FFFFFF?text=Armor+Case" data-name="قاب ضدضربه سری Armor" data-pid="case-latest-001" data-price="690000" data-sku="CASE-ARMOR-01">
                 <div class="relative">
@@ -21,7 +21,9 @@
                     </div> *@
                 </div>
                 <div class="mt-3">
-                    <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
+                    <a href="/Product/@item.Id">
+                        <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
+                    </a>
                     <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: @item.ShortDescription</p>
                 </div>
                 <div class="mt-3 flex items-end justify-between gap-3">

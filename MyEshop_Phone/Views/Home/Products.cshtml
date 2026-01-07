@@ -1,0 +1,240 @@
+﻿@using MyEshop_Phone.Domain.Model
+@model _Products
+<link rel="stylesheet" href="/Layout/assets/css/style.css" />
+<link rel="stylesheet" href="/Layout/assets/css/product-detail.css" />
+<main id="main-content" class="max-w-7xl mx-auto px-4 pt-4 sm:pt-6 pb-16">
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-5" aria-label="breadcrumb">
+        <ol class="flex flex-nowrap items-center gap-2 whitespace-nowrap overflow-x-auto no-scrollbar">
+            <li><a class="hover:text-gray-700" href="/">خانه</a></li>
+            <li class="opacity-60">/</li>
+            <li><a class="hover:text-gray-700" href="/Products">محصولات</a></li>
+            <li class="opacity-60">/</li>
+            <li class="text-gray-700 font-medium" id="breadcrumb-title">جزئیات محصول</li>
+        </ol>
+    </nav>
+
+    <!-- Product layout -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6" id="product-root" data-pid="dkp_19787230">
+
+        <!-- RIGHT: Gallery -->
+        <div class="lg:col-span-5">
+            <div class="pd-card h-full">
+                <div class="pd-media">
+                    <img id="main-product-image"
+                         src="/AdminPanel/Photo/Products/@Model.ImageName"
+                         alt="تصویر محصول"
+                         class="pd-main-image"
+                         loading="lazy" />
+
+                    <button class="pd-nav-btn pd-nav-btn--prev" type="button" aria-label="تصویر قبلی">
+                        <span class="material-icon" aria-hidden="true">chevron_right</span>
+                    </button>
+                    <button class="pd-nav-btn pd-nav-btn--next" type="button" aria-label="تصویر بعدی">
+                        <span class="material-icon" aria-hidden="true">chevron_left</span>
+                    </button>
+
+                    <button id="favorite-toggle"
+                            type="button"
+                            class="pd-like-btn"
+                            aria-pressed="false"
+                            aria-label="افزودن به علاقه‌مندی"
+                            title="علاقه‌مندی">
+                        <span class="material-icon" aria-hidden="true">favorite_border</span>
+                    </button>
+                </div>
+
+                <div class="pd-thumbs" aria-label="تصاویر محصول">
+                    <button class="pd-thumb is-active" type="button" data-full-src="/AdminPanel/Photo/Products/@Model.ImageName" aria-label="تصویر 1">
+                        <img src="/AdminPanel/Photo/Products/@Model.ImageName" alt="نمای 1" loading="lazy" />
+                    </button>
+                    @foreach (var item in Model.products_Galleries)
+                    {
+                        <button class="pd-thumb is-active" type="button" data-full-src="/AdminPanel/Photo/Products/Gallerise/@item.ImageName" aria-label="تصویر 1">
+                            <img src="/AdminPanel/Photo/Products/Gallerise/@item.ImageName" alt="نمای 1" loading="lazy" />
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- LEFT/MIDDLE: Info -->
+        <div class="lg:col-span-4">
+            <div class="pd-card h-full">
+                <h1 id="product-title" class="text-base sm:text-lg font-bold leading-7 text-gray-900">
+                    @Model.Title
+                </h1>
+
+                <p id="product-subtitle" class="mt-1 text-xs sm:text-sm text-gray-500">
+                    برند: <span id="product-brand" class="text-gray-700 font-medium">@Model.ShortDescription</span>
+                </p>
+
+                <hr class="pd-divider" />
+
+                <div class="grid gap-4">
+                    <!-- Color -->
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-semibold text-gray-800">رنگ</span>
+                        </div>
+
+                        <div class="mt-3 flex items-center gap-2 flex-wrap">
+                            @await Component.InvokeAsync("ColorProducts",new{id = Model.Id})
+                        </div>
+                    </div>
+
+                    <!-- Highlights -->
+                    @* <div>
+                        <span class="text-sm font-semibold text-gray-800">ویژگی‌های کلیدی</span>
+                        <ul class="mt-2 space-y-2 text-sm text-gray-600">
+                            <li class="pd-bullet">صفحه‌نمایش 6.7 اینچ</li>
+                            <li class="pd-bullet">حافظه 256GB / رم 8GB</li>
+                            <li class="pd-bullet">باتری 5000mAh</li>
+                            <li class="pd-bullet">پشتیبانی از دو سیم‌کارت</li>
+                        </ul>
+                    </div> *@
+
+                    <!-- Stock / Warranty -->
+                    @if (Model.Count > 0)
+                    {
+                        <div class="flex items-center justify-between gap-3 text-sm">
+                            <div class="inline-flex items-center gap-2 text-emerald-600">
+                                <span class="material-icon text-[18px]" aria-hidden="true">check_circle</span>
+                                <span class="font-medium">موجود در انبار</span>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex items-center justify-between gap-3 text-sm">
+                            <div class="inline-flex items-center gap-2 text-emerald-600">
+                                @* <span class="material-icon text-[18px]" aria-hidden="true">check_circle</span> *@
+                                <span style="color:red" class="font-medium">این محصول موجود نمیباشد</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- FAR LEFT: Buy box -->
+        <div class="lg:col-span-3">
+            <div class="pd-buy pd-card">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <div class="text-xs text-gray-500">قیمت</div>
+                        <div class="mt-1">
+                            <span id="product-price" class="text-lg font-extrabold text-gray-900" data-price="@Model.Price.ToString("N0")">@Model.Price.ToString("N0")</span>
+                            <span class="text-sm font-semibold text-gray-600"> تومان</span>
+                        </div>
+                    </div>
+
+                    <div class="text-xs text-gray-500 text-left">
+                        <div class="inline-flex items-center gap-1">
+                            <span class="material-icon text-[18px]" aria-hidden="true">local_shipping</span>
+                            ارسال سریع
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="pd-divider" />
+
+                <button id="add-to-cart-btn" type="button" class="pd-cta w-full">
+                    <span class="material-icon pd-cta__icon" aria-hidden="true">shopping_cart</span>
+                    <span class="pd-cta__label" data-cta-label>افزودن به سبد خرید</span>
+                </button>
+
+                <!-- Quantity -->
+                <div id="qty-row" class="pd-qty-row flex items-center justify-between gap-3" aria-hidden="true">
+                    <span class="text-sm font-semibold text-gray-800">تعداد</span>
+                    <div class="pd-qty" aria-label="تعداد محصول">
+                        <button type="button" class="pd-qty__btn" data-qty="dec" aria-label="کم کردن">-</button>
+                        <input id="qty-input" type="text" inputmode="numeric" value="1" class="pd-qty__input" aria-label="تعداد" />
+                        <button type="button" class="pd-qty__btn" data-qty="inc" aria-label="زیاد کردن">+</button>
+                    </div>
+                </div>
+
+                <div class="mt-3 grid gap-2 text-xs text-gray-500">
+                    <div class="flex items-center gap-2">
+                        <span class="material-icon text-[18px]" aria-hidden="true">verified</span>
+                        ضمانت اصالت و سلامت کالا
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="material-icon text-[18px]" aria-hidden="true">support_agent</span>
+                        پشتیبانی ۲۴/۷
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Tabs + content -->
+        <div class="lg:col-span-12">
+            <div class="pd-card mt-1">
+                <div class="pd-tabs" role="tablist" aria-label="اطلاعات محصول">
+                    <button class="pd-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="tab-desc" data-tab="desc">معرفی</button>
+                    <button class="pd-tab" type="button" role="tab" aria-selected="false" aria-controls="tab-specs" data-tab="specs">مشخصات</button>
+                </div>
+
+                <div class="pt-4">
+                    <section id="tab-desc" class="pd-panel" role="tabpanel">
+                        <h2 class="text-sm font-bold text-gray-900">معرفی محصول</h2>
+                        <p class="mt-3 text-sm leading-7 text-gray-600">
+                            @Html.Raw(Model.Text)
+                        </p>
+
+                        @* <div class="mt-4 grid sm:grid-cols-3 gap-3">
+                            <div class="pd-mini">
+                                <span class="pd-mini__k">نمایشگر</span>
+                                <span class="pd-mini__v">6.7 اینچ</span>
+                            </div>
+                            <div class="pd-mini">
+                                <span class="pd-mini__k">حافظه</span>
+                                <span class="pd-mini__v">256GB</span>
+                            </div>
+                            <div class="pd-mini">
+                                <span class="pd-mini__k">باتری</span>
+                                <span class="pd-mini__v">5000mAh</span>
+                            </div>
+                        </div> *@
+                    </section>
+
+                    <section id="tab-specs" class="pd-panel hidden" role="tabpanel">
+                        <div class="flex items-center justify-between gap-3">
+                            <h2 class="text-sm font-bold text-gray-900">مشخصات</h2>
+                        </div>
+
+                        <div class="mt-4 pd-specs" id="specs-list">
+                            @await Component.InvokeAsync("Features",new{id = Model.Id})
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<script defer src="/Layout/assets/js/script.js"></script>
+<script defer src="/Layout/assets/js/product-detail.js"></script>
+
+<div id="pd-lightbox" class="pd-lightbox" aria-hidden="true" role="dialog" aria-label="نمایش تصویر محصول" aria-modal="true" tabindex="-1">
+    <div class="pd-lightbox__inner" role="document">
+        <button class="pd-lightbox__close" type="button" data-lightbox-close aria-label="بستن">
+            <span class="material-icon" aria-hidden="true">close</span>
+        </button>
+
+        <div class="pd-lightbox__stage">
+            <img id="pd-lightbox-image" alt="تصویر محصول" />
+            <div id="pd-lightbox-loader" class="pd-lightbox__loader" aria-live="polite">در حال بارگذاری...</div>
+        </div>
+
+    </div>
+
+    <div class="pd-lightbox__toolbar" aria-hidden="false">
+        <button class="pd-lightbox__nav" type="button" data-lightbox-prev aria-label="تصویر قبلی">
+            <span class="material-icon" aria-hidden="true">chevron_right</span>
+        </button>
+        <span id="pd-lightbox-counter" class="pd-lightbox__counter">1 / 1</span>
+        <button class="pd-lightbox__nav" type="button" data-lightbox-next aria-label="تصویر بعدی">
+            <span class="material-icon" aria-hidden="true">chevron_left</span>
+        </button>
+    </div>
+</div>

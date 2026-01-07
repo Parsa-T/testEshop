@@ -1,0 +1,9 @@
+﻿@using MyEshop_Phone.Domain.Model
+@model IEnumerable<_ProductsColor>
+@foreach (var item in Model)
+{
+    <label class="pd-color" aria-label="مشکی">
+        <input type="radio" name="color" value="مشکی" checked />
+        <span class="pd-color__dot" style="background:@(item.color.Name)"></span>
+    </label>
+}

@@ -11,6 +11,7 @@ namespace MyEshop_Phone.Domain.Interface
     {
         Task<IEnumerable<_ProductsColor>> GetAllAsync();
         Task AddProductColor(_ProductsColor productsColor);
+        Task<IEnumerable<_ProductsColor>> ShowColorByID(int id);
         Task Save();
     }
 }

@@ -21,6 +21,11 @@ namespace MyEshop_Phone.Application.Interface
         Task<IEnumerable<_Products>> BestSeller();
         Task<IEnumerable<_Products>> ShowProtectionPhone();
         Task<IEnumerable<_Products>> ReSearch(string search);
+        Task<IEnumerable<_Products>> GetAllProduct();
         Task Save();
+    }
+    public interface IQueriProductsServices
+    {
+        Task<_Products> ShowSingleProducts(int id);
     }
 }

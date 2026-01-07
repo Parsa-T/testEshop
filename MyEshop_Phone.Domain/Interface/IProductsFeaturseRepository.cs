@@ -14,6 +14,7 @@ namespace MyEshop_Phone.Domain.Interface
         Task AddAsync(_Products_Features products_Features);
         Task<IEnumerable<_Products_Features>> ShowAllProducts_Featurse();
         Task<bool> DeleteProductsFeatures(int id);
+        Task<IEnumerable<_Products_Features>> ShowfeatureById(int id);
         Task Save();
     }
 }

@@ -66,6 +66,11 @@ namespace MyEshop_Phone.Application.Services
             }).ToList();
         }
 
+        public async Task<IEnumerable<_Products>> GetAllProduct()
+        {
+            return await _productsRepository.ShowAllProducts();
+        }
+
         public async Task<ShowProductsDTO> GetAllProducts()
         {
             var products = await _productsGroupeRepository.GetAllGroups();
