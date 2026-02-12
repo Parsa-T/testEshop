@@ -30,6 +30,20 @@ namespace MyEshop_Phone.Infra.Data.Repository
             _db.Users.Remove(users);
         }
 
+        public async Task<bool> FindByNumber(string number)
+        {
+            try
+            {
+                return await _db.Users.AnyAsync(u => u.Number == number);
+
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<_Users>> GetAllUsers()
         {
             var result = await _db.Users.ToListAsync();
@@ -39,6 +53,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
         public async Task<_Users> GetUserById(int id)
         {
             return await _db.Users.SingleOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<_Users> IsExistUser(string number)
+        {
+            return await _db.Users.SingleOrDefaultAsync(u => u.Number == number);
         }
 
         public async Task Save()

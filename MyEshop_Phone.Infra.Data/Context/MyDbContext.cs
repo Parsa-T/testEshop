@@ -41,6 +41,15 @@ namespace MyEshop_Phone.Infra.Data.Context
             modelBuilder.Entity<_Users>()
                 .Property(x => x.ProductsId)
                 .IsRequired(false);
+            modelBuilder.Entity<_Users>()
+                .Property(x => x.Number)
+                .IsRequired(false);
+            modelBuilder.Entity<_Users>()
+                .Property(x => x.StateName)
+                .IsRequired(false);
+            modelBuilder.Entity<_Users>()
+                .Property(x => x.UrlPhoto)
+                .IsRequired(false);
 
             modelBuilder.Entity<_ProductsColor>()
                 .HasOne(c=>c.products)

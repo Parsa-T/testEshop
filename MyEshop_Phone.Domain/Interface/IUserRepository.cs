@@ -16,5 +16,7 @@ namespace MyEshop_Phone.Domain.Interface
         Task<_Users> GetUserById(int id);
         Task UpdateUser(_Users users);
         Task DeleteUsers(_Users users);
+        Task<bool> FindByNumber(string number);
+        Task<_Users> IsExistUser(string number);
     }
 }

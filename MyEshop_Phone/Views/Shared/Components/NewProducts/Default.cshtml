@@ -4,7 +4,7 @@
 <section class="page-section max-w-7xl mx-auto px-4">
     <div class="flex justify-between items-center mb-6 md:mb-8">
         <h2 class="text-xl md:text-2xl font-bold text-[#1D1B20]">جدیدترین محصولات</h2>
-        <a class="text-sm md:text-base text-[#2563EB] font-medium hover:underline" href="pages/products.html?sort=new">مشاهده همه</a>
+        <a class="text-sm md:text-base text-[#2563EB] font-medium hover:underline" href="/Products">مشاهده همه</a>
     </div>
     <!-- کارت‌ها توسط بک‌اند رندر شوند؛ data-* برای سبد/علاقه‌مندی استفاده می‌شود -->
     <div aria-label="اسلایدر جدیدترین محصولات" aria-live="off" aria-roledescription="carousel" class="products-row drag-scroll flex gap-3 md:gap-6 overflow-x-auto no-scrollbar pb-8 px-2 snap-x snap-mandatory" role="region" tabindex="0">
@@ -36,12 +36,15 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button aria-label="افزودن به علاقه‌مندی" class="nav-icon-btn ripple w-10 h-10 rounded-2xl bg-white border border-gray-100 text-gray-700 flex items-center justify-center hover:bg-[#EFF6FF] transition" type="button">
-                            <span class="material-icon text-[22px]">favorite_border</span>
-                        </button>
-                        <button aria-label="افزودن به سبد خرید" class="nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
-                            <span class="material-icon text-[22px]">add</span>
-                        </button>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button aria-label="افزودن به علاقه‌مندی" class="nav-icon-btn ripple w-10 h-10 rounded-2xl bg-white border border-gray-100 text-gray-700 flex items-center justify-center hover:bg-[#EFF6FF] transition" type="button">
+                                <span class="material-icon text-[22px]">favorite_border</span>
+                            </button>
+                            <button aria-label="افزودن به سبد خرید" class="nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
+                                <span class="material-icon text-[22px]">add</span>
+                            </button>
+                        }
                     </div>
                 </div>
             </article>

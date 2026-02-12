@@ -15,5 +15,6 @@ namespace MyEshop_Phone.Application.Interface
         Task AddSubMenuAsync(_SubmenuGroups submenuGroups);
         Task<SubMenuGroupsDTO?> GetSubGroupsForId(int id);
         Task UpdateSubMenuAsync(SubMenuGroupsDTO dTO);
+        Task<IEnumerable<_Products>> ShowSubMenuById(int id);
     }
 }

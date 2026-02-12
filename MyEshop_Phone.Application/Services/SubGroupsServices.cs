@@ -58,6 +58,11 @@ namespace MyEshop_Phone.Application.Services
             };
         }
 
+        public async Task<IEnumerable<_Products>> ShowSubMenuById(int id)
+        {
+            return await _subMenuGroupsRepository.GetSubMenuById(id);
+        }
+
         public async Task<IEnumerable<_SubmenuGroups>> ShowSubMenuGroups()
         {
            return await _subMenuGroupsRepository.GetAllSubGroups();

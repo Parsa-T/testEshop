@@ -40,6 +40,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
             return await _db.submenuGroups.Include(sg => sg.groups).ToListAsync();
         }
 
+        public async Task<IEnumerable<_Products>> GetSubMenuById(int id)
+        {
+            return await _db.Products.Where(p => p.SubmenuGroupsId == id).Include(s => s.submenuGroups).ToListAsync();
+        }
+
         public async Task<_SubmenuGroups> ShowSubMenuForId(int id)
         {
             return await _db.submenuGroups.Where(sg => sg.Id == id).Include(g => g.groups).SingleOrDefaultAsync();

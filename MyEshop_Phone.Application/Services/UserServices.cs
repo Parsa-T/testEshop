@@ -24,6 +24,11 @@ namespace MyEshop_Phone.Application.Services
             return users.Id;
         }
 
+        public async Task<bool> FindNumberAsync(string number)
+        {
+            return await _userRepository.FindByNumber(number);
+        }
+
         public async Task<int> GetCountUser()
         {
             return await _userRepository.UserCount();

@@ -1,0 +1,72 @@
+﻿@using MyEshop_Phone.Application.ViewModel
+@model VerifyCodeViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "ورود به سایت";
+}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F8FAFC" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https:; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>@ViewData["Title"]</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/Layout/assets/css/style.css" />
+</head>
+<body class="bg-[#F8FAFC] text-gray-900 overflow-x-hidden font-[Vazirmatn] no-navbar" data-auth="guest">
+    <div id="top" aria-hidden="true"></div>
+
+
+
+    <main id="main-content" class="min-h-screen flex items-center py-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="w-full max-w-md mx-auto bg-gradient-to-b from-white via-white to-slate-50 rounded-3xl border border-slate-100 shadow-2xl shadow-[#2563EB]/10 overflow-hidden sm:min-h-[560px]">
+                <div class="p-8 sm:p-10">
+                    <div class="flex items-center mb-6">
+                        <a href="/" class="flex items-center gap-2 text-gray-600 hover:text-[#2563EB] transition-colors" aria-label="بازگشت به فروشگاه">
+                            <span class="material-icon" aria-hidden="true">arrow_forward</span>
+                            <span class="font-bold">بازگشت</span>
+                        </a>
+                    </div>
+
+                    <div id="register-step" class="transition-opacity duration-300 ease-out">
+                        <div class="text-center mb-8">
+                            <a href="/" class="inline-flex items-center gap-2 mb-4" aria-label="بازگشت به صفحه اصلی">
+                                <span class="material-icon text-3xl text-[#2563EB]" aria-hidden="true">shopping_bag</span>
+                                <span class="font-black text-xl text-gray-900">ماهان شاپ</span>
+                            </a>
+                        </div>
+
+                        <form method="post" id="register-form" class="space-y-6" novalidate>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="firstname" class="block text-sm font-medium text-gray-700 mb-2">تایید شماره :</label>
+                                    <div class="relative">
+                                        <input asp-for="Code" placeholder="کد ارسالی را وارد کنید" style="width:350px" autocomplete="given-name" autocapitalize="off" maxlength="4" spellcheck="false" aria-describedby="register-error" class="auth-input w-full pl-4 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563EB]" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <button style="margin-right: 30%;background-color: #2563EB;padding: 14px;border-radius: 10px;width: 150px;color:#FFFFFF;font-weight:bold;" type="submit">
+                                تایید کد
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+    <script defer src="/Layout/assets/js/layout.js"></script>
+    <script defer src="/Layout/assets/js/script.js"></script>
+    <div data-include="footer"></div>
+</body>
+</html>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyEshop_Phone.Application.DTO;
 using MyEshop_Phone.Application.Interface;
+using MyEshop_Phone.Application.Utilitise;
 using MyEshop_Phone.Domain.Model;
 
 namespace MyEshop_Phone.Pages.Admin.Users
@@ -32,6 +33,7 @@ namespace MyEshop_Phone.Pages.Admin.Users
             ModelState.Remove("UserAdd.ProductsId");
             ModelState.Remove("UserAdd.StateName");
             ModelState.Remove("UserAdd.CityName");
+            ModelState.Remove("UserAdd.CodeActive");
             if (!ModelState.IsValid)
                 return Page();
             var states = await _locationServices.GetStatesAsync();

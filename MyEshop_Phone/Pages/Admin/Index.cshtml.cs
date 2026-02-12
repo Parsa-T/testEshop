@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyEshop_Phone.Application.Interface;
@@ -5,6 +6,7 @@ using MyEshop_Phone.Infra.Data.Context;
 
 namespace MyEshop_Phone.Pages.Admin
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         IUserServices _userservices;

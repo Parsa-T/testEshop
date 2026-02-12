@@ -167,6 +167,11 @@ namespace MyEshop_Phone.Application.Services
             await _productsRepository.Save();
         }
 
+        public async Task<IEnumerable<_Products>> ShowGroupsById(int id)
+        {
+            return await _productsRepository.ShowProductsByGroupsId(id);
+        }
+
         public async Task<IEnumerable<_Products>> ShowProtectionPhone()
         {
             return await _productsRepository.ProtectionPhone();

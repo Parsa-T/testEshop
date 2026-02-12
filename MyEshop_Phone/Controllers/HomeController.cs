@@ -11,12 +11,14 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     IProductsServices _productsServices;
     IQueriProductsServices _services;
+    ISubGroupsServices _subGroupsServices;
 
-    public HomeController(ILogger<HomeController> logger, IProductsServices productsServices, IQueriProductsServices queri)
+    public HomeController(ILogger<HomeController> logger, IProductsServices productsServices, IQueriProductsServices queri, ISubGroupsServices subGroupsServices)
     {
         _logger = logger;
         _productsServices = productsServices;
         _services = queri;
+        _subGroupsServices = subGroupsServices;
     }
 
     public IActionResult Index()
@@ -41,6 +43,21 @@ public class HomeController : Controller
         if(result==null)
             return NotFound();
         return View(result);
+    }
+    [Route("ProductsGroups/{id}")]
+    public async Task<IActionResult> PageGroupsProducts(int id)
+    {
+        if(id==null)
+            return NotFound();
+        var products = await _productsServices.ShowGroupsById(id);
+        return View(products);
+    }
+    [Route("SubMenu/{id}")]
+    public async Task<IActionResult> SubMenuProducts(int id)
+    {
+        if(id==null)
+            return NotFound();
+        return View(await _subGroupsServices.ShowSubMenuById(id));
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

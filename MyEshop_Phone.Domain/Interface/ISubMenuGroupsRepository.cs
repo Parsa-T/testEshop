@@ -15,5 +15,6 @@ namespace MyEshop_Phone.Domain.Interface
         Task UpdateSubMenu(_SubmenuGroups submenuGroups);
         Task DeleteSubMenu(_SubmenuGroups submenuGroups);
         Task<_SubmenuGroups> ShowSubMenuForId(int id);
+        Task<IEnumerable<_Products>> GetSubMenuById(int id);
     }
 }

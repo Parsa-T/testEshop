@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Application.Services;
@@ -19,13 +20,29 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 
 
 #region Services
-builder.Services.AddHttpClient<ILocationServices,LocationServices>();
+builder.Services.AddHttpClient<SendSmsSercives>();
+builder.Services.AddHttpClient<ILocationServices, LocationServices>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 RegisterServices(builder.Services);
 static void RegisterServices(IServiceCollection services)
 {
     DependencyContainer.RegisterServices(services);
 }
 #endregion
+
+
+#region Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Login";
+        options.LogoutPath = "/Account/Loguot";
+        options.ExpireTimeSpan = TimeSpan.FromDays(10);
+    });
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,8 +58,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapRazorPages();
+
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -96,6 +96,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
         {
             return await _db.Products.Include(pg => pg.products_Groups).Include(sub => sub.submenuGroups).ToListAsync();
         }
+
+        public async Task<IEnumerable<_Products>> ShowProductsByGroupsId(int id)
+        {
+            return await _db.Products.Where(p => p.ProductGroupsId == id).Include(pg => pg.products_Groups).ToListAsync();
+        }
     }
     public class QueriProductsRepository : IQueriProductsServices
     {
