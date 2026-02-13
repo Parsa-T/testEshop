@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using MyEshop_Phone.Application.Common.Interfaces;
 using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Application.Services;
 using MyEshop_Phone.Infra.Data.Context;
@@ -24,6 +25,10 @@ builder.Services.AddHttpClient<SendSmsSercives>();
 builder.Services.AddHttpClient<ILocationServices, LocationServices>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(GetUserProfileQuery).Assembly));
+builder.Services.AddScoped<IApplicationDbContext>(provider =>
+    provider.GetRequiredService<MyDbContext>());
 RegisterServices(builder.Services);
 static void RegisterServices(IServiceCollection services)
 {

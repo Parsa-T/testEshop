@@ -1,117 +1,14 @@
 ﻿@using MyEshop_Phone.Domain.Model
 @model IEnumerable<_Products>
+@{
+    ViewData["Title"] = "ماهان شاپ";
+}
 
 <main id="main-content" class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-6 md:pb-8">
     <div class="lg:grid lg:grid-cols-12 lg:gap-8">
 
         <!-- Filter Sidebar -->
-        <aside id="filter-sidebar" class="filter-sidebar fixed lg:static top-0 -right-full lg:right-auto w-[86%] sm:w-[78%] md:w-80 max-w-[360px] lg:max-w-none lg:w-full h-full lg:h-auto bg-white lg:bg-transparent z-[160] lg:z-auto lg:col-span-3 lg:block p-4 lg:p-0" role="navigation" aria-label="فیلترهای محصولات">
-            <div class="filter-panel bg-white rounded-xl border border-gray-200/80 shadow-sm lg:shadow-lg lg:p-4 flex flex-col">
-
-                <div class="filter-panel-header flex items-center justify-between lg:hidden pb-3 border-b border-gray-200">
-                    <h2 class="font-bold text-lg text-[#1D1B20]">فیلترها</h2>
-                    <button id="close-filters-btn" class="p-2 rounded-full hover:bg-gray-100" aria-label="بستن فیلترها" type="button">
-                        <span class="material-icon">close</span>
-                    </button>
-                </div>
-
-                <!-- Search in filters -->
-                <div class="p-3 border-b border-gray-200 hidden lg:block filter-search">
-                    <div class="search-shell relative w-full">
-                        <input type="search" id="filter-search" placeholder="جستجو در محصولات..." class="search-input text-sm pr-3 pl-10 py-2 w-full">
-                        <span class="material-icon search-icon absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">search</span>
-                    </div>
-                </div>
-
-                <div class="filter-section overflow-y-auto pr-2 max-h-[calc(100vh-180px)] lg:max-h-[calc(100vh-150px)]">
-                    <details open class="filter-accordion">
-                        <summary class="filter-accordion-summary">
-                            <span>دسته ها</span>
-                            <span class="material-icon">expand_more</span>
-                        </summary>
-                        <div class="category-filter-list">
-                            <button data-category="all" class="category-filter-btn" type="button">
-                                <span class="category-label">تمام محصولات</span>
-                            </button>
-                            <button data-category="accessory" class="category-filter-btn" type="button">
-                                <span class="category-label">اکسسوری</span>
-                            </button>
-                            <button data-category="case" class="category-filter-btn" type="button">
-                                <span class="category-label">قاب گوشی</span>
-                            </button>
-                            <button data-category="phone" class="category-filter-btn" type="button">
-                                <span class="category-label">گوشی هوشمند</span>
-                            </button>
-                            <button data-category="charger" class="category-filter-btn" type="button">
-                                <span class="category-label">شارژ</span>
-                            </button>
-                            <button data-category="airpod" class="category-filter-btn" type="button">
-                                <span class="category-label">کاور ایرپاد</span>
-                            </button>
-                            <button data-category="glass" class="category-filter-btn" type="button">
-                                <span class="category-label">گلس و محافظ</span>
-                            </button>
-                            <button data-category="gadget" class="category-filter-btn" type="button">
-                                <span class="category-label">گجت</span>
-                            </button>
-                        </div>
-                    </details>
-
-                    <details open class="filter-accordion">
-                        <summary class="filter-accordion-summary">
-                            <span>فیلترها</span>
-                            <span class="material-icon">expand_more</span>
-                        </summary>
-                        <div id="dynamic-filters" class="dynamic-filters"></div>
-                        <div id="dynamic-filters-empty" class="filter-empty hidden">
-                            <p>برای این دسته فیلتر دیگری ثبت نشده است.</p>
-                        </div>
-                    </details>
-
-                    <details open class="filter-accordion">
-                        <summary class="price-filter-summary">
-                            <span>فیلتر قیمت</span>
-                            <span class="material-icon">expand_more</span>
-                        </summary>
-                        <div class="price-range-container px-4 pt-2 pb-3">
-                            <div class="price-display text-xs font-semibold text-[#1D1B20]">
-                                <span>حداقل: <span id="price-min-value">0</span> تومان</span>
-                                <span>حداکثر: <span id="price-max-value">0</span> تومان</span>
-                            </div>
-                            <div class="custom-range-slider price-range-slider mt-3" dir="rtl">
-                                <div class="track-bg"></div>
-                                <div class="range-fill" id="price-range-fill"></div>
-                                <input type="range" id="price-min" class="range-input range-input-min" aria-label="حداقل قیمت" step="1000">
-                                <input type="range" id="price-max" class="range-input range-input-max" aria-label="حداکثر قیمت" step="1000">
-                            </div>
-                        </div>
-                    </details>
-
-                    <div class="filter-in-stock-panel mt-4 flex items-center justify-between gap-3 px-4 py-3 bg-[#F8F8FB] border border-gray-200/80 rounded-2xl shadow-sm" aria-live="polite">
-                        <p class="text-sm font-semibold text-[#1D1B20] whitespace-nowrap">کالاهای موجود</p>
-                        <label class="in-stock-toggle-switch" for="in-stock-toggle">
-                            <input type="checkbox" id="in-stock-toggle">
-                            <span class="toggle-track">
-                                <span class="toggle-thumb"></span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="filter-actions">
-                    <div class="pt-3">
-                        <button id="reset-filters" class="w-full text-center py-3 px-4 rounded-xl bg-gray-100 text-gray-700 font-bold hover:bg-gray-200 transition" type="button" aria-label="حذف تمام فیلترها">
-                            حذف فیلترها
-                        </button>
-                    </div>
-                    <div class="lg:hidden pt-3">
-                        <div class="flex gap-2">
-                            <button id="apply-filters-btn" class="flex-1 py-3 px-4 rounded-xl bg-[#2563EB] text-white font-bold hover:bg-[#1D4ED8] transition" type="button">اعمال فیلترها</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
+        @await Component.InvokeAsync("FilterSearch")
 
         <!-- Products Grid -->
         <div class="lg:col-span-9 mt-6 lg:mt-0">
@@ -153,18 +50,18 @@
             </div>
 
             <div class="products-grid-shell relative">
-                <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+                <div id="products-container2" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
                     <!-- Product cards will be dynamically populated/filtered. -->
                     @foreach (var item in Model)
                     {
                         <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
-                                 data-category="case"
-                                 data-brand="apple"
+                                 data-category="@item.products_Groups.GroupTitle"
+                                 data-brand="@item.ShortDescription"
                                  data-model="@item.Title"
                                  data-material="silicone"
-                                 data-price="690000"
+                                 data-price="@item.Price"
                                  data-popular="9"
-                                 data-new="1"
+                                 data-new="@item.CreateTime.ToString("yyyy-MM-dd")"
                                  data-stock="true">
                             <div class="relative">
                                 <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
@@ -225,616 +122,182 @@
 <!-- Mobile Filter Button and Overlay -->
 <div id="filter-overlay" class="filter-overlay" role="presentation"></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const productsGrid = document.getElementById('products-grid');
-      if (!productsGrid) return;
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-      const productCards = Array.from(productsGrid.querySelectorAll('.product-card'));      const noResultsEl = document.getElementById('no-results');
+            const productsContainer = document.getElementById("products-container2");
+            const applyBtn = document.getElementById("apply-filters-btn");
+            const priceMin = document.getElementById("price-min");
+            const priceMax = document.getElementById("price-max");
+            const inStockToggle = document.getElementById("in-stock-toggle");
 
-      const filterSearch = document.getElementById('filter-search');
-      const categoryButtons = document.querySelectorAll('.category-filter-btn');
-      const inStockToggle = document.getElementById('in-stock-toggle');
-      const selectedFiltersEl = document.getElementById('selected-filters');
-      const sortSelect = document.getElementById('sort-by');
-      const dynamicFiltersEl = document.getElementById('dynamic-filters');
-      const dynamicFiltersEmptyEl = document.getElementById('dynamic-filters-empty');
-      const priceMinInput = document.getElementById('price-min');
-      const priceMaxInput = document.getElementById('price-max');
-      const priceMinValue = document.getElementById('price-min-value');
-      const priceMaxValue = document.getElementById('price-max-value');
-      const priceRangeFill = document.getElementById('price-range-fill');
+            // -------------------------------
+            // گرفتن مقادیر فیلتر
+            // -------------------------------
+            function getFilters() {
 
-      const mobileFilterBtn = document.getElementById('mobile-filter-btn');
-      const closeFiltersBtn = document.getElementById('close-filters-btn');
-      const filterSidebar = document.getElementById('filter-sidebar');
-      const filterOverlay = document.getElementById('filter-overlay');
-      const resetFiltersBtn = document.getElementById('reset-filters');
-      const applyFiltersBtn = document.getElementById('apply-filters-btn');
-      const resetFiltersMobileBtn = document.getElementById('reset-filters-btn-mobile');
+                const activeCategory = document.querySelector(".category-filter-btn.active");
+                const category = activeCategory ? activeCategory.dataset.category : "all";
 
-      const CATEGORY_ALIASES = {
-        accessories: 'accessory'
-      };
+                const brandCheckboxes = document.querySelectorAll(".filter-input:checked");
+                const brands = Array.from(brandCheckboxes).map(cb => cb.value);
 
-      const activeCategoryNameEl = document.getElementById('active-category-name');
-      const updateActiveCategoryLabel = () => {
-        if (!activeCategoryNameEl) return;
-        const activeBtn = document.querySelector('#filter-sidebar .category-filter-btn.active .category-label');
-        const fallback = 'تمام محصولات';
-        activeCategoryNameEl.textContent = activeBtn?.textContent?.trim() || fallback;
-      };
+                const minPrice = priceMin ? priceMin.value : null;
+                const maxPrice = priceMax ? priceMax.value : null;
 
-      const FILTER_GROUPS = {
-        all: [
-          { key: 'brand', label: 'برند' }
-        ],
-        accessory: [
-          { key: 'brand', label: 'برند' }
-        ],
-        case: [
-          { key: 'brand', label: 'برند گوشی', options: ['apple', 'samsung', 'xiaomi'] },
-          { key: 'material', label: 'جنس قاب', options: ['silicone', 'leather', 'clear', 'tpu'] }
-        ],
-        phone: [
-          { key: 'brand', label: 'برند', options: ['apple', 'samsung', 'xiaomi'] },
-          { key: 'model', label: 'مدل', options: ['iPhone 15', 'S24', 'Xiaomi 13'] },
-          { key: 'storage', label: 'حافظه', options: ['128', '256', '512'] },
-          { key: 'ram', label: 'رم', options: ['8', '12', '16'] }
-        ],
-        charger: [
-          { key: 'brand', label: 'برند', options: ['anker', 'apple', 'xiaomi'] },
-          { key: 'port', label: 'نوع پورت', options: ['usb-c', 'usb-a', 'usb-c+usb-a'] }
-        ],
-        airpod: [
-          { key: 'brand', label: 'برند', options: ['apple', 'baseus'] },
-          { key: 'material', label: 'جنس کاور', options: ['silicone', 'leather', 'hard'] }
-        ],
-        glass: [
-          { key: 'brand', label: 'برند گوشی', options: ['apple', 'samsung', 'xiaomi'] },
-          { key: 'model', label: 'مدل گوشی' },
-          { key: 'type', label: 'نوع محافظ', options: ['privacy', 'ceramic', 'standard'] }
-        ],
-        gadget: [
-          { key: 'brand', label: 'برند', options: ['baseus', 'ugreen'] },
-          { key: 'type', label: 'نوع گجت', options: ['popsocket', 'holder', 'cable'] },
-          { key: 'material', label: 'جنس', options: ['plastic', 'metal', 'nylon'] }
-        ]
-      };
+                const inStock = inStockToggle ? inStockToggle.checked : false;
 
-      const FILTER_LABELS = {
-        brand: {
-          apple: 'اپل',
-          samsung: 'سامسونگ',
-          xiaomi: 'شیائومی',
-          anker: 'Anker',
-          baseus: 'Baseus',
-          ugreen: 'UGREEN'
-        },
-        material: {
-          silicone: 'سیلیکونی',
-          leather: 'چرمی',
-          clear: 'شفاف',
-          tpu: 'ژله‌ای',
-          plastic: 'پلاستیکی',
-          metal: 'فلزی',
-          nylon: 'نایلون',
-          hard: 'سخت'
-        },
-        type: {
-          adapter: 'آداپتور',
-          cable: 'کابل',
-          popsocket: 'پاپ سوکت',
-          holder: 'هولدر',
-          privacy: 'پرایوسی',
-          ceramic: 'سرامیکی',
-          standard: 'معمولی'
-        },
-        watt: {
-          '20w': '۲۰ وات',
-          '30w': '۳۰ وات',
-          '33w': '۳۳ وات',
-          '65w': '۶۵ وات'
-        },
-        port: {
-          'usb-c': 'USB-C',
-          'usb-a': 'USB-A',
-          'usb-c+usb-a': 'USB-C + USB-A'
-        },
-        storage: {
-          '128': '۱۲۸ گیگ',
-          '256': '۲۵۶ گیگ',
-          '512': '۵۱۲ گیگ'
-        },
-        ram: {
-          '8': '۸ گیگ',
-          '12': '۱۲ گیگ',
-          '16': '۱۶ گیگ'
-        }
-      };
-
-      const normalize = (value) => String(value || '').trim().toLowerCase();
-
-      const getCardsForCategory = (category) => {
-        if (category === 'all') return productCards;
-        if (category === 'accessory') {
-          // "اکسسوری" یعنی همه‌ی محصولات به‌جز گوشی هوشمند
-          return productCards.filter((card) => (card.dataset.category || '') !== 'phone');
-        }
-        return productCards.filter((card) => card.dataset.category === category);
-      };
-
-      const getLabel = (key, value) => {
-        const map = FILTER_LABELS[key];
-        return map && map[value] ? map[value] : value;
-      };
-
-      const getCardValues = (card, key) => {
-        const raw = card?.dataset?.[key];
-        if (!raw) return [];
-        return raw.split(/[|,]/).map((val) => normalize(val));
-      };
-
-      const getGroupValues = (category, group) => {
-        const valuesMap = new Map();
-        const cards = getCardsForCategory(category);
-
-        cards.forEach((card) => {
-          const raw = card.dataset[group.key];
-          if (!raw) return;
-          raw.split(/[|,]/).forEach((val) => {
-            const trimmed = val.trim();
-            if (!trimmed) return;
-            const normalized = normalize(trimmed);
-            if (!valuesMap.has(normalized)) valuesMap.set(normalized, trimmed);
-          });
-        });
-
-        if (valuesMap.size === 0 && Array.isArray(group.options)) {
-          group.options.forEach((opt) => {
-            const normalized = normalize(opt);
-            if (!valuesMap.has(normalized)) valuesMap.set(normalized, opt);
-          });
-        }
-
-        return Array.from(valuesMap.values());
-      };
-
-      const currentFilters = {
-        category: 'all',
-        attributes: {},
-        inStock: false,
-        search: '',
-        priceMin: null,
-        priceMax: null
-      };
-
-      let priceMinLimit = 0;
-      let priceMaxLimit = 0;
-
-      const setActiveCategory = (cat) => {
-        const normalized = CATEGORY_ALIASES[cat] || cat || 'all';
-        categoryButtons.forEach((btn) => {
-          btn.classList.toggle('active', btn.dataset.category === normalized);
-        });
-        currentFilters.category = normalized;
-        updateActiveCategoryLabel();
-      };
-
-      const renderDynamicFilters = () => {
-        if (!dynamicFiltersEl) return;
-        dynamicFiltersEl.innerHTML = '';
-        const groups = FILTER_GROUPS[currentFilters.category] || FILTER_GROUPS.all;
-        let hasAnyOptions = false;
-
-        groups.forEach((group) => {
-          const values = getGroupValues(currentFilters.category, group);
-          const details = document.createElement('details');
-          details.className = 'filter-subgroup';
-          details.open = true;
-
-          const summary = document.createElement('summary');
-          summary.className = 'filter-subgroup-summary';
-          const summaryText = document.createElement('span');
-          summaryText.textContent = group.label;
-          const summaryIcon = document.createElement('span');
-          summaryIcon.className = 'material-icon';
-          summaryIcon.textContent = 'expand_more';
-          summary.append(summaryText, summaryIcon);
-          details.appendChild(summary);
-
-          const optionsWrap = document.createElement('div');
-          optionsWrap.className = 'filter-options';
-
-          if (values.length === 0) {
-            const empty = document.createElement('div');
-            empty.className = 'filter-group-empty';
-            empty.textContent = 'فعلا گزینه‌ای برای این فیلتر ثبت نشده است.';
-            optionsWrap.appendChild(empty);
-          } else {
-            hasAnyOptions = true;
-            values.forEach((rawValue) => {
-              const normalized = normalize(rawValue);
-              const label = getLabel(group.key, rawValue);
-              const labelEl = document.createElement('label');
-              labelEl.className = 'filter-option';
-
-              const input = document.createElement('input');
-              input.type = 'checkbox';
-              input.className = 'filter-input';
-              input.value = rawValue;
-              input.dataset.filterKey = group.key;
-              input.dataset.normalized = normalized;
-
-              const span = document.createElement('span');
-              span.textContent = label;
-
-              labelEl.append(input, span);
-              optionsWrap.appendChild(labelEl);
-            });
-          }
-
-          details.appendChild(optionsWrap);
-          dynamicFiltersEl.appendChild(details);
-        });
-
-        if (dynamicFiltersEmptyEl) {
-          dynamicFiltersEmptyEl.classList.toggle('hidden', hasAnyOptions);
-        }
-
-        const inputs = dynamicFiltersEl.querySelectorAll('input.filter-input');
-        inputs.forEach((input) => {
-          input.addEventListener('change', () => {
-            const label = input.closest('label');
-            if (label) label.classList.toggle('selected', input.checked);
-            filterAndSortProducts();
-          });
-        });
-      };
-
-      const collectFiltersFromUI = () => {
-        const activeCategoryBtn = document.querySelector('.category-filter-btn.active');
-        currentFilters.category = activeCategoryBtn ? activeCategoryBtn.dataset.category : 'all';
-        currentFilters.inStock = Boolean(inStockToggle && inStockToggle.checked);
-        currentFilters.search = filterSearch ? normalize(filterSearch.value) : '';
-        currentFilters.attributes = {};
-        currentFilters.priceMin = priceMinInput ? parseInt(priceMinInput.value, 10) : null;
-        currentFilters.priceMax = priceMaxInput ? parseInt(priceMaxInput.value, 10) : null;
-
-        if (dynamicFiltersEl) {
-          dynamicFiltersEl.querySelectorAll('input.filter-input:checked').forEach((input) => {
-            const key = input.dataset.filterKey;
-            const normalized = input.dataset.normalized || normalize(input.value);
-            if (!currentFilters.attributes[key]) currentFilters.attributes[key] = [];
-            currentFilters.attributes[key].push(normalized);
-          });
-        }
-      };
-
-      const formatPrice = (value) => {
-        const numeric = Number.isFinite(value) ? value : 0;
-        return numeric.toLocaleString('fa-IR');
-      };
-
-      const syncPriceRangeUI = () => {
-        if (!priceMinInput || !priceMaxInput) return;
-        const minVal = parseInt(priceMinInput.value, 10) || priceMinLimit;
-        const maxVal = parseInt(priceMaxInput.value, 10) || priceMaxLimit;
-        if (priceMinValue) priceMinValue.textContent = formatPrice(minVal);
-        if (priceMaxValue) priceMaxValue.textContent = formatPrice(maxVal);
-        if (priceRangeFill) {
-          const range = priceMaxLimit - priceMinLimit || 1;
-          const minPercent = ((minVal - priceMinLimit) / range) * 100;
-          const maxPercent = ((maxVal - priceMinLimit) / range) * 100;
-          priceRangeFill.style.right = `${minPercent}%`;
-          priceRangeFill.style.left = `${100 - maxPercent}%`;
-        }
-      };
-
-      const updateSelectedFiltersUI = () => {
-        if (!selectedFiltersEl) return;
-        const chips = [];
-
-        const activeCategoryBtn = document.querySelector('.category-filter-btn.active');
-        if (activeCategoryBtn && activeCategoryBtn.dataset.category !== 'all') {
-          const label = activeCategoryBtn.querySelector('.category-label')?.textContent?.trim()
-            || activeCategoryBtn.textContent.trim();
-          chips.push({
-            type: 'category',
-            label,
-            value: activeCategoryBtn.dataset.category
-          });
-        }
-
-        if (dynamicFiltersEl) {
-          dynamicFiltersEl.querySelectorAll('input.filter-input:checked').forEach((input) => {
-            const key = input.dataset.filterKey;
-            const normalized = input.dataset.normalized || normalize(input.value);
-            const label = input.closest('label')?.querySelector('.filter-option-label')?.textContent?.trim() || input.value;
-            chips.push({
-              type: 'attribute',
-              key,
-              normalized,
-              label
-            });
-          });
-        }
-
-        if (currentFilters.inStock) {
-          chips.push({ type: 'stock', label: 'فقط کالاهای موجود' });
-        }
-
-        if (priceMinInput && priceMaxInput) {
-          const minVal = currentFilters.priceMin ?? priceMinLimit;
-          const maxVal = currentFilters.priceMax ?? priceMaxLimit;
-          if (minVal > priceMinLimit || maxVal < priceMaxLimit) {
-            chips.push({
-              type: 'price',
-              label: `قیمت: ${formatPrice(minVal)} تا ${formatPrice(maxVal)} تومان`
-            });
-          }
-        }
-
-        const searchLabel = filterSearch?.value?.trim();
-        if (searchLabel) {
-          chips.push({ type: 'search', label: `جستجو: ${searchLabel}` });
-        }
-
-        selectedFiltersEl.innerHTML = '';
-        if (chips.length === 0) {
-          selectedFiltersEl.style.display = 'none';
-          return;
-        }
-
-        selectedFiltersEl.style.display = '';
-        chips.forEach((chip) => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'filter-chip';
-          btn.textContent = chip.label;
-          btn.addEventListener('click', () => {
-            if (chip.type === 'category') {
-              setActiveCategory('all');
-              renderDynamicFilters();
-            } else if (chip.type === 'attribute' && dynamicFiltersEl) {
-              const target = dynamicFiltersEl.querySelector(
-                `input.filter-input[data-filter-key="${chip.key}"][data-normalized="${chip.normalized}"]`
-              );
-              if (target) {
-                target.checked = false;
-                target.closest('label')?.classList.remove('selected');
-              }
-            } else if (chip.type === 'stock' && inStockToggle) {
-              inStockToggle.checked = false;
-            } else if (chip.type === 'price' && priceMinInput && priceMaxInput) {
-              priceMinInput.value = priceMinLimit;
-              priceMaxInput.value = priceMaxLimit;
-              syncPriceRangeUI();
-            } else if (chip.type === 'search' && filterSearch) {
-              filterSearch.value = '';
+                return { category, brands, minPrice, maxPrice, inStock };
             }
-            filterAndSortProducts();
-          });
-          selectedFiltersEl.appendChild(btn);
+
+            // -------------------------------
+            // رندر محصولات
+            // -------------------------------
+            function renderProducts(products) {
+
+                if (!productsContainer) return;
+
+                productsContainer.innerHTML = "";
+
+                if (!products || products.length === 0) {
+                    productsContainer.innerHTML =
+                        "<p class='col-span-full text-center text-gray-500'>محصولی یافت نشد</p>";
+                    return;
+                }
+
+                products.forEach(product => {
+                    const card = `
+                        <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
+                            <img src="${product.imageUrl}"
+                                 class="w-full h-40 object-cover rounded-lg mb-3" />
+                            <a href="/Product/${product.id}">
+                            <h3 class="font-bold text-sm mb-2">${product.name}</h3>
+                            </a>
+                            <p class="text-blue-600 font-semibold">
+                                ${Number(product.price).toLocaleString()} تومان
+                            </p>
+                        </div>
+                    `;
+                    productsContainer.insertAdjacentHTML("beforeend", card);
+                });
+            }
+
+            // -------------------------------
+            // صدا زدن API
+            // -------------------------------
+            async function applyFilters() {
+
+                const filters = getFilters();
+                const queryParams = new URLSearchParams();
+
+                if (filters.category && filters.category !== "all")
+                    queryParams.append("Category", filters.category);
+
+                filters.brands.forEach(b => queryParams.append("Brands", b));
+
+                if (filters.minPrice)
+                    queryParams.append("MinPrice", filters.minPrice);
+
+                if (filters.maxPrice)
+                    queryParams.append("MaxPrice", filters.maxPrice);
+
+                if (filters.inStock)
+                    queryParams.append("InStock", true);
+
+                try {
+
+                    // لودینگ ساده
+                    productsContainer.innerHTML =
+                        "<p class='col-span-full text-center'>در حال بارگذاری...</p>";
+
+                    const response = await fetch(`/api/FilterProducts/filter?${queryParams.toString()}`);
+
+                    if (!response.ok) {
+                        throw new Error("Server error");
+                    }
+
+                    const data = await response.json();
+                    renderProducts(data);
+
+                } catch (error) {
+                    console.error("خطا در دریافت اطلاعات:", error);
+                    productsContainer.innerHTML =
+                        "<p class='col-span-full text-center text-red-500'>خطا در دریافت اطلاعات</p>";
+                }
+            }
+
+            // -------------------------------
+            // Debounce برای اسلایدر قیمت
+            // -------------------------------
+            function debounce(func, delay) {
+                let timer;
+                return function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => func.apply(this, arguments), delay);
+                };
+            }
+
+            const debouncedApply = debounce(applyFilters, 400);
+
+            // -------------------------------
+            // Event ها
+            // -------------------------------
+
+            // دسته‌ها
+            document.querySelectorAll(".category-filter-btn").forEach(btn => {
+                btn.addEventListener("click", function () {
+                    document.querySelectorAll(".category-filter-btn")
+                        .forEach(b => b.classList.remove("active"));
+
+                    this.classList.add("active");
+                    applyFilters();
+                });
+            });
+
+            // برندها
+            document.querySelectorAll(".filter-input").forEach(cb => {
+                cb.addEventListener("change", applyFilters);
+            });
+
+            // قیمت
+            if (priceMin) priceMin.addEventListener("input", debouncedApply);
+            if (priceMax) priceMax.addEventListener("input", debouncedApply);
+
+            // موجودی
+            if (inStockToggle)
+                inStockToggle.addEventListener("change", applyFilters);
+
+            // دکمه اعمال (موبایل)
+            if (applyBtn)
+                applyBtn.addEventListener("click", applyFilters);
+
         });
-      };
+        //حذف فیلتر ها
+                document.getElementById("reset-filters").addEventListener("click", function() {
 
-      const buildSearchText = (card) => {
-        const title = card.querySelector('h3')?.textContent || '';
-        const brand = card.dataset.brand || '';
-        const model = card.dataset.model || '';
-        const material = card.dataset.material || '';
-        const type = card.dataset.type || '';
-        const watt = card.dataset.watt || '';
-        const port = card.dataset.port || '';
-        const searchParts = [
-          title,
-          brand,
-          getLabel('brand', brand),
-          model,
-          getLabel('material', material),
-          getLabel('type', type),
-          getLabel('watt', watt),
-          getLabel('port', port)
-        ];
-        return normalize(searchParts.join(' '));
-      };
+            // 1️⃣ دسته‌ها: کلاس active رو پاک کن و اولی (تمام محصولات) رو فعال کن
+            document.querySelectorAll(".category-filter-btn").forEach((btn, index) => {
+                btn.classList.remove("active");
+                if (index === 0) btn.classList.add("active"); // اولی = "تمام محصولات"
+            });
 
-      const filterAndSortProducts = () => {
-        collectFiltersFromUI();
+            // 2️⃣ برندها: تمام چک‌باکس‌ها رو uncheck کن
+            document.querySelectorAll(".filter-input").forEach(cb => cb.checked = false);
 
-        const visibleProducts = [];
-        productCards.forEach((card) => {
-          const categoryMatch = currentFilters.category === 'all'
-            || (currentFilters.category === 'accessory'
-              ? (card.dataset.category || '') !== 'phone'
-              : card.dataset.category === currentFilters.category);
-          const attributesMatch = Object.entries(currentFilters.attributes).every(([key, values]) => {
-            if (!values || values.length === 0) return true;
-            const cardValues = getCardValues(card, key);
-            if (cardValues.length === 0) return false;
-            return values.some((val) => cardValues.includes(val));
-          });
-          const stockMatch = !currentFilters.inStock || card.dataset.stock === 'true';
-          const priceValue = parseInt(card.dataset.price, 10) || 0;
-          const priceMin = currentFilters.priceMin ?? priceMinLimit;
-          const priceMax = currentFilters.priceMax ?? priceMaxLimit;
-          const priceMatch = priceValue >= priceMin && priceValue <= priceMax;
-          const searchMatch = !currentFilters.search || buildSearchText(card).includes(currentFilters.search);
-          const isVisible = categoryMatch && attributesMatch && stockMatch && priceMatch && searchMatch;
-          card.classList.toggle('hidden', !isVisible);
-          if (isVisible) visibleProducts.push(card);
+            // 3️⃣ قیمت: بازنشانی به مقدار پیش‌فرض
+            const priceMin = document.getElementById("price-min");
+            const priceMax = document.getElementById("price-max");
+            if (priceMin) priceMin.value = priceMin.min || 0;
+            if (priceMax) priceMax.value = priceMax.max || 50000000;
+
+            // 4️⃣ موجودی: uncheck کن
+            const inStock = document.getElementById("in-stock-toggle");
+            if (inStock) inStock.checked = false;
+
+            // 5️⃣ دوباره فیلتر اعمال کن (اکنون همه مقادیر پیش‌فرض هستند)
+            applyFilters();
         });
 
-        const sortBy = sortSelect ? sortSelect.value : 'newest';
-        visibleProducts.sort((a, b) => {
-          switch (sortBy) {
-            case 'price-asc':
-              return (parseInt(a.dataset.price, 10) || 0) - (parseInt(b.dataset.price, 10) || 0);
-            case 'price-desc':
-              return (parseInt(b.dataset.price, 10) || 0) - (parseInt(a.dataset.price, 10) || 0);
-            case 'oldest':
-              return (parseInt(a.dataset.new, 10) || 0) - (parseInt(b.dataset.new, 10) || 0);
-            case 'newest':
-            default:
-              return (parseInt(b.dataset.new, 10) || 0) - (parseInt(a.dataset.new, 10) || 0);
-          }
-        });
-
-        visibleProducts.forEach((card) => productsGrid.appendChild(card));        if (noResultsEl) {
-          noResultsEl.classList.toggle('hidden', visibleProducts.length > 0);
-        }
-
-        updateSelectedFiltersUI();
-      };
-
-      const updateCategoryInUrl = (category) => {
-        try {
-          const params = new URLSearchParams(window.location.search);
-          if (category === 'all') {
-            params.delete('cat');
-          } else {
-            params.set('cat', category);
-          }
-          params.delete('category');
-          const query = params.toString();
-          const newUrl = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
-          history.replaceState(null, '', newUrl);
-        } catch (e) {}
-      };
-
-      if (filterSearch) {
-        filterSearch.addEventListener('input', () => filterAndSortProducts());
-      }
-      if (inStockToggle) {
-        inStockToggle.addEventListener('change', () => filterAndSortProducts());
-      }
-      if (sortSelect) {
-        sortSelect.addEventListener('change', () => filterAndSortProducts());
-      }
-      if (priceMinInput && priceMaxInput) {
-        priceMinInput.addEventListener('input', () => {
-          const minVal = parseInt(priceMinInput.value, 10) || priceMinLimit;
-          const maxVal = parseInt(priceMaxInput.value, 10) || priceMaxLimit;
-          if (minVal > maxVal) {
-            priceMinInput.value = maxVal;
-          }
-          syncPriceRangeUI();
-          filterAndSortProducts();
-        });
-        priceMaxInput.addEventListener('input', () => {
-          const minVal = parseInt(priceMinInput.value, 10) || priceMinLimit;
-          const maxVal = parseInt(priceMaxInput.value, 10) || priceMaxLimit;
-          if (maxVal < minVal) {
-            priceMaxInput.value = minVal;
-          }
-          syncPriceRangeUI();
-          filterAndSortProducts();
-        });
-      }
-
-      categoryButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          setActiveCategory(btn.dataset.category);
-          renderDynamicFilters();
-          updateCategoryInUrl(btn.dataset.category);
-          filterAndSortProducts();
-        });
-      });
-
-      if (resetFiltersBtn) {
-        resetFiltersBtn.addEventListener('click', () => {
-          setActiveCategory('all');
-          renderDynamicFilters();
-          if (filterSearch) filterSearch.value = '';
-          if (inStockToggle) inStockToggle.checked = false;
-          if (sortSelect) sortSelect.value = 'newest';
-          if (priceMinInput && priceMaxInput) {
-            priceMinInput.value = priceMinLimit;
-            priceMaxInput.value = priceMaxLimit;
-            syncPriceRangeUI();
-          }
-          updateCategoryInUrl('all');
-          filterAndSortProducts();
-        });
-      }
-      if (resetFiltersMobileBtn && resetFiltersBtn) {
-        resetFiltersMobileBtn.addEventListener('click', () => {
-          resetFiltersBtn.click();
-        });
-      }
-
-      const openFilterMenu = () => {
-        if (!filterSidebar || !filterOverlay) return;
-        filterSidebar.classList.add('open');
-        filterOverlay.classList.add('visible');
-        if (mobileFilterBtn) mobileFilterBtn.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => closeFiltersBtn && closeFiltersBtn.focus(), 100);
-      };
-
-      const closeFilterMenu = () => {
-        if (!filterSidebar || !filterOverlay) return;
-        filterSidebar.classList.remove('open');
-        filterOverlay.classList.remove('visible');
-        if (mobileFilterBtn) mobileFilterBtn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-        if (mobileFilterBtn) mobileFilterBtn.focus();
-      };
-
-      if (mobileFilterBtn) mobileFilterBtn.addEventListener('click', openFilterMenu);
-      if (closeFiltersBtn) closeFiltersBtn.addEventListener('click', closeFilterMenu);
-      if (filterOverlay) filterOverlay.addEventListener('click', closeFilterMenu);
-      if (applyFiltersBtn) applyFiltersBtn.addEventListener('click', () => {
-        filterAndSortProducts();
-        closeFilterMenu();
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && filterSidebar && filterSidebar.classList.contains('open')) {
-          closeFilterMenu();
-        }
-      });
-
-      const applyUrlParams = () => {
-        const params = new URLSearchParams(window.location.search);
-        const catParam = params.get('category') || params.get('cat');
-        if (catParam) {
-          setActiveCategory(CATEGORY_ALIASES[catParam] || catParam);
-        } else {
-          setActiveCategory('all');
-        }
-      };
-
-      const initPriceRange = () => {
-        if (!priceMinInput || !priceMaxInput) return;
-        const prices = productCards
-          .map((card) => parseInt(card.dataset.price, 10))
-          .filter((value) => Number.isFinite(value));
-        if (prices.length === 0) {
-          priceMinLimit = 0;
-          priceMaxLimit = 0;
-        } else {
-          priceMinLimit = Math.min(...prices);
-          priceMaxLimit = Math.max(...prices);
-        }
-
-        priceMinInput.min = priceMinLimit;
-        priceMinInput.max = priceMaxLimit;
-        priceMaxInput.min = priceMinLimit;
-        priceMaxInput.max = priceMaxLimit;
-        priceMinInput.value = priceMinLimit;
-        priceMaxInput.value = priceMaxLimit;
-        syncPriceRangeUI();
-      };
-
-      applyUrlParams();
-      if (!document.querySelector('.category-filter-btn.active')) {
-        setActiveCategory('all');
-      }
-
-      initPriceRange();
-      renderDynamicFilters();
-      filterAndSortProducts();
-    });
-</script>
+    </script>
+}

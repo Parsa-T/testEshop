@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using MyEshop_Phone.Domain.Model;
 using System.Data;
+using MyEshop_Phone.Application.Common.Interfaces;
 
 namespace MyEshop_Phone.Infra.Data.Context
 {
-    public class MyDbContext : DbContext
+    public class MyDbContext : DbContext, IApplicationDbContext
     {
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
@@ -28,14 +29,16 @@ namespace MyEshop_Phone.Infra.Data.Context
         public DbSet<_Color> colors { get; set; }
         public DbSet<_ProductsColor> productsColors { get; set; }
         public DbSet<_SubmenuGroups> submenuGroups { get; set; }
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        => await base.SaveChangesAsync(cancellationToken);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<_Users>()
-                .HasOne(u=>u.products)
-                .WithMany(p=>p.users)
-                .HasForeignKey(u=>u.ProductsId)
+                .HasOne(u => u.products)
+                .WithMany(p => p.users)
+                .HasForeignKey(u => u.ProductsId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<_Users>()
@@ -52,9 +55,9 @@ namespace MyEshop_Phone.Infra.Data.Context
                 .IsRequired(false);
 
             modelBuilder.Entity<_ProductsColor>()
-                .HasOne(c=>c.products)
-                .WithMany(p=>p.productsColors)
-                .HasForeignKey(x=>x.ProductId)
+                .HasOne(c => c.products)
+                .WithMany(p => p.productsColors)
+                .HasForeignKey(x => x.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<_ProductsColor>()
@@ -68,12 +71,12 @@ namespace MyEshop_Phone.Infra.Data.Context
             //    .IsRequired(false);
 
             modelBuilder.Entity<_Products>()
-                .HasOne(p=>p.submenuGroups)
-                .WithMany(sg=>sg.products)
-                .HasForeignKey(p=>p.SubmenuGroupsId)
+                .HasOne(p => p.submenuGroups)
+                .WithMany(sg => sg.products)
+                .HasForeignKey(p => p.SubmenuGroupsId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<_Products>()
-                .Property(x=>x.SubmenuGroupsId)
+                .Property(x => x.SubmenuGroupsId)
                 .IsRequired(false);
         }
     }

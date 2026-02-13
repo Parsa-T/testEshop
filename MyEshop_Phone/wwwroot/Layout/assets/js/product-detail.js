@@ -107,30 +107,30 @@
 
     applyState(readFav());
 
-    likeBtn.addEventListener('click', () => {
-      const current = readFav();
-      const next = !current;
-      writeFav(next);
-      applyState(next);
+    //likeBtn.addEventListener('click', () => {
+    //  const current = readFav();
+    //  const next = !current;
+    //  writeFav(next);
+    //  applyState(next);
 
-      // Toast
-      if (window.mahanToast && typeof window.mahanToast.show === 'function') {
-        window.mahanToast.show({
-          type: next ? 'favorite' : 'danger',
-          title: next ? 'به محبوب‌ها اضافه شد' : 'از محبوب‌ها حذف شد',
-          icon: 'favorite',
-          duration: next ? 2500 : 6000,
-          action: !next ? {
-            label: 'بازگردانی',
-            onClick: () => {
-              writeFav(true);
-              applyState(true);
-            }
-          } : undefined,
-          showCloseButton: false
-        });
-      }
-    });
+    //  // Toast
+    //  if (window.mahanToast && typeof window.mahanToast.show === 'function') {
+    //    window.mahanToast.show({
+    //      type: next ? 'favorite' : 'danger',
+    //      title: next ? 'به محبوب‌ها اضافه شد' : 'از محبوب‌ها حذف شد',
+    //      icon: 'favorite',
+    //      duration: next ? 2500 : 6000,
+    //      action: !next ? {
+    //        label: 'بازگردانی',
+    //        onClick: () => {
+    //          writeFav(true);
+    //          applyState(true);
+    //        }
+    //      } : undefined,
+    //      showCloseButton: false
+    //    });
+    //  }
+    //});
   }
 
   function initQty() {
@@ -250,55 +250,55 @@
       btn.classList.add('pd-cta--pulse');
     };
 
-    const setBtnState = () => {
-      const inCart = isInCart(pid);
-      btn.classList.toggle('pd-cta--remove', inCart);
-      setLabel(inCart ? 'حذف از سبد خرید' : 'افزودن به سبد خرید');
-      if (icon) icon.textContent = inCart ? 'delete' : 'shopping_cart';
-      if (qtyRow) {
-        qtyRow.classList.toggle('is-visible', inCart);
-        qtyRow.setAttribute('aria-hidden', inCart ? 'false' : 'true');
-      }
-      if (!inCart) qtyInput.value = '1';
-    };
+    //const setBtnState = () => {
+    //  const inCart = isInCart(pid);
+    //  btn.classList.toggle('pd-cta--remove', inCart);
+    //  setLabel(inCart ? 'حذف از سبد خرید' : 'افزودن به سبد خرید');
+    //  if (icon) icon.textContent = inCart ? 'delete' : 'shopping_cart';
+    //  if (qtyRow) {
+    //    qtyRow.classList.toggle('is-visible', inCart);
+    //    qtyRow.setAttribute('aria-hidden', inCart ? 'false' : 'true');
+    //  }
+    //  if (!inCart) qtyInput.value = '1';
+    //};
 
     setBtnState();
 
-    btn.addEventListener('click', () => {
-      const inCart = isInCart(pid);
+    //btn.addEventListener('click', () => {
+    //  const inCart = isInCart(pid);
 
-      if (inCart) {
-        removeFromCart(pid);
-        setBtnState();
-        pulseBtn();
+    //  if (inCart) {
+    //    removeFromCart(pid);
+    //    setBtnState();
+    //    pulseBtn();
 
-        if (window.mahanToast && typeof window.mahanToast.show === 'function') {
-          window.mahanToast.show({
-            type: 'danger',
-            title: 'از سبد خرید حذف شد',
-            icon: 'delete',
-            duration: 2500,
-            showCloseButton: false
-          });
-        }
-        return;
-      }
+    //    if (window.mahanToast && typeof window.mahanToast.show === 'function') {
+    //      window.mahanToast.show({
+    //        type: 'danger',
+    //        title: 'از سبد خرید حذف شد',
+    //        icon: 'delete',
+    //        duration: 2500,
+    //        showCloseButton: false
+    //      });
+    //    }
+    //    return;
+    //  }
 
-      const qty = clampQty(qtyInput.value);
-      addToCart(pid, qty);
-      setBtnState();
-      pulseBtn();
+    //  const qty = clampQty(qtyInput.value);
+    //  addToCart(pid, qty);
+    //  setBtnState();
+    //  pulseBtn();
 
-      if (window.mahanToast && typeof window.mahanToast.show === 'function') {
-        window.mahanToast.show({
-          type: 'success',
-          title: 'به سبد خرید اضافه شد',
-          icon: 'check_circle',
-          duration: 2500,
-          showCloseButton: false
-        });
-      }
-    });
+    //  if (window.mahanToast && typeof window.mahanToast.show === 'function') {
+    //    window.mahanToast.show({
+    //      type: 'success',
+    //      title: 'به سبد خرید اضافه شد',
+    //      icon: 'check_circle',
+    //      duration: 2500,
+    //      showCloseButton: false
+    //    });
+    //  }
+    //});
   }
 
   function initGallery() {

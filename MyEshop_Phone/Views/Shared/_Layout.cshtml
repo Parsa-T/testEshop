@@ -57,14 +57,10 @@
 
                 <!-- اکشن‌های کاربر: علاقه‌مندی، سبد خرید، حساب -->
                 <nav id="navbar-actions" class="flex items-center gap-2 md:gap-3 shrink-0" aria-label="ابزارهای کاربری">
-
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <!-- علاقه‌مندی‌ها -->
+                    @* <!-- علاقه‌مندی‌ها -->
                         <a href="{{base}}/pages/favorites.html" class="hidden md:flex nav-icon-btn ripple w-10 h-10 rounded-lg items-center justify-center text-gray-600" title="علاقه‌مندی‌ها" aria-label="علاقه‌مندی‌ها">
                             <span class="material-icon" aria-hidden="true">favorite_border</span>
-                        </a>
-                    }
+                        </a> *@
 
                     <!-- ورود (موبایل) -->
                     <a href="/Login" class="md:hidden nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="ورود" aria-label="ورود">
@@ -77,9 +73,9 @@
                         <div id="cart-menu-wrapper" class="relative">
                             <a href="/Shop" id="cart-btn" class="nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="سبد خرید" aria-label="سبد خرید" aria-haspopup="dialog" aria-controls="cart-menu" aria-expanded="false">
                                 <span class="material-icon" aria-hidden="true">shopping_cart</span>
-                                <span id="cart-count-badge" class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white hidden z-10" aria-live="polite" aria-atomic="true">0</span>
+                                <span id="cart-count-badge" class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white hidden z-10" aria-live="polite" aria-atomic="true"></span>
                             </a>
-                            <div id="cart-menu" class="cart-menu" role="dialog" aria-label="سبد خرید" aria-hidden="true" data-cart-menu tabindex="-1">
+                            @* <div id="cart-menu" class="cart-menu" role="dialog" aria-label="سبد خرید" aria-hidden="true" data-cart-menu tabindex="-1">
                                 <div class="cart-menu-panel">
                                     <div class="cart-menu-header">
                                         <div class="flex items-center gap-2">
@@ -104,7 +100,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                         </div>
                     }
 
@@ -132,6 +128,20 @@
                                 <span class="material-icon text-lg" aria-hidden="true">login</span>
                                 <span>خروج</span>
                             </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a href="/admin" class="header-cta header-cta--primary" aria-label="ثبت نام">
+                                    <span class="material-icon text-lg" aria-hidden="true">person_add</span>
+                                    <span>پنل ادمین</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/paneluser" class="header-cta header-cta--primary" aria-label="ثبت نام">
+                                    <span class="material-icon text-lg" aria-hidden="true">person_add</span>
+                                    <span>پنل کاربری</span>
+                                </a>
+                            }
                         }
                         else
                         {
@@ -282,7 +292,7 @@
         </div>
     </footer>
 
-
+    @RenderSection("Scripts",false)
     <script defer="" src="/Layout/assets/js/layout.js"></script>
     <script defer="" src="/Layout/assets/js/script.js"></script>
 

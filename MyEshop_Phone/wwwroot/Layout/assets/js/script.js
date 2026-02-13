@@ -1,3 +1,20 @@
+$(function () {
+    countShopCart();
+});
+function countShopCart() {
+    $.get("/Api/Shop", function (res) {
+        $("#cart-count-badge").html(res);
+    });
+}
+
+function AddToCart(id) {
+    $.get("/Api/Shop/" + id, function (res) {
+        $("#cart-count-badge").html(res);
+    });
+}
+
+
+
 (function () {
   "use strict";
 
@@ -50,58 +67,58 @@ const mahanToast = (() => {
         return stack;
     }
 
-    function show({ type = 'success', title = '', icon = '', duration = 4000, action } = {}) {
-        const root = ensureStack();
-        const t = document.createElement('div');
-        t.className = `toast toast--${type}`;
-        if (action && typeof action.onClick === 'function') {
-            t.classList.add('toast--has-action');
-        }
+    //function show({ type = 'success', title = '', icon = '', duration = 4000, action } = {}) {
+    //    const root = ensureStack();
+    //    const t = document.createElement('div');
+    //    t.className = `toast toast--${type}`;
+    //    if (action && typeof action.onClick === 'function') {
+    //        t.classList.add('toast--has-action');
+    //    }
 
-        const iconName = icon || (type === 'danger' ? 'cancel' : (type === 'favorite' ? 'favorite' : 'check_circle'));
-        t.innerHTML = `
-          <div class="toast__icon" aria-hidden="true"><span class="material-icon">${iconName}</span></div>
-          <div class="toast__body">
-            <div class="toast__title">${title}</div>
-            <div class="toast__actions"></div>
-          </div>
-        `.trim();
+    //    const iconName = icon || (type === 'danger' ? 'cancel' : (type === 'favorite' ? 'favorite' : 'check_circle'));
+    //    t.innerHTML = `
+    //      <div class="toast__icon" aria-hidden="true"><span class="material-icon">${iconName}</span></div>
+    //      <div class="toast__body">
+    //        <div class="toast__title">${title}</div>
+    //        <div class="toast__actions"></div>
+    //      </div>
+    //    `.trim();
 
-        const actions = t.querySelector('.toast__actions');
-        let closed = false;
-        const close = () => {
-            if (closed) return;
-            closed = true;
-            t.classList.remove('is-visible');
-            setTimeout(() => t.remove(), 180);
-        };
+    //    const actions = t.querySelector('.toast__actions');
+    //    let closed = false;
+    //    const close = () => {
+    //        if (closed) return;
+    //        closed = true;
+    //        t.classList.remove('is-visible');
+    //        setTimeout(() => t.remove(), 180);
+    //    };
 
-        if (action && typeof action.onClick === 'function') {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'toast__btn toast__btn--revert';
-            btn.textContent = action.label || 'بازگردانی';
-            btn.addEventListener('click', () => {
-                try { action.onClick(); } finally { close(); }
-            });
-            actions.appendChild(btn);
-        }
+    //    if (action && typeof action.onClick === 'function') {
+    //        const btn = document.createElement('button');
+    //        btn.type = 'button';
+    //        btn.className = 'toast__btn toast__btn--revert';
+    //        btn.textContent = action.label || 'بازگردانی';
+    //        btn.addEventListener('click', () => {
+    //            try { action.onClick(); } finally { close(); }
+    //        });
+    //        actions.appendChild(btn);
+    //    }
 
-        // Close button intentionally omitted for all toasts.
+    //    // Close button intentionally omitted for all toasts.
 
-        const progress = document.createElement('div');
-        progress.className = 'toast__progress';
-        t.appendChild(progress);
+    //    const progress = document.createElement('div');
+    //    progress.className = 'toast__progress';
+    //    t.appendChild(progress);
 
-        root.appendChild(t);
-        requestAnimationFrame(() => t.classList.add('is-visible'));
+    //    root.appendChild(t);
+    //    requestAnimationFrame(() => t.classList.add('is-visible'));
 
-        const ttl = 4000;
-        t.style.setProperty('--toast-duration', `${ttl}ms`);
-        const timer = setTimeout(close, ttl);
-        t.addEventListener('mouseenter', () => clearTimeout(timer), { once: true });
-        return { close };
-    }
+    //    const ttl = 4000;
+    //    t.style.setProperty('--toast-duration', `${ttl}ms`);
+    //    const timer = setTimeout(close, ttl);
+    //    t.addEventListener('mouseenter', () => clearTimeout(timer), { once: true });
+    //    return { close };
+    //}
 
     function queue(payload) {
         try {
@@ -512,14 +529,14 @@ function getCardPid(card) {
     return card?.dataset?.pid || null;
 }
 
-function setFavoriteButtonState(btn, isFav) {
-    if (!btn) return;
-    btn.classList.toggle('is-favorite', isFav);
-    btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
-    btn.setAttribute('aria-label', isFav ? 'حذف از علاقه‌مندی' : 'افزودن به علاقه‌مندی');
-    const icon = btn.querySelector('.material-icon');
-    if (icon) icon.textContent = isFav ? 'favorite' : 'favorite_border';
-}
+//function setFavoriteButtonState(btn, isFav) {
+//    if (!btn) return;
+//    btn.classList.toggle('is-favorite', isFav);
+//    btn.setAttribute('aria-pressed', isFav ? 'true' : 'false');
+//    btn.setAttribute('aria-label', isFav ? 'حذف از علاقه‌مندی' : 'افزودن به علاقه‌مندی');
+//    const icon = btn.querySelector('.material-icon');
+//    if (icon) icon.textContent = isFav ? 'favorite' : 'favorite_border';
+//}
 
 function loadCartFromStorage() {
     if (typeof Storage === 'undefined') return;
@@ -689,48 +706,48 @@ function renderCartMenu() {
             meta.appendChild(brand);
         }
 
-        const price = document.createElement('p');
-        price.className = 'cart-menu-price';
-        price.textContent = priceValue ? formatCurrency(priceValue * quantity) : 'قیمت نامشخص';
-        meta.appendChild(price);
+        //const price = document.createElement('p');
+        //price.className = 'cart-menu-price';
+        //price.textContent = priceValue ? formatCurrency(priceValue * quantity) : 'قیمت نامشخص';
+        //meta.appendChild(price);
 
-        const footer = document.createElement('div');
-        footer.className = 'cart-menu-item-footer';
+        //const footer = document.createElement('div');
+        //footer.className = 'cart-menu-item-footer';
 
-        const qtyWrap = document.createElement('div');
-        qtyWrap.className = 'cart-menu-qty';
+        //const qtyWrap = document.createElement('div');
+        //qtyWrap.className = 'cart-menu-qty';
 
-        const minusBtn = document.createElement('button');
-        minusBtn.type = 'button';
-        minusBtn.className = 'cart-menu-qty-btn';
-        minusBtn.dataset.cartMenuAction = 'dec';
-        minusBtn.dataset.cartMenuPid = pid;
-        minusBtn.setAttribute('aria-label', 'کاهش تعداد');
-        minusBtn.innerHTML = '<span class="material-icon text-sm">remove</span>';
+        //const minusBtn = document.createElement('button');
+        //minusBtn.type = 'button';
+        //minusBtn.className = 'cart-menu-qty-btn';
+        //minusBtn.dataset.cartMenuAction = 'dec';
+        //minusBtn.dataset.cartMenuPid = pid;
+        //minusBtn.setAttribute('aria-label', 'کاهش تعداد');
+        //minusBtn.innerHTML = '<span class="material-icon text-sm">remove</span>';
 
-        const qtyValue = document.createElement('span');
-        qtyValue.className = 'cart-menu-qty-value';
-        qtyValue.textContent = numberFormatter.format(quantity);
+        //const qtyValue = document.createElement('span');
+        //qtyValue.className = 'cart-menu-qty-value';
+        //qtyValue.textContent = numberFormatter.format(quantity);
 
-        const plusBtn = document.createElement('button');
-        plusBtn.type = 'button';
-        plusBtn.className = 'cart-menu-qty-btn';
-        plusBtn.dataset.cartMenuAction = 'inc';
-        plusBtn.dataset.cartMenuPid = pid;
-        plusBtn.setAttribute('aria-label', 'افزایش تعداد');
-        plusBtn.innerHTML = '<span class="material-icon text-sm">add</span>';
+        //const plusBtn = document.createElement('button');
+        //plusBtn.type = 'button';
+        //plusBtn.className = 'cart-menu-qty-btn';
+        //plusBtn.dataset.cartMenuAction = 'inc';
+        //plusBtn.dataset.cartMenuPid = pid;
+        //plusBtn.setAttribute('aria-label', 'افزایش تعداد');
+        //plusBtn.innerHTML = '<span class="material-icon text-sm">add</span>';
 
-        qtyWrap.appendChild(minusBtn);
-        qtyWrap.appendChild(qtyValue);
-        qtyWrap.appendChild(plusBtn);
+        //qtyWrap.appendChild(minusBtn);
+        //qtyWrap.appendChild(qtyValue);
+        //qtyWrap.appendChild(plusBtn);
 
-        const removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.className = 'cart-menu-remove-btn ripple';
-        removeBtn.setAttribute('aria-label', 'حذف از سبد خرید');
-        removeBtn.dataset.cartMenuAction = 'remove';
-        removeBtn.dataset.cartMenuPid = pid;
-        removeBtn.innerHTML = '<span class="material-icon text-base">delete</span>';
+        //const removeBtn = document.createElement('button');
+        //removeBtn.type = 'button';
+        //removeBtn.className = 'cart-menu-remove-btn ripple';
+        //removeBtn.setAttribute('aria-label', 'حذف از سبد خرید');
+        //removeBtn.dataset.cartMenuAction = 'remove';
+        //removeBtn.dataset.cartMenuPid = pid;
+        //removeBtn.innerHTML = '<span class="material-icon text-base">delete</span>';
 
         footer.appendChild(qtyWrap);
         footer.appendChild(removeBtn);
@@ -912,39 +929,39 @@ document.addEventListener('click', (e) => {
         return;
     }
 
-    if ((btn.classList.contains('product-like-btn') || iconName === 'favorite_border' || iconName === 'favorite') && btn.closest('.product-card')) {
-        e.stopPropagation();
-        const card = btn.closest('.product-card');
-        const pid = getCardPid(card);
-        const isFav = btn.classList.contains('is-favorite');
-        const nextFav = !isFav;
-        if (pid) {
-            if (nextFav) favoritesSet.add(pid);
-            else favoritesSet.delete(pid);
-            saveFavoritesToStorage();
-        }
-        setFavoriteButtonState(btn, nextFav);
+    //if ((btn.classList.contains('product-like-btn') || iconName === 'favorite_border' || iconName === 'favorite') && btn.closest('.product-card')) {
+    //    e.stopPropagation();
+    //    const card = btn.closest('.product-card');
+    //    const pid = getCardPid(card);
+    //    const isFav = btn.classList.contains('is-favorite');
+    //    const nextFav = !isFav;
+    //    if (pid) {
+    //        if (nextFav) favoritesSet.add(pid);
+    //        else favoritesSet.delete(pid);
+    //        saveFavoritesToStorage();
+    //    }
+    //    setFavoriteButtonState(btn, nextFav);
 
-        // Toast: favorites
-        window.mahanToast?.show({
-            type: nextFav ? 'favorite' : 'danger',
-            title: nextFav ? 'به محبوب‌ها اضافه شد' : 'از محبوب‌ها حذف شد',
-            icon: 'favorite',
-            duration: nextFav ? 2500 : 6000,
-            action: !nextFav ? {
-                label: 'بازگردانی',
-                onClick: () => {
-                    if (pid) {
-                        favoritesSet.add(pid);
-                        saveFavoritesToStorage();
-                    }
-                    setFavoriteButtonState(btn, true);
-                }
-            } : undefined,
-            showCloseButton: false
-        });
-        return;
-    }
+    //    // Toast: favorites
+    //    //window.mahanToast?.show({
+    //    //    type: nextFav ? 'favorite' : 'danger',
+    //    //    title: nextFav ? 'به محبوب‌ها اضافه شد' : 'از محبوب‌ها حذف شد',
+    //    //    icon: 'favorite',
+    //    //    duration: nextFav ? 2500 : 6000,
+    //    //    action: !nextFav ? {
+    //    //        label: 'بازگردانی',
+    //    //        onClick: () => {
+    //    //            if (pid) {
+    //    //                favoritesSet.add(pid);
+    //    //                saveFavoritesToStorage();
+    //    //            }
+    //    //            setFavoriteButtonState(btn, true);
+    //    //        }
+    //    //    } : undefined,
+    //    //    showCloseButton: false
+    //    //});
+    //    return;
+    //}
 });
 
 document.addEventListener('click', (e) => {
@@ -990,44 +1007,44 @@ document.querySelectorAll('.product-card').forEach((card) => {
         }
     });
 
-    const hasLike = card.querySelector('button.product-like-btn');
-    const addBtn = card.querySelector('button.product-add-btn');
-    if (!hasLike) {
-        const likeBtn = document.createElement('button');
-        likeBtn.type = 'button';
-        likeBtn.className = 'nav-icon-btn ripple product-like-btn w-10 h-10 rounded-2xl bg-white border border-gray-100 text-gray-700 flex items-center justify-center hover:bg-[#EFF6FF] transition';
-        likeBtn.setAttribute('aria-label', 'افزودن به علاقه‌مندی');
-        likeBtn.innerHTML = '<span class="material-icon text-[20px]">favorite_border</span>';
-        if (addBtn && addBtn.parentNode) {
-            addBtn.parentNode.insertBefore(likeBtn, addBtn);
-        } else if (bottomRow) {
-            const wrap = document.createElement('div');
-            wrap.className = 'flex items-center gap-2';
-            wrap.appendChild(likeBtn);
-            bottomRow.appendChild(wrap);
-        }
-    }
+    //const hasLike = card.querySelector('button.product-like-btn');
+    //const addBtn = card.querySelector('button.product-add-btn');
+    //if (!hasLike) {
+    //    const likeBtn = document.createElement('button');
+    //    likeBtn.type = 'button';
+    //    likeBtn.className = 'nav-icon-btn ripple product-like-btn w-10 h-10 rounded-2xl bg-white border border-gray-100 text-gray-700 flex items-center justify-center hover:bg-[#EFF6FF] transition';
+    //    likeBtn.setAttribute('aria-label', 'افزودن به علاقه‌مندی');
+    //    likeBtn.innerHTML = '<span class="material-icon text-[20px]">favorite_border</span>';
+    //    if (addBtn && addBtn.parentNode) {
+    //        addBtn.parentNode.insertBefore(likeBtn, addBtn);
+    //    } else if (bottomRow) {
+    //        const wrap = document.createElement('div');
+    //        wrap.className = 'flex items-center gap-2';
+    //        wrap.appendChild(likeBtn);
+    //        bottomRow.appendChild(wrap);
+    //    }
+    //}
 
-    const likeBtn = card.querySelector('button.product-like-btn');
-    if (likeBtn) {
-        const pid = getCardPid(card);
-        const isFav = pid ? favoritesSet.has(pid) : likeBtn.classList.contains('is-favorite');
-        setFavoriteButtonState(likeBtn, isFav);
-    }
+    //const likeBtn = card.querySelector('button.product-like-btn');
+    //if (likeBtn) {
+    //    const pid = getCardPid(card);
+    //    const isFav = pid ? favoritesSet.has(pid) : likeBtn.classList.contains('is-favorite');
+    //    setFavoriteButtonState(likeBtn, isFav);
+    //}
 
-    const cardPid = getCardPid(card);
-    if (cardPid) {
-        const cardName = (card.dataset.name || titleEl?.textContent || '').trim();
-        const cardBrand = (card.dataset.brand || brandEl?.textContent || '').trim();
-        const priceValue = parsePriceValue(card.dataset.price);
-        const cardImage = card.dataset.image || card.querySelector('img')?.src || '';
-        productCatalog.set(cardPid, {
-            name: cardName || 'محصول',
-            brand: cardBrand,
-            priceValue,
-            image: cardImage,
-        });
-    }
+    //const cardPid = getCardPid(card);
+    //if (cardPid) {
+    //    const cardName = (card.dataset.name || titleEl?.textContent || '').trim();
+    //    const cardBrand = (card.dataset.brand || brandEl?.textContent || '').trim();
+    //    const priceValue = parsePriceValue(card.dataset.price);
+    //    const cardImage = card.dataset.image || card.querySelector('img')?.src || '';
+    //    productCatalog.set(cardPid, {
+    //        name: cardName || 'محصول',
+    //        brand: cardBrand,
+    //        priceValue,
+    //        image: cardImage,
+    //    });
+    //}
 });
 
 document.addEventListener('click', function (e) {
