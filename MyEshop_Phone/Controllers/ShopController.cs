@@ -30,7 +30,7 @@ namespace MyEshop_Phone.Controllers
 
         // افزودن یا افزایش آیتم در سبد خرید
         [HttpGet("{id}")]
-        public int Get(int id)
+        public int Get(int id, string? color)
         {
             List<ShopCartItem> list = new List<ShopCartItem>();
 
@@ -43,7 +43,9 @@ namespace MyEshop_Phone.Controllers
             }
 
             // بررسی وجود محصول در سبد
-            var existingItem = list.FirstOrDefault(p => p.ProductID == id);
+            var existingItem = list.FirstOrDefault(p =>
+                                                   p.ProductID == id &&
+                                                   (p.ColorName ?? "") == (color ?? ""));
             if (existingItem != null)
             {
                 existingItem.Count += 1;
@@ -53,7 +55,8 @@ namespace MyEshop_Phone.Controllers
                 list.Add(new ShopCartItem
                 {
                     ProductID = id,
-                    Count = 1
+                    Count = 1,
+                    ColorName = string.IsNullOrEmpty(color) ? null : color,
                 });
             }
 
@@ -61,7 +64,26 @@ namespace MyEshop_Phone.Controllers
             HttpContext.Session.SetString("ShopCart", JsonSerializer.Serialize(list));
 
             // برگرداندن مجموع تعداد آیتم‌ها
-            return Get();
+            return list.Sum(l => l.Count);
         }
+        [HttpDelete("{id}")]
+        public IActionResult Remove(int id)
+        {
+            var shopCartJson = HttpContext.Session.GetString("ShopCart");
+            if (string.IsNullOrEmpty(shopCartJson))
+                return Ok(0);
+
+            var list = JsonSerializer.Deserialize<List<ShopCartItem>>(shopCartJson);
+
+            // حذف محصول
+            list.RemoveAll(p => p.ProductID == id);
+
+            // ذخیره دوباره Session
+            HttpContext.Session.SetString("ShopCart", JsonSerializer.Serialize(list));
+
+            // برگرداندن مجموع تعداد آیتم‌ها
+            return Ok(list.Sum(x => x.Count));
+        }
+
     }
 }

@@ -17,5 +17,8 @@ namespace MyEshop_Phone.Application.Interface
         Task<AddOrEditUsersDTO> GetUserforEdit(int id);
         Task UserDelete(_Users users);
         Task<bool> FindNumberAsync(string number);
+        Task<EditUserProfileDTO> UserforEdit(int id);
+        Task<EditNumberUsersDTO> FindUserIdForEditNumber(int id);
+        Task UpdateUserNumber(int id, string number);
     }
 }

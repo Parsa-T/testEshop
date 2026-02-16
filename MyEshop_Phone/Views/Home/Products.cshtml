@@ -1,5 +1,8 @@
 ﻿@using MyEshop_Phone.Domain.Model
 @model _Products
+@{
+    ViewData["Title"] = "محصولات | ماهان شاپ";
+}
 <link rel="stylesheet" href="/Layout/assets/css/style.css" />
 <link rel="stylesheet" href="/Layout/assets/css/product-detail.css" />
 <main id="main-content" class="max-w-7xl mx-auto px-4 pt-4 sm:pt-6 pb-16">
@@ -32,15 +35,6 @@
                     </button>
                     <button class="pd-nav-btn pd-nav-btn--next" type="button" aria-label="تصویر بعدی">
                         <span class="material-icon" aria-hidden="true">chevron_left</span>
-                    </button>
-
-                    <button id="favorite-toggle"
-                            type="button"
-                            class="pd-like-btn"
-                            aria-pressed="false"
-                            aria-label="افزودن به علاقه‌مندی"
-                            title="علاقه‌مندی">
-                        <span class="material-icon" aria-hidden="true">favorite_border</span>
                     </button>
                 </div>
 
@@ -138,7 +132,7 @@
 
                 <hr class="pd-divider" />
 
-                <button id="add-to-cart-btn" type="button" class="pd-cta w-full">
+                <button type="button" data-id="@Model.Id" class="add-to-cart-btn pd-cta w-full">
                     <span class="material-icon pd-cta__icon" aria-hidden="true">shopping_cart</span>
                     <span class="pd-cta__label" data-cta-label>افزودن به سبد خرید</span>
                 </button>

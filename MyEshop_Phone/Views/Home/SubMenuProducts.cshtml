@@ -54,7 +54,7 @@
                     <!-- Product cards will be dynamically populated/filtered. -->
                     @foreach (var item in Model)
                     {
-                            <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
+                        <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
                                  data-category="@item.products_Groups.GroupTitle"
                                  data-brand="@item.ShortDescription"
                                  data-model="@item.Title"
@@ -63,42 +63,42 @@
                                  data-popular="9"
                                  data-new="@item.CreateTime.ToString("yyyy-MM-dd")"
                                  data-stock="true">
-                                <div class="relative">
-                                    <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
-                                        <img src="/AdminPanel/Photo/Products/@item.ImageName" alt="@item.Title" class="w-full h-full object-contain" width="900" height="900" loading="lazy">
-                                    </div>
+                            <div class="relative">
+                                <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
+                                    <img src="/AdminPanel/Photo/Products/@item.ImageName" alt="@item.Title" class="w-full h-full object-contain" width="900" height="900" loading="lazy">
+                                </div>
 
                                 @* <div class="product-card-color-strip" aria-label="رنگ‌های موجود">
                                     <span class="color-swatch bg-slate-900" data-color-hex="#0f172a" title="مشکی" aria-label="مشکی"></span>
                                     <span class="color-swatch bg-zinc-400" data-color-hex="#a1a1aa" title="خاکستری" aria-label="خاکستری"></span>
                                 </div> *@
-                                </div>
+                            </div>
 
-                                <div class="mt-4">
-                                    <a href="/Product/@item.Id">
-                                        <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
-                                    </a>
-                                    <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: @item.ShortDescription</p>
-                                </div>
+                            <div class="mt-4">
+                                <a href="/Product/@item.Id">
+                                    <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
+                                </a>
+                                <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: @item.ShortDescription</p>
+                            </div>
 
-                                <div class="mt-3 flex items-center justify-between gap-3">
-                                    <div class="min-w-0">
-                                        <div class="text-[10px] md:text-xs text-gray-400 line-through">@item.Price.ToString("N0")</div>
-                                        <div class="text-base md:text-lg font-black text-[#2563EB] leading-tight">
+                            <div class="mt-3 flex items-center justify-between gap-3">
+                                <div class="min-w-0">
+                                    <div class="text-[10px] md:text-xs text-gray-400 line-through">@item.Price.ToString("N0")</div>
+                                    <div class="text-base md:text-lg font-black text-[#2563EB] leading-tight">
                                         @item.Price.ToString("N0") <span class="text-[10px] md:text-xs font-medium text-gray-500">تومان</span>
-                                        </div>
                                     </div>
+                                </div>
 
-                                    <div class="flex items-center gap-2" style="margin-top:40px">
-                                        <button class="nav-icon-btn ripple product-like-btn w-10 h-10 rounded-2xl bg-white border border-gray-100 text-gray-700 flex items-center justify-center hover:bg-[#EFF6FF] transition" type="button" aria-label="افزودن به علاقه‌مندی">
-                                            <span class="material-icon text-[22px]">favorite_border</span>
-                                        </button>
-                                        <button class="nav-icon-btn ripple product-add-btn w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button" aria-label="افزودن به سبد خرید">
+                                <div class="flex items-center gap-2" style="margin-top:40px">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <button data-id="@item.Id" class="add-to-cart-btn nav-icon-btn ripple product-add-btn w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button" aria-label="افزودن به سبد خرید">
                                             <span class="material-icon text-[22px]">add</span>
                                         </button>
-                                    </div>
+                                    }
                                 </div>
-                            </article>
+                            </div>
+                        </article>
                     }
                 </div>
 

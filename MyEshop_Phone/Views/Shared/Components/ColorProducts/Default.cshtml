@@ -2,8 +2,11 @@
 @model IEnumerable<_ProductsColor>
 @foreach (var item in Model)
 {
-    <label class="pd-color" aria-label="مشکی">
-        <input type="radio" name="color" value="مشکی" checked />
-        <span class="pd-color__dot" style="background:@(item.color.Name)"></span>
+    <label class="pd-color" aria-label="@item.color.Name">
+        <input type="radio" name="color" value="@item.color.Name" />
+        <span class="pd-color__dot"
+              style="background:@item.color.Name">
+        </span>
     </label>
+
 }

@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MyEshop_Phone.Application.Common;
 using MyEshop_Phone.Application.DTO;
 using System.Security.Claims;
 
@@ -21,5 +22,6 @@ namespace MyEshop_Phone.Pages.PanelUser
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             UserProfile = await _mediator.Send(new GetUserProfileQuery(userId));
         }
+
     }
 }

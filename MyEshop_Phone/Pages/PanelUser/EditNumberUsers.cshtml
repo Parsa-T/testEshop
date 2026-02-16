@@ -1,0 +1,40 @@
+﻿@page
+@model MyEshop_Phone.Pages.PanelUser.EditNumberUsersModel
+@{
+    ViewData["Title"] = "ویرایش شماره تماس";
+}
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <aside class="lg:col-span-1">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-16">
+            @*             <div class="p-6 border-b border-gray-100 bg-[#F8FAFC]">
+                <div class="flex items-center gap-3">
+                    <div class="w-14 h-14 bg-[#DBEAFE] rounded-full flex items-center justify-center text-xl text-[#1E3A8A] font-black">پارسا</div>
+                    <div>
+                        <h3 class="font-bold text-gray-900">پارسا طاهری</h3>
+                        <p class="text-xs text-gray-500 mt-1">09044870582</p>
+                    </div>
+                </div>
+            </div> *@
+            <nav class="p-2 space-y-1">
+                <a href="#" data-tab-target="#details" class="profile-sidebar-link flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 text-sm font-medium active bg-[#EFF6FF] text-[#2563EB]">
+                    <span class="material-icon">person</span> مشخصات حساب
+                </a>
+                <div class="border-t border-gray-100 my-2"></div>
+                <a href="/Loguot" class="flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 text-sm font-medium transition-colors">
+                    <span class="material-icon">logout</span> خروج از حساب
+                </a>
+            </nav>
+        </div>
+    </aside>
+    <div class="lg:col-span-3">
+        <form method="post">
+            <input asp-for="EditNumber.Id" type="hidden" />
+            <label>شماره تماس فعلی : </label>
+            <input asp-for="EditNumber.Number" readonly/>
+            <label>شماره تماس جدید :</label>
+            <input asp-for="EditNumber.NewNumber" />
+            <span asp-validation-for="EditNumber.NewNumber" class="text-danger"></span>
+            <input id="btnsum" style="margin: 10px;padding: 5px;border-radius: 10px;background-color: #2563EB;width: 150px;color: white;font-family: inherit;font-weight: bold;" type="submit" value="تایید شماره تماس" class="btn btn-primary" />
+        </form>
+    </div>
+</div>

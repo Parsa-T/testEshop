@@ -83,7 +83,8 @@ namespace MyEshop_Phone.Controllers
                 Name = HttpContext.Session.GetString("RegisterName"),
                 Family = HttpContext.Session.GetString("RegisterFamily"),
                 Number = HttpContext.Session.GetString("RegisterNumber"),
-                IsAdmin = false
+                IsAdmin = false,
+                RegisterDate = DateTime.Now,
             };
             await _userServices.AddUsers(user);
             await _userServices.SaveAsync();

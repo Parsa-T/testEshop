@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyEshop_Phone.Application.DTO;
 using MyEshop_Phone.Application.Interface;
+using MyEshop_Phone.Application.ViewModel;
 using MyEshop_Phone.Domain.Interface;
 using MyEshop_Phone.Domain.Model;
 using MyEshop_Phone.Infra.Data.Context;
@@ -101,6 +102,12 @@ namespace MyEshop_Phone.Infra.Data.Repository
         {
             return await _db.Products.Where(p => p.ProductGroupsId == id).Include(pg => pg.products_Groups).ToListAsync();
         }
+
+        public async Task<_Products> ShopCart(int id)
+        {
+            var productId = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
+            return productId;
+        }
     }
     public class QueriProductsRepository : IQueriProductsServices
     {
@@ -109,6 +116,7 @@ namespace MyEshop_Phone.Infra.Data.Repository
         {
             _db = context;
         }
+
         public async Task<_Products> ShowSingleProducts(int id)
         {
             var product = await _db.Products

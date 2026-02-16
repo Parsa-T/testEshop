@@ -44,6 +44,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
             }
         }
 
+        public async Task<_Users> FindUserById(int id)
+        {
+            return await _db.Users.FindAsync(id);
+        }
+
         public async Task<IEnumerable<_Users>> GetAllUsers()
         {
             var result = await _db.Users.ToListAsync();

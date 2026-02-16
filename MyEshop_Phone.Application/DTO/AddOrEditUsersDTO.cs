@@ -50,4 +50,16 @@ namespace MyEshop_Phone.Application.DTO
         public int Id { get; set; }
         public string Name { get; set; }
     }
+    public class EditUserProfileDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Family { get; set; }
+        public string Address { get; set; }
+        public string UrlPhoto { get; set; }
+        public string CityName { get; set; }
+        public string StateName { get; set; }
+        public IFormFile imgUp { get; set; }
+        public int PostalCode { get; set; }
+    }
 }

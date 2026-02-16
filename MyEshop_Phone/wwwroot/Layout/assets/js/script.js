@@ -1,20 +1,3 @@
-$(function () {
-    countShopCart();
-});
-function countShopCart() {
-    $.get("/Api/Shop", function (res) {
-        $("#cart-count-badge").html(res);
-    });
-}
-
-function AddToCart(id) {
-    $.get("/Api/Shop/" + id, function (res) {
-        $("#cart-count-badge").html(res);
-    });
-}
-
-
-
 (function () {
   "use strict";
 

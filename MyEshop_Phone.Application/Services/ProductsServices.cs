@@ -16,7 +16,7 @@ namespace MyEshop_Phone.Application.Services
         IProductsRepository _productsRepository;
         IProductsGroupeRepository _productsGroupeRepository;
         ISubGroupsServices _subGroupsRepository;
-        public ProductsServices(IProductsRepository repository, IProductsGroupeRepository productsGroupeRepository,ISubGroupsServices subGroupsServices)
+        public ProductsServices(IProductsRepository repository, IProductsGroupeRepository productsGroupeRepository, ISubGroupsServices subGroupsServices)
         {
             _productsRepository = repository;
             _productsGroupeRepository = productsGroupeRepository;
@@ -100,7 +100,7 @@ namespace MyEshop_Phone.Application.Services
         public async Task<IEnumerable<ProductsDropdownDTO>> GetProductsDropDown()
         {
             var product = await _productsRepository.GetAll();
-            return product.Select(p=>new ProductsDropdownDTO
+            return product.Select(p => new ProductsDropdownDTO
             {
                 Id = p.Id,
                 Title = p.Title
@@ -110,7 +110,7 @@ namespace MyEshop_Phone.Application.Services
         public async Task<ShowProductsDTO?> GetProductsForEdit(int id)
         {
             var product = await _productsRepository.GetProductsById(id);
-            if(product==null)
+            if (product == null)
                 return null;
             var group = await _productsGroupeRepository.GetAllGroups();
             var sub = await _subGroupsRepository.ShowSubMenuGroups();
@@ -129,12 +129,12 @@ namespace MyEshop_Phone.Application.Services
                 SubmenuGroupsId = product.SubmenuGroupsId,
                 ShowGroups = group.Select(g => new AddOrEditGroupsDTO
                 {
-                    GroupTitle= g.GroupTitle,
+                    GroupTitle = g.GroupTitle,
                     Id = g.Id,
                 }).ToList(),
-                ShowSubGroups = sub.Select(sg=> new ShowSubMenuDTO
+                ShowSubGroups = sub.Select(sg => new ShowSubMenuDTO
                 {
-                    Id= sg.Id,
+                    Id = sg.Id,
                     Title = sg.Title,
                 }).ToList()
             };
@@ -165,6 +165,12 @@ namespace MyEshop_Phone.Application.Services
         public async Task Save()
         {
             await _productsRepository.Save();
+        }
+
+        public async Task<_Products> ShopCartItem(int id)
+        {
+            var productId = await _productsRepository.ShopCart(id);
+            return productId;
         }
 
         public async Task<IEnumerable<_Products>> ShowGroupsById(int id)

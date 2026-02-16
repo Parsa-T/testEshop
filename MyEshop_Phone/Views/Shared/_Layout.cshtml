@@ -71,9 +71,9 @@
                     {
                         <!-- سبد خرید -->
                         <div id="cart-menu-wrapper" class="relative">
-                            <a href="/Shop" id="cart-btn" class="nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="سبد خرید" aria-label="سبد خرید" aria-haspopup="dialog" aria-controls="cart-menu" aria-expanded="false">
+                            <a href="/ShopCart" id="cart-btn" class="nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="سبد خرید" aria-label="سبد خرید" aria-haspopup="dialog" aria-controls="cart-menu" aria-expanded="false">
                                 <span class="material-icon" aria-hidden="true">shopping_cart</span>
-                                <span id="cart-count-badge" class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white hidden z-10" aria-live="polite" aria-atomic="true"></span>
+                                <span style="display:flex" id="countShopCart" class="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white hidden z-10" aria-live="polite" aria-atomic="true"></span>
                             </a>
                             @* <div id="cart-menu" class="cart-menu" role="dialog" aria-label="سبد خرید" aria-hidden="true" data-cart-menu tabindex="-1">
                                 <div class="cart-menu-panel">
@@ -292,9 +292,11 @@
         </div>
     </footer>
 
-    @RenderSection("Scripts",false)
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script defer="" src="/Layout/assets/js/layout.js"></script>
     <script defer="" src="/Layout/assets/js/script.js"></script>
+    <script src="/Layout/assets/js/cartshop.js"></script>
+    @RenderSection("Scripts",false)
 
 </body>
 </html>

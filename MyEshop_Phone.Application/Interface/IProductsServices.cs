@@ -1,4 +1,5 @@
 ﻿using MyEshop_Phone.Application.DTO;
+using MyEshop_Phone.Application.ViewModel;
 using MyEshop_Phone.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace MyEshop_Phone.Application.Interface
         Task<IEnumerable<_Products>> ReSearch(string search);
         Task<IEnumerable<_Products>> GetAllProduct();
         Task<IEnumerable<_Products>> ShowGroupsById(int id);
+        Task<_Products> ShopCartItem(int id);
         Task Save();
     }
     public interface IQueriProductsServices

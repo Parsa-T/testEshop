@@ -30,7 +30,8 @@ public class GetUserProfileQueryHandler
                 PostalCode = u.PostalCode,
                 StateId = u.StateId,
                 StateName = u.StateName,
-                UrlPhoto = u.UrlPhoto
+                UrlPhoto = u.UrlPhoto,
+                Id = u.Id
             })
             .FirstOrDefaultAsync(cancellationToken);
     }

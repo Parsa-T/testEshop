@@ -9,6 +9,7 @@ namespace MyEshop_Phone.Application.DTO
 {
     public class UserProfileDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Family { get; set; }
         public string? Number { get; set; }
@@ -19,5 +20,12 @@ namespace MyEshop_Phone.Application.DTO
         public string StateName { get; set; }
         public int CityId { get; set; }
         public string? CityName { get; set; }
+    }
+    public class EditNumberUsersDTO
+    {
+        public int Id { get; set; }
+        public string Number { get; set; }
+        public string NewNumber { get; set; }
+        public int Code { get; set; }
     }
 }
