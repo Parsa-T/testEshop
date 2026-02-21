@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using MyEshop_Phone.Application.ViewModel;
 using System.Text.Json;
+using MyEshop_Phone.Application.Interface;
+using MyEshop_Phone.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MyEshop_Phone.Domain.Model;
 
 namespace MyEshop_Phone.Controllers
 {
@@ -10,6 +15,13 @@ namespace MyEshop_Phone.Controllers
     [ApiController]
     public class ShopController : ControllerBase
     {
+        IOrderServices _orderServices;
+        IPaymentGateway _paymentGateway;
+        public ShopController(IOrderServices order,IPaymentGateway payment)
+        {
+            _orderServices = order;
+            _paymentGateway = payment;
+        }
         public int Get()
         {
             // لیست پیش‌فرض
@@ -83,6 +95,46 @@ namespace MyEshop_Phone.Controllers
 
             // برگرداندن مجموع تعداد آیتم‌ها
             return Ok(list.Sum(x => x.Count));
+        }
+        [HttpPost("pay/{orderId}")]
+        public async Task<IActionResult> Pay(int orderId)
+        {
+            var order =await _orderServices.FinIdOrder(orderId);
+            if (order == null || order.IsFinaly)
+                return BadRequest();
+            var authority = await _paymentGateway.RequestPaymentAsync(order.Id, order.TotalPrice);
+            if(authority==null)
+                return BadRequest("خطا در درگاه");
+            order.Authority = authority;
+            await _orderServices.SaveAsync();
+            var url = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
+            return Redirect(url);
+
+        }
+        [HttpGet("verify")]
+        public async Task<IActionResult> Verify(string Authority, string Status)
+        {
+            if (Status != "OK")
+                return BadRequest("پرداخت لغو شد");
+
+            var order = await _orderServices.FindOrderByAuthorityAsync(Authority);
+
+            if (order == null)
+                return NotFound();
+
+            var result = await _paymentGateway
+                .VerifyAsync(Authority, order.TotalPrice);
+
+            if (!result.IsSuccess)
+                return Redirect("/PaymentResult/failed");
+
+            order.IsFinaly = true;
+            order.RefId = result.RefId;
+            order.Date = DateTime.Now;
+
+            await _orderServices.SaveAsync();
+            HttpContext.Session.Remove("ShopCart");
+            return Redirect("/PaymentResult/Success?refId=" + order.RefId);
         }
 
     }

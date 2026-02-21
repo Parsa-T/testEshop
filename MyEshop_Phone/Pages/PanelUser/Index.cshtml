@@ -52,23 +52,34 @@
 
                     <!-- Order Status Tabs -->
                     <div class="flex gap-2 mb-6 border-b border-gray-200">
-                        <button class="order-tab active px-4 py-3 text-sm font-medium border-b-2 border-[#2563EB] text-[#2563EB] transition-all duration-200 flex items-center gap-2" data-status="processing">
+                        <button onclick="btn()" class="order-tab active px-4 py-3 text-sm font-medium border-b-2 border-[#2563EB] text-[#2563EB] transition-all duration-200 flex items-center gap-2" data-status="processing">
                             <span class="material-icon text-lg">hourglass_empty</span>
                             در حال پردازش
-                            <span class="bg-[#2563EB] text-white text-xs px-2 py-1 rounded-full">2</span>
+                            <span style="display:none" class="bg-[#2563EB] text-white text-xs px-2 py-1 rounded-full"></span>
                         </button>
-                        <button class="order-tab px-4 py-3 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300 transition-all duration-200 flex items-center gap-2" data-status="shipped">
+                        <button onclick="btn2()" class="order-tab px-4 py-3 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300 transition-all duration-200 flex items-center gap-2" data-status="shipped">
                             <span class="material-icon text-lg">local_shipping</span>
                             ارسال شده
-                            <span class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">1</span>
+                            <span style="display:none" class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"></span>
                         </button>
                     </div>
-
                     <!-- Order Content Container -->
-                    <div id="order-content" class="space-y-4">
-                        <!-- Orders will be dynamically inserted here -->
+                    <div id="order-content2" class="space-y-4">
+                        @await Component.InvokeAsync("ShowUserProduct")
                     </div>
-
+                    <div id="order-content3">
+                        @await Component.InvokeAsync("SendProductUser")
+                    </div>
+                    <script>
+                        function btn(){
+                            document.getElementById('order-content2').style.display = "block";
+                            document.getElementById('order-content3').style.display = "none";
+                        }
+                        function btn2(){
+                            document.getElementById('order-content2').style.display = "none";
+                            document.getElementById('order-content3').style.display = "block";
+                        }
+                    </script>
                     <!-- Loading State -->
                     <div id="loading-state" class="hidden">
                         <div class="flex flex-col items-center justify-center py-12">
@@ -459,48 +470,48 @@
           statusBgColor = 'bg-blue-100';
         }
 
-        // Generate products HTML
-        const productsHtml = order.products.map(product =>
-          `<div class="flex flex-col items-center gap-1 min-w-fit">
-            <img src="${product.image}" class="w-16 h-16 rounded-lg border border-gray-100 object-cover hover:scale-105 transition-transform" alt="${product.name}">
-            <span class="text-xs text-gray-600 text-center max-w-[80px] truncate">${product.name}</span>
-          </div>`
-        ).join('');
+        // // Generate products HTML
+        // const productsHtml = order.products.map(product =>
+        //   `<div class="flex flex-col items-center gap-1 min-w-fit">
+        //     <img src="${product.image}" class="w-16 h-16 rounded-lg border border-gray-100 object-cover hover:scale-105 transition-transform" alt="${product.name}">
+        //     <span class="text-xs text-gray-600 text-center max-w-[80px] truncate">${product.name}</span>
+        //   </div>`
+        // ).join('');
 
-        // Tracking code section (only for shipped orders)
-        let trackingSection = '';
-        if (isShipped) {
-          if (order.trackingCode && order.trackingStatus === 'registered') {
-            trackingSection = `
-              <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <span class="material-icon text-green-600 text-sm">check_circle</span>
-                    <div>
-                      <span class="text-sm font-medium text-green-800">کد رهگیری پستی:</span>
-                      <span class="font-mono font-bold text-green-700 mr-2">${order.trackingCode}</span>
-                    </div>
-                  </div>
-                  <button onclick="copyToClipboard('${order.trackingCode}')" class="text-green-600 hover:text-green-800 transition">
-                    <span class="material-icon text-lg">content_copy</span>
-                  </button>
-                </div>
-              </div>
-            `;
-          } else {
-            trackingSection = `
-              <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-3">
-                <div class="flex items-center gap-2">
-                  <span class="material-icon text-orange-600 text-sm">schedule</span>
-                  <div>
-                    <span class="text-sm font-medium text-orange-800">در حال ثبت کد رهگیری...</span>
-                    <div class="text-xs text-orange-600 mt-1">به زودی کد رهگیری ثبت خواهد شد</div>
-                  </div>
-                </div>
-              </div>
-            `;
-          }
-        }
+        // // Tracking code section (only for shipped orders)
+        // let trackingSection = '';
+        // if (isShipped) {
+        //   if (order.trackingCode && order.trackingStatus === 'registered') {
+        //     trackingSection = `
+        //       <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
+        //         <div class="flex items-center justify-between">
+        //           <div class="flex items-center gap-2">
+        //             <span class="material-icon text-green-600 text-sm">check_circle</span>
+        //             <div>
+        //               <span class="text-sm font-medium text-green-800">کد رهگیری پستی:</span>
+        //               <span class="font-mono font-bold text-green-700 mr-2">${order.trackingCode}</span>
+        //             </div>
+        //           </div>
+        //           <button onclick="copyToClipboard('${order.trackingCode}')" class="text-green-600 hover:text-green-800 transition">
+        //             <span class="material-icon text-lg">content_copy</span>
+        //           </button>
+        //         </div>
+        //       </div>
+        //     `;
+        //   } else {
+        //     trackingSection = `
+        //       <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-3">
+        //         <div class="flex items-center gap-2">
+        //           <span class="material-icon text-orange-600 text-sm">schedule</span>
+        //           <div>
+        //             <span class="text-sm font-medium text-orange-800">در حال ثبت کد رهگیری...</span>
+        //             <div class="text-xs text-orange-600 mt-1">به زودی کد رهگیری ثبت خواهد شد</div>
+        //           </div>
+        //         </div>
+        //       </div>
+        //     `;
+        //   }
+        // }
 
         // Action buttons
         let actionButtons = `
@@ -1880,3 +1891,10 @@
         </button>
     </div>
 </div>
+@section Scripts{
+    <script>
+        $(document).ready(function(){
+            document.getElementById('order-content3').style.display = "none";
+        });
+    </script>
+}

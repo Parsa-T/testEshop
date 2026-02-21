@@ -14,8 +14,10 @@ namespace MyEshop_Phone.Domain.Model
         public int Id { get; set; }
         public int OrderId { get; set; }
         public int ProductId { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public int Count { get; set; }
+        public string? ColorName { get; set; }
+        public string? ProductTitle { get; set; }
         #region Rel
         [ForeignKey("OrderId")]
         public virtual _Orders orders { get; set; }

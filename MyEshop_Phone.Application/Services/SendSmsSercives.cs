@@ -34,7 +34,7 @@ namespace MyEshop_Phone.Application.Services
             var body = new
             {
                 mobile = mobile,
-                templateId = 136996,
+                templateId = 246861,
                 parameters = new[]
                 {
             new { name = "Code", value = code }

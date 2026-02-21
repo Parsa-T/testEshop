@@ -28,4 +28,20 @@ namespace MyEshop_Phone.Application.DTO
         public string NewNumber { get; set; }
         public int Code { get; set; }
     }
+    public class UserOrderDto
+    {
+        public int OrderId { get; set; }
+        public DateTime Date { get; set; }
+        public int TotalPrice { get; set; }
+        public List<UserOrderDetailDto> Items { get; set; }
+    }
+
+    public class UserOrderDetailDto
+    {
+        public string ProductTitle { get; set; }
+        public string ColorName { get; set; }
+        public int Count { get; set; }
+        public string ImageUrl { get; set; }
+        public int Price { get; set; }
+    }
 }

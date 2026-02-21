@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MyEshop_Phone.Application.Common.Interfaces;
+using MyEshop_Phone.Application.Common.setting;
 using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Application.Services;
 using MyEshop_Phone.Infra.Data.Context;
 using MyEshop_Phone.Infra.IoC;
+using QuestPDF.Drawing;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,10 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 });
 #endregion
 
+#region PDF
+QuestPDF.Settings.License = LicenseType.Community;
+FontManager.RegisterFont(File.OpenRead("wwwroot/fonts/Vazir.ttf"));
+#endregion
 
 #region Services
 builder.Services.AddHttpClient<SendSmsSercives>();
@@ -29,10 +37,10 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(GetUserProfileQuery).Assembly));
 builder.Services.AddScoped<IApplicationDbContext>(provider =>
     provider.GetRequiredService<MyDbContext>());
-RegisterServices(builder.Services);
-static void RegisterServices(IServiceCollection services)
+RegisterServices(builder.Services,builder.Configuration);
+static void RegisterServices(IServiceCollection services, IConfiguration configuration)
 {
-    DependencyContainer.RegisterServices(services);
+    DependencyContainer.RegisterServices(services,configuration);
 }
 #endregion
 

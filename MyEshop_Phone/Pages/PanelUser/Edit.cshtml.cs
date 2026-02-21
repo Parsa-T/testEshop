@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyEshop_Phone.Application.DTO;
 using MyEshop_Phone.Application.Interface;
+using MyEshop_Phone.Application.Services;
 using MyEshop_Phone.Domain.Interface;
+using MyEshop_Phone.Domain.Model;
 
 namespace MyEshop_Phone.Pages.PanelUser
 {
@@ -10,10 +12,12 @@ namespace MyEshop_Phone.Pages.PanelUser
     {
         IUserServices _userServices;
         IUserRepository _userRepository;
-        public EditModel(IUserServices user, IUserRepository repository)
+        ILocationServices _locationServices;
+        public EditModel(IUserServices user, IUserRepository repository, ILocationServices locationServices)
         {
             _userServices = user;
             _userRepository = repository;
+            _locationServices = locationServices;
         }
         [BindProperty]
         public EditUserProfileDTO EditUser { get; set; }

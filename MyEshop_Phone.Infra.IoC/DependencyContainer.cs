@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MyEshop_Phone.Application.Common.Interfaces;
+using MyEshop_Phone.Application.Common.services;
+using MyEshop_Phone.Application.Common.setting;
 using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Application.Services;
 using MyEshop_Phone.Application.Utilitise;
@@ -15,7 +18,7 @@ namespace MyEshop_Phone.Infra.IoC
 {
     public class DependencyContainer
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
             //Data & Domain
             services.AddScoped<IUserRepository, UserRepository>();
@@ -29,8 +32,12 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IColorRepository, ColorRepository>();
             services.AddScoped<IProductColorRepository, ProductColorRepository>();
             services.AddScoped<ISubMenuGroupsRepository, SubMenuGroupsRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDitelsRepository, OrderDitelsRepository>();
             //Application
+            services.AddScoped<IOrderDitelsServices, OrderDitelsServices>();
             services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<IOrderServices, OrderServices>();
             services.AddScoped<IProductsServices, ProductsServices>();
             services.AddScoped<IProductsCommentServices, ProductsCommentServices>();
             services.AddScoped<IProductsGroupServices, ProductsGroupServices>();
@@ -40,10 +47,15 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IProductsGalleriseServices, ProductsGalleriseServices>();
             services.AddScoped<IProductColorServices, ProductColorServices>();
             services.AddScoped<ISubGroupsServices, SubGroupsServices>();
+            //Zarinpal
+            services.Configure<ZarinpalSettings>(configuration.GetSection("Zarinpal"));
+            services.AddHttpClient<IPaymentGateway, ZarinpalPaymentGateway>();
             //Application and Data
             services.AddScoped<IPColorServices, PColorRepository>();
             services.AddScoped<IGroupsSubMenuServices, GroupsSubMenuRepository>();
             services.AddScoped<IQueriProductsServices, QueriProductsRepository>();
+            services.AddScoped<IOrderQuery, OrderQuery>();
+            services.AddScoped<IAdminOrdersServices, AdminOrdersRepository>();
         }
     }
 }

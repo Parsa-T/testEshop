@@ -64,17 +64,23 @@ namespace MyEshopPhone.Infra.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ColorName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ProductTitle")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -93,11 +99,20 @@ namespace MyEshopPhone.Infra.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Authority")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsFinaly")
                         .HasColumnType("bit");
+
+                    b.Property<long?>("RefId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

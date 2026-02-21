@@ -15,6 +15,9 @@ namespace MyEshop_Phone.Domain.Model
         public int UserId { get; set; }
         public DateTime Date { get; set; }
         public bool IsFinaly { get; set; }
+        public long? RefId { get; set; }
+        public string? Authority { get; set; }
+        public decimal TotalPrice { get; set; }
         #region Rel
         [ForeignKey("UserId")]
         public virtual _Users users { get; set; }

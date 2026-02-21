@@ -23,6 +23,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="18.0.1" />
     <PackageReference Include="NWebsec.AspNetCore.Core" Version="3.0.1" />
+    <PackageReference Include="QuestPDF" Version="2026.2.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,55 @@
+﻿@using MyEshop_Phone.Application.DTO
+@model List<UserOrderDto>
+
+
+@if (!Model.Any())
+{
+    <p>هنوز خریدی انجام ندادید</p>
+}
+else
+{
+    @foreach (var item in Model)
+    {
+        <div class="order-card border border-gray-200 rounded-xl p-5 hover:shadow-md transition-all duration-300 hover:border-[#2563EB]/30">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-4 pb-4 border-b border-gray-100">
+                <div class="flex items-center gap-4">
+                    <div class="bg-yellow-100 text-yellow-700 p-2.5 rounded-full">
+                        <span class="material-icon text-xl">hourglass_empty</span>
+                    </div>
+                    <div>
+                        <div class="font-bold text-gray-900">در حال پردازش</div>
+                        <div class="text-xs text-gray-500 font-mono mt-1">@item.Date.ToShamsi()</div>
+                    </div>
+                </div>
+                <div class="text-left min-w-fit">
+                    <div class="text-sm text-gray-500">مبلغ کل</div>
+                    <div class="font-bold text-[#2563EB]">@item.TotalPrice.ToString("N0") تومان</div>
+                </div>
+            </div>
+
+
+
+            @foreach(var order in item.Items)
+            {
+                <div class="mb-4">
+                    <div class="text-sm text-gray-600 mb-2">تعداد @order.Count</div>
+                    <div class="flex items-center gap-3 overflow-x-auto pb-2">
+                        <div class="flex flex-col items-center gap-1 min-w-fit">
+                            <img src="/AdminPanel/Photo/Products/@order.ImageUrl" class="w-16 h-16 rounded-lg border border-gray-100 object-cover hover:scale-105 transition-transform" alt="قاب گوشی iPhone 15">
+                            <span class="text-xs text-gray-600 text-center max-w-[80px] truncate">@order.ProductTitle</span>
+                            <div class="pd-color" title="@order.ColorName">
+                                <span class="pd-color__dot"
+                                      style="background:@order.ColorName; width:20px; height:20px; display:inline-block; border-radius:50%;">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="flex gap-2">
+
+            </div>
+        </div>
+    }
+}
