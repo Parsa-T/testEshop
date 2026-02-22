@@ -41,6 +41,7 @@ namespace MyEshop_Phone.Domain.Model
         public ICollection<_Orders> orders { get; set; }
         [ForeignKey("ProductsId")]
         public virtual _Products products { get; set; }
+        public ICollection<_CodePostal> codePostals { get; set; }
         #endregion
     }
 }

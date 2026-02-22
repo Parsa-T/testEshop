@@ -34,6 +34,7 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<ISubMenuGroupsRepository, SubMenuGroupsRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDitelsRepository, OrderDitelsRepository>();
+            services.AddScoped<ICodePostalRepository, PostalCodeRepository>();
             //Application
             services.AddScoped<IOrderDitelsServices, OrderDitelsServices>();
             services.AddScoped<IUserServices, UserServices>();
@@ -47,6 +48,7 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IProductsGalleriseServices, ProductsGalleriseServices>();
             services.AddScoped<IProductColorServices, ProductColorServices>();
             services.AddScoped<ISubGroupsServices, SubGroupsServices>();
+            services.AddScoped<IPostalCodeServices, PostalCodeServices>();
             //Zarinpal
             services.Configure<ZarinpalSettings>(configuration.GetSection("Zarinpal"));
             services.AddHttpClient<IPaymentGateway, ZarinpalPaymentGateway>();

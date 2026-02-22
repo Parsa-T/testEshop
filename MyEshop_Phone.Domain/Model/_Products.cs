@@ -36,6 +36,7 @@ namespace MyEshop_Phone.Domain.Model
         [Display(Name ="محصولات پیشنهادی")]
         public bool RecommendedProducts { get; set; }
         #region Rel
+        public ICollection<_CodePostal> codePostals { get; set; }
         public ICollection<_OrderDetails> orderDetails { get; set; }
         public ICollection<_Products_comment> products_Comments { get; set; }
         [ForeignKey("ProductGroupsId")]

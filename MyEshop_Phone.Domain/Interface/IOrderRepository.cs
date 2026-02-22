@@ -13,5 +13,7 @@ namespace MyEshop_Phone.Domain.Interface
         Task Save();
         Task<_Orders> FindByAuthority(string authority);
         Task AddOrder(_Orders orders);
+        Task<int> CountOrders();
+        Task IsFainally();
     }
 }

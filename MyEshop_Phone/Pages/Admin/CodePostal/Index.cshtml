@@ -1,0 +1,37 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.CodePostal.IndexModel
+@{
+    ViewData["Title"] = "ثب کد پستی";
+}
+<div>
+    <a asp-page="Add" class="btn btn-success">افزودن کد جدید</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>نام کاربر</th>
+            <th>نام محصول</th>
+            <th>کدپیگیری</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.AllPostal)
+        {
+            <tr>
+                <td>
+                    @item.users.Name @item.users.Family
+                </td>
+                <td>
+                    @item.products.Title
+                </td>
+                <td>
+                    @item.Code
+                </td>
+                <td>
+                    <a asp-page="Delete" asp-route-id="@item.Id" class="btn btn-danger">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

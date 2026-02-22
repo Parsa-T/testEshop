@@ -1,0 +1,31 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.CodePostal.AddModel
+@{
+    ViewData["Title"] = "کد پیگیری جدید";
+}
+<form method="post">
+    <label>نام محصول</label>
+    <select asp-for="AddPostalCode.ProductsId" class="form-control" style="margin-top:20px">
+        @foreach (var item in Model.AddPostalCode.ShowProducts)
+        {
+            <option value="@item.Id">
+                @item.Title
+            </option>
+        }
+    </select><br />
+    <label>نام کاربر</label>
+    <select asp-for="AddPostalCode.UserId" class="form-control" style="margin-top:20px">
+        <option>
+            ----
+        </option>
+        @foreach (var item in Model.AddPostalCode.ShowUsers)
+        {
+            <option value="@item.Id">
+                @item.FullName
+            </option>
+        }
+    </select><br />
+    <label>کدپیگیری : </label>
+    <input asp-for="AddPostalCode.Code" class="form-control" required />
+    <input type="submit" value="ثبت" class="btn btn-success" />
+</form>

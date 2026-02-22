@@ -1,0 +1,15 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.CodePostal.DeleteModel
+@{
+    ViewData["Title"] = "حذف کد پیگیری";
+}
+<form method="post">
+    <input asp-for="DeletePostal.Id" type="hidden" />
+    <label>نام محصول</label>
+    <input asp-for="DeletePostal.products.Title" class="form-control" readonly />
+    <label>نام کاربر</label>
+    <input asp-for="DeletePostal.users.Name" readonly class="form-control" />
+    <label>کدپیگیری : </label>
+    <input asp-for="DeletePostal.Code" class="form-control" readonly />
+    <input type="submit" value="حذف" class="btn btn-danger" />
+</form>

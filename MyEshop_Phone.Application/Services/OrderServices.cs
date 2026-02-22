@@ -23,6 +23,11 @@ namespace MyEshop_Phone.Application.Services
             await _orderRepository.AddOrder(orders);
         }
 
+        public async Task<int> CountOrderAsync()
+        {
+            return await _orderRepository.CountOrders();
+        }
+
         public async Task<_Orders> FindOrderByAuthorityAsync(string authority)
         {
             if (authority == null)

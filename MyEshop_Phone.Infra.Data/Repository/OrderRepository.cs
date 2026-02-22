@@ -23,6 +23,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
             await _db.Orders.AddAsync(orders);
         }
 
+        public async Task<int> CountOrders()
+        {
+            return await _db.Orders.Where(o => o.IsFinaly == true).CountAsync();
+        }
+
         public async Task<_Orders> FindByAuthority(string authority)
         {
             return await _db.Orders.FirstOrDefaultAsync(o => o.Authority == authority);
@@ -31,6 +36,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
         public async Task<_Orders> FindById(int id)
         {
             return await _db.Orders.FindAsync(id);
+        }
+
+        public async Task IsFainally()
+        {
+             await _db.Orders.Where(o=>o.IsFinaly).ToListAsync();
         }
 
         public async Task Save()

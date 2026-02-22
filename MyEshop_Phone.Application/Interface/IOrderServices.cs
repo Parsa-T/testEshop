@@ -13,5 +13,6 @@ namespace MyEshop_Phone.Application.Interface
         Task SaveAsync();
         Task<_Orders> FindOrderByAuthorityAsync(string authority);
         Task AddOrderAsunc(_Orders orders);
+        Task<int> CountOrderAsync();
     }
 }

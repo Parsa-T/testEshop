@@ -36,7 +36,7 @@ namespace MyEshop_Phone.Infra.Data.Repository
         {
             _db= context;
         }
-        public async Task<List<UserOrderDto>> GetUserOrders(int userId)
+        public async Task<List<UserOrderDto>> GetUserOrders(int userId) 
         {
             return await _db.Orders.Where(o => o.UserId == userId && o.IsFinaly).Select(o => new UserOrderDto
             {
