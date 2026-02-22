@@ -34,8 +34,11 @@ namespace MyEshop_Phone.Application.Common.services
             };
 
             var response = await _httpClient.PostAsJsonAsync(
-                "https://sandbox.zarinpal.com/pg/v4/payment/request.json",
+                "https://api.zarinpal.com/pg/v4/payment/request.json",
                 body);
+            //var response = await _httpClient.PostAsJsonAsync(
+            //    "https://sandbox.zarinpal.com/pg/v4/payment/request.json",
+            //    body);
 
             var result = await response.Content
     .ReadFromJsonAsync<ZarinpalRequestResponse>();
@@ -58,8 +61,11 @@ namespace MyEshop_Phone.Application.Common.services
             };
 
             var response = await _httpClient.PostAsJsonAsync(
-    "https://sandbox.zarinpal.com/pg/v4/payment/verify.json",
+    "https://api.zarinpal.com/pg/v4/payment/verify.json",
     body);
+    //        var response = await _httpClient.PostAsJsonAsync(
+    //"https://sandbox.zarinpal.com/pg/v4/payment/verify.json",
+    //body);
 
             var result = await response.Content
     .ReadFromJsonAsync<ZarinpalVerifyResponse>();

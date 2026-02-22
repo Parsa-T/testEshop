@@ -133,7 +133,8 @@ namespace MyEshop_Phone.Controllers
             order.Authority = authority;
             await _orderServices.SaveAsync();
 
-            var url = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
+            var url = $"https://zarinpal.com/pg/StartPay/{authority}";
+            //var url = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
             return Redirect(url);
         }
     }

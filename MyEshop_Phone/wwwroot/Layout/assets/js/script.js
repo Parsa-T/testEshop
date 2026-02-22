@@ -49,7 +49,7 @@ const mahanToast = (() => {
         document.body.appendChild(stack);
         return stack;
     }
-
+    const show = () => ({ close() { } });
     //function show({ type = 'success', title = '', icon = '', duration = 4000, action } = {}) {
     //    const root = ensureStack();
     //    const t = document.createElement('div');

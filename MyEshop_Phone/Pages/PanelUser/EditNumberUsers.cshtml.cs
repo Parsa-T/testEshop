@@ -35,7 +35,7 @@ namespace MyEshop_Phone.Pages.PanelUser
                 return Page();
             }
             string code = GenerateCode();
-            //var result = await _sendSmsSercives.SendOtpAsync(EditNumber.NewNumber, code);
+            var result = await _sendSmsSercives.SendOtpAsync(EditNumber.NewNumber, code);
             HttpContext.Session.SetString("LastSendSmS", DateTime.Now.ToString());
             HttpContext.Session.SetString("VerifyCode", code);
             HttpContext.Session.SetString("NewNumber", EditNumber.NewNumber);
