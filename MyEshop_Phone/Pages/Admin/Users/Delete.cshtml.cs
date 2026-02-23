@@ -10,10 +10,12 @@ namespace MyEshop_Phone.Pages.Admin.Users
     {
         IUserRepository _userRepository;
         IUserServices _userServices;
-        public DeleteModel(IUserRepository user,IUserServices services)
+        private readonly IWebHostEnvironment _env;
+        public DeleteModel(IUserRepository user,IUserServices services, IWebHostEnvironment env)
         {
             _userRepository = user;
             _userServices = services;
+            _env = env;
         }
         [BindProperty]
         public _Users DeleteUsers { get; set; }
@@ -31,15 +33,30 @@ namespace MyEshop_Phone.Pages.Admin.Users
             if (users == null)
                 return BadRequest();
 
-            string filepath2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
-                    + ".jpg");
-            if (System.IO.File.Exists(filepath2))
-                System.IO.File.Delete(filepath2);
+            string uploadsFolder = Path.Combine(
+    _env.WebRootPath,
+    "AdminPanel",
+    "Photo",
+    "Users"
+);
+            if (!string.IsNullOrEmpty(users.UrlPhoto))
+            {
+                string filePath = Path.Combine(uploadsFolder, users.UrlPhoto);
 
-            string filepath3 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
-                + ".png");
-            if (System.IO.File.Exists(filepath3))
-                System.IO.File.Delete(filepath3);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+            //string filepath2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
+            //        + ".jpg");
+            //if (System.IO.File.Exists(filepath2))
+            //    System.IO.File.Delete(filepath2);
+
+            //string filepath3 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
+            //    + ".png");
+            //if (System.IO.File.Exists(filepath3))
+            //    System.IO.File.Delete(filepath3);
 
             _userServices.UserDelete(users);
             await _userServices.SaveAsync();

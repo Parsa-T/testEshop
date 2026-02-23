@@ -13,11 +13,13 @@ namespace MyEshop_Phone.Pages.PanelUser
         IUserServices _userServices;
         IUserRepository _userRepository;
         ILocationServices _locationServices;
-        public EditModel(IUserServices user, IUserRepository repository, ILocationServices locationServices)
+        private readonly IWebHostEnvironment _env;
+        public EditModel(IUserServices user, IUserRepository repository, ILocationServices locationServices, IWebHostEnvironment env)
         {
             _userServices = user;
             _userRepository = repository;
             _locationServices = locationServices;
+            _env = env;
         }
         [BindProperty]
         public EditUserProfileDTO EditUser { get; set; }
@@ -43,17 +45,37 @@ namespace MyEshop_Phone.Pages.PanelUser
             await _userServices.SaveAsync();
             if (EditUser.imgUp?.Length > 0)
             {
-                string filepath2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
-                    + ".jpg");
-                if (System.IO.File.Exists(filepath2))
-                    System.IO.File.Delete(filepath2);
-                string filepath3 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
-                    + ".png");
-                if (System.IO.File.Exists(filepath3))
-                    System.IO.File.Delete(filepath3);
-                string filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
-                    + Path.GetExtension(EditUser.imgUp.FileName));
-                using (var stream = new FileStream(filepath, FileMode.Create))
+                //string filepath2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
+                //    + ".jpg");
+                //if (System.IO.File.Exists(filepath2))
+                //    System.IO.File.Delete(filepath2);
+                //string filepath3 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
+                //    + ".png");
+                //if (System.IO.File.Exists(filepath3))
+                //    System.IO.File.Delete(filepath3);
+                //string filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", users.Id
+                //    + Path.GetExtension(EditUser.imgUp.FileName));
+                string uploadsFolder = Path.Combine(
+_env.WebRootPath,
+"AdminPanel",
+"Photo",
+"Users"
+);
+
+                Directory.CreateDirectory(uploadsFolder);
+                if (!string.IsNullOrEmpty(users.UrlPhoto))
+                {
+                    string oldFilePath = Path.Combine(uploadsFolder, users.UrlPhoto);
+
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+                string extension = Path.GetExtension(EditUser.imgUp.FileName);
+                string newFileName = $"{users.Id}{extension}";
+                string newFilePath = Path.Combine(uploadsFolder, newFileName);
+                using (var stream = new FileStream(newFilePath, FileMode.Create))
                 {
                     EditUser.imgUp.CopyTo(stream);
                 }

@@ -9,9 +9,11 @@ namespace MyEshop_Phone.Pages.Admin.Products
     public class DeleteModel : PageModel
     {
         IProductsRepository _productsRepository;
-        public DeleteModel(IProductsRepository products)
+        private readonly IWebHostEnvironment _env;
+        public DeleteModel(IProductsRepository products, IWebHostEnvironment env)
         {
             _productsRepository = products;
+            _env = env;
         }
         [BindProperty]
         public _Products DeleteProducts { get; set; }
@@ -24,16 +26,32 @@ namespace MyEshop_Phone.Pages.Admin.Products
             var pro = await _productsRepository.GetProductsById(DeleteProducts.Id);
             if(pro==null)
                 return NotFound();
-            string filePath2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", DeleteProducts.Id
-                    + ".png");
-            if (System.IO.File.Exists(filePath2))
-                System.IO.File.Delete(filePath2);
 
-            string filePath3 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", DeleteProducts.Id
-                + ".jpg");
-            if (System.IO.File.Exists(filePath3))
-                System.IO.File.Delete(filePath3);
-             await _productsRepository.Delete(pro);
+            string uploadsFolder = Path.Combine(
+_env.WebRootPath,
+"AdminPanel",
+"Photo",
+"Products"
+);
+            if (!string.IsNullOrEmpty(pro.ImageName))
+            {
+                string filePath = Path.Combine(uploadsFolder, pro.ImageName);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+            //string filePath2 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", DeleteProducts.Id
+            //        + ".png");
+            //if (System.IO.File.Exists(filePath2))
+            //    System.IO.File.Delete(filePath2);
+
+            //string filePath3 = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", DeleteProducts.Id
+            //    + ".jpg");
+            //if (System.IO.File.Exists(filePath3))
+            //    System.IO.File.Delete(filePath3);
+            await _productsRepository.Delete(pro);
             return RedirectToPage("index");
         }
     }

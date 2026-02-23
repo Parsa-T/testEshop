@@ -11,10 +11,12 @@ namespace MyEshop_Phone.Pages.Admin.Users
     {
         IUserServices _userServices;
         ILocationServices _locationServices;
-        public AddModel(IUserServices user,ILocationServices location)
+        private readonly IWebHostEnvironment _env;
+        public AddModel(IUserServices user, ILocationServices location, IWebHostEnvironment env)
         {
             _userServices = user;
             _locationServices = location;
+            _env = env;
         }
         public List<StateDto> States { get; set; } = new();
         [BindProperty]
@@ -61,9 +63,21 @@ namespace MyEshop_Phone.Pages.Admin.Users
             await _userServices.SaveAsync();
             if (UserAdd.imgUp?.Length > 0)
             {
-                string filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", user.Id
-                    + Path.GetExtension(UserAdd.imgUp.FileName));
-                using (var stream = new FileStream(filepath, FileMode.Create))
+                //string filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", user.Id
+                //    + Path.GetExtension(UserAdd.imgUp.FileName));
+                string uploadsFolder = Path.Combine(
+    _env.WebRootPath,
+    "AdminPanel",
+    "Photo",
+    "Users"
+);
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+                string fileName = user.Id + Path.GetExtension(UserAdd.imgUp.FileName);
+                string filePath = Path.Combine(uploadsFolder, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     UserAdd.imgUp.CopyTo(stream);
                 }

@@ -9,9 +9,11 @@ namespace MyEshop_Phone.Pages.Admin.Products
     public class AddModel : PageModel
     {
         IProductsServices _productsServices;
-        public AddModel(IProductsServices products)
+        private readonly IWebHostEnvironment _env;
+        public AddModel(IProductsServices products, IWebHostEnvironment env)
         {
             _productsServices = products;
+            _env = env;
         }
         [BindProperty]
         public ShowProductsDTO AddProduct { get; set; }
@@ -38,8 +40,20 @@ namespace MyEshop_Phone.Pages.Admin.Products
             await _productsServices.Save();
             if (AddProduct.imgUp?.Length > 0)
             {
-                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", product.Id
-                    + Path.GetExtension(AddProduct.imgUp.FileName));
+                //string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", product.Id
+                //    + Path.GetExtension(AddProduct.imgUp.FileName));
+                string uploadsFolder = Path.Combine(
+_env.WebRootPath,
+"AdminPanel",
+"Photo",
+"Products"
+);
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+                string fileName = product.Id + Path.GetExtension(AddProduct.imgUp.FileName);
+                string filePath = Path.Combine(uploadsFolder, fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     AddProduct.imgUp.CopyTo(stream);
