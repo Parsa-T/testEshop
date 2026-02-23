@@ -11,7 +11,6 @@
 </style>
 
 <form method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="UserAdd.UrlPhoto" value="test" />
     <select asp-for="UserAdd.StateId" id="state" class="form-control" style="margin-top:20px">
         <option value="">انتخاب استان</option>
         @foreach (var state in Model.States)

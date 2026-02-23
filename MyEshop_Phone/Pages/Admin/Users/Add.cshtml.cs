@@ -51,7 +51,7 @@ namespace MyEshop_Phone.Pages.Admin.Users
                 Number = UserAdd.Number,
                 RegisterDate = DateTime.Now,
                 IsAdmin = UserAdd.IsAdmin,
-                UrlPhoto = UserAdd.Name,
+                UrlPhoto = null,
                 CityName = city.Name,
                 StateName = state.Name,
                 PostalCode = UserAdd.PostalCode,
@@ -61,7 +61,7 @@ namespace MyEshop_Phone.Pages.Admin.Users
 
             await _userServices.AddUsers(user);
             await _userServices.SaveAsync();
-            if (UserAdd.imgUp?.Length > 0)
+            if (UserAdd.imgUp?.Length > 0 && UserAdd.imgUp != null)
             {
                 //string filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", user.Id
                 //    + Path.GetExtension(UserAdd.imgUp.FileName));

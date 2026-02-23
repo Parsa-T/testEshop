@@ -27,7 +27,7 @@ namespace MyEshop_Phone.Application.DTO
         public int Price { get; set; }
         [Display(Name = "عکس محصول")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        public string ImageName { get; set; }
+        public string? ImageName { get; set; }
         [Display(Name = "آپلود عکس")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public IFormFile imgUp { get; set; }

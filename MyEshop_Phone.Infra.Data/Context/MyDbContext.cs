@@ -79,6 +79,9 @@ namespace MyEshop_Phone.Infra.Data.Context
             modelBuilder.Entity<_Products>()
                 .Property(x => x.SubmenuGroupsId)
                 .IsRequired(false);
+            modelBuilder.Entity<_Products>()
+                .Property(x => x.ImageName)
+                .IsRequired(false);
         }
     }
 }

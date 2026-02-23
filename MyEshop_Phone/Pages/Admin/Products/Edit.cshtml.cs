@@ -32,7 +32,7 @@ namespace MyEshop_Phone.Pages.Admin.Products
         {
             //if (!ModelState.IsValid)
             //    return Page();
-            if (EditProducts.imgUp?.Length > 0)
+            if (EditProducts.imgUp?.Length > 0 && EditProducts.imgUp != null)
             {
                 string uploadsFolder = Path.Combine(
 _env.WebRootPath,

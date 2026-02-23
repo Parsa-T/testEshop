@@ -39,7 +39,7 @@ namespace MyEshop_Phone.Pages.Admin.Users
             users.Family = EditUser.Family;
             users.PostalCode = EditUser.PostalCode;
             await _userServices.SaveAsync();
-            if (EditUser.imgUp?.Length > 0)
+            if (EditUser.imgUp?.Length > 0 && EditUser.imgUp != null)
             {
                 string uploadsFolder = Path.Combine(
     _env.WebRootPath,

@@ -26,7 +26,7 @@ namespace MyEshop_Phone.Pages.Admin.Products
             var product = new _Products
             {
                 CreateTime = DateTime.Now,
-                ImageName = AddProduct.Title,
+                ImageName = null,
                 Price = AddProduct.Price,
                 Text = AddProduct.Text,
                 Title = AddProduct.Title,
@@ -38,7 +38,7 @@ namespace MyEshop_Phone.Pages.Admin.Products
             };
             await _productsServices.RegisterProducts(product);
             await _productsServices.Save();
-            if (AddProduct.imgUp?.Length > 0)
+            if (AddProduct.imgUp?.Length > 0 && AddProduct.imgUp != null)
             {
                 //string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Products", product.Id
                 //    + Path.GetExtension(AddProduct.imgUp.FileName));

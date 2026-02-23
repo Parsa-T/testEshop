@@ -11,7 +11,6 @@
 </style>
 <form method="post" enctype="multipart/form-data">
     <input asp-for="EditProducts.Id" type="hidden" />
-    <input asp-for="EditProducts.ImageName" type="hidden" />
     <input asp-for="EditProducts.CreateTime" type="hidden" />
     <select asp-for="EditProducts.ProductGroupsId"
             asp-items="@(new SelectList(Model.EditProducts.ShowGroups,"Id","GroupTitle"))" class="form-control" style="margin-top:20px">
