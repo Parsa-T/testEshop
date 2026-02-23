@@ -33,7 +33,8 @@ public class HomeController : Controller
     [Route("Products")]
     public async Task<IActionResult> AllProducts()
     {
-        var products = await _productsServices.GetAllProduct();
+        //var products = await _productsServices.GetAllProduct();
+        var products =await _services.GetProductsFullData();
         return View(products);
     }
     [Route("Product/{id}")]

@@ -30,5 +30,6 @@ namespace MyEshop_Phone.Application.Interface
     public interface IQueriProductsServices
     {
         Task<_Products> ShowSingleProducts(int id);
+        Task<List<ProductFullListDTO>> GetProductsFullData();
     }
 }

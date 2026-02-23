@@ -96,14 +96,13 @@ namespace MyEshop_Phone.Controllers
 
         #region Login
         [Route("Login")]
-        public async Task<IActionResult> Login(string? ReturnUrl = null)
+        public async Task<IActionResult> Login()
         {
-            ViewData["returnUrl"] = ReturnUrl;
             return View();
         }
-        [Route("Login")]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginUsersDTO dTO)
+        [Route("Login")]
+        public async Task<IActionResult> Login(LoginUsersDTO dTO,string ReturnUrl="/")
         {
             if (!ModelState.IsValid)
                 return View();

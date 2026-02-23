@@ -93,9 +93,10 @@ namespace MyEshop_Phone.Infra.Data.Repository
             return _db.Products.Where(p => p.Title.Contains(search) || p.ShortDescription.Contains(search) || p.Text.Contains(search)).Distinct();
         }
 
-        public async Task<IEnumerable<_Products>> ShowAllProducts()
+        public async Task<IEnumerable<_Products>> ShowAllProducts() 
         {
-            return await _db.Products.Include(pg => pg.products_Groups).Include(sub => sub.submenuGroups).ToListAsync();
+            return await _db.Products.Include(s=>s.submenuGroups).Include(g=>g.products_Groups).ToListAsync();
+            //
         }
 
         public async Task<IEnumerable<_Products>> ShowProductsByGroupsId(int id)
@@ -115,6 +116,30 @@ namespace MyEshop_Phone.Infra.Data.Repository
         public QueriProductsRepository(MyDbContext context)
         {
             _db = context;
+        }
+
+        public async Task<List<ProductFullListDTO>> GetProductsFullData()
+        {
+            return await _db.Products
+       .Select(p => new ProductFullListDTO
+       {
+           Id = p.Id,
+           Title = p.Title,
+           Price = p.Price,
+           CreateTime = p.CreateTime,
+           ImageName = p.ImageName,
+           ShortDescription = p.ShortDescription,
+           Count =(int)p.Count,
+
+           GroupName = p.products_Groups != null
+                       ? p.products_Groups.GroupTitle
+                       : "ندارد",
+
+           SubGroupName = p.submenuGroups != null
+                       ? p.submenuGroups.Title
+                       : "ندارد"
+       })
+       .ToListAsync();
         }
 
         public async Task<_Products> ShowSingleProducts(int id)

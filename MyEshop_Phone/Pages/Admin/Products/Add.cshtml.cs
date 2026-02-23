@@ -26,7 +26,6 @@ namespace MyEshop_Phone.Pages.Admin.Products
             var product = new _Products
             {
                 CreateTime = DateTime.Now,
-                ImageName = null,
                 Price = AddProduct.Price,
                 Text = AddProduct.Text,
                 Title = AddProduct.Title,

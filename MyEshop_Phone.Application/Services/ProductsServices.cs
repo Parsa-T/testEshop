@@ -36,13 +36,16 @@ namespace MyEshop_Phone.Application.Services
             products.ShortDescription = dTO.ShortDescription;
             products.Price = dTO.Price;
             products.CreateTime = dTO.CreateTime;
-            products.ImageName = dTO.ImageName;
             products.ProductGroupsId = dTO.ProductGroupsId;
             products.Text = dTO.Text;
             products.Title = dTO.Title;
             products.Count = dTO.Count;
             products.SubmenuGroupsId = dTO.SubmenuGroupsId;
             products.RecommendedProducts = dTO.RecommendedProducts;
+            if (!string.IsNullOrEmpty(dTO.ImageName))
+            {
+                products.ImageName = dTO.ImageName;
+            }
             await _productsRepository.UpdateProducts(products);
 
         }

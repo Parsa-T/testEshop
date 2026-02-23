@@ -16,6 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+//test
+//builder.Logging.ClearProviders();
+//builder.Logging.AddConsole();
+//builder.Logging.AddDebug();
+//builder.Logging.AddEventLog();
+//
 #region Database
 builder.Services.AddDbContext<MyDbContext>(options =>
 {
@@ -49,9 +55,9 @@ static void RegisterServices(IServiceCollection services, IConfiguration configu
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login";
+        options.LoginPath = "/Login";
         options.AccessDeniedPath = "/Login";
-        options.LogoutPath = "/Account/Loguot";
+        options.LogoutPath = "/Loguot";
         options.ExpireTimeSpan = TimeSpan.FromDays(10);
     });
 #endregion
@@ -73,7 +79,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+//test
+//app.UseExceptionHandler("/Error");
+//app.UseStatusCodePagesWithReExecute("/Error");
+//
 app.MapRazorPages();
 
 app.UseSession();

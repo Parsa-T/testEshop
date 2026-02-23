@@ -21,9 +21,10 @@ namespace MyEshop_Phone.Pages.Admin.Users
         public List<StateDto> States { get; set; } = new();
         [BindProperty]
         public AddOrEditUsersDTO UserAdd { get; set; }
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
             States = await _locationServices.GetStatesAsync();
+            return Page();
         }
         public async Task<JsonResult> OnGetCitiesAsync(int stateId)
         {
@@ -36,13 +37,16 @@ namespace MyEshop_Phone.Pages.Admin.Users
             ModelState.Remove("UserAdd.StateName");
             ModelState.Remove("UserAdd.CityName");
             ModelState.Remove("UserAdd.CodeActive");
+            ModelState.Remove("UserAdd.UrlPhoto");
             if (!ModelState.IsValid)
                 return Page();
             var states = await _locationServices.GetStatesAsync();
-            var state = states.First(x => x.Id == UserAdd.StateId);
+            var state = states.FirstOrDefault(x => x.Id == UserAdd.StateId);
 
             var cities = await _locationServices.GetCitiesAsync(UserAdd.StateId);
-            var city = cities.First(x => x.Id == UserAdd.CityId);
+            var city = cities.FirstOrDefault(x => x.Id == UserAdd.CityId);
+            if (state == null || city == null)
+                return Page();
             _Users user = new _Users()
             {
                 Address = UserAdd.Address,
@@ -51,7 +55,6 @@ namespace MyEshop_Phone.Pages.Admin.Users
                 Number = UserAdd.Number,
                 RegisterDate = DateTime.Now,
                 IsAdmin = UserAdd.IsAdmin,
-                UrlPhoto = null,
                 CityName = city.Name,
                 StateName = state.Name,
                 PostalCode = UserAdd.PostalCode,
@@ -59,9 +62,9 @@ namespace MyEshop_Phone.Pages.Admin.Users
                 StateId = state.Id,
             };
 
-            await _userServices.AddUsers(user);
-            await _userServices.SaveAsync();
-            if (UserAdd.imgUp?.Length > 0 && UserAdd.imgUp != null)
+            //await _userServices.AddUsers(user);
+            //await _userServices.SaveAsync();
+            if (UserAdd.imgUp != null && UserAdd.imgUp.Length > 0)
             {
                 //string filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "AdminPanel", "Photo", "Users", user.Id
                 //    + Path.GetExtension(UserAdd.imgUp.FileName));
@@ -75,15 +78,15 @@ namespace MyEshop_Phone.Pages.Admin.Users
                 {
                     Directory.CreateDirectory(uploadsFolder);
                 }
-                string fileName = user.Id + Path.GetExtension(UserAdd.imgUp.FileName);
+                string fileName = $"{Guid.NewGuid()}{Path.GetExtension(UserAdd.imgUp.FileName)}";
                 string filePath = Path.Combine(uploadsFolder, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    UserAdd.imgUp.CopyTo(stream);
-                }
-                user.UrlPhoto = user.Id + Path.GetExtension(UserAdd.imgUp.FileName);
-                await _userServices.SaveAsync();
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await UserAdd.imgUp.CopyToAsync(stream);
+                user.UrlPhoto = fileName;
+                //await _userServices.SaveAsync();
             }
+            await _userServices.AddUsers(user);
+            await _userServices.SaveAsync();
             return RedirectToPage("index");
         }
     }

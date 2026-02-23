@@ -1,5 +1,6 @@
-﻿@using MyEshop_Phone.Domain.Model
-@model IEnumerable<_Products>
+﻿@using MyEshop_Phone.Application.DTO
+@using MyEshop_Phone.Domain.Model
+@model IEnumerable<ProductFullListDTO>
 @{
     ViewData["Title"] = "تمامی محصولات";
 }
@@ -39,8 +40,8 @@
                             </button>
                             @foreach (var item in Model)
                             {
-                                <button data-category="@item.products_Groups.GroupTitle" class="category-filter-btn" type="button">
-                                    <span class="category-label">@item.products_Groups.GroupTitle</span>
+                                <button data-category="@item.GroupName" class="category-filter-btn" type="button">
+                                    <span class="category-label">@item.GroupName</span>
                                 </button>
                             }
                         </div>
@@ -61,7 +62,7 @@
                                     {
                                         <label class="filter-option">
                                             <input type="checkbox" class="filter-input" value="@item.ShortDescription" data-filter-key="brand" data-normalized="apple">
-                                            <span>@item.submenuGroups.Title</span>
+                                            <span>@item.SubGroupName</span>
                                         </label>
                                     }
                                 </div>
@@ -162,7 +163,7 @@
                     @foreach (var item in Model)
                     {
                         <article style="width:220px" class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
-                                 data-category="@item.products_Groups.GroupTitle"
+                                 data-category="@item."
                                  data-brand="@item.ShortDescription"
                                  data-model="@item.Title"
                                  data-material="silicone"
