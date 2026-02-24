@@ -58,7 +58,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Login";
         options.AccessDeniedPath = "/Login";
         options.LogoutPath = "/Loguot";
-        options.ExpireTimeSpan = TimeSpan.FromDays(10);
+        options.ExpireTimeSpan = TimeSpan.FromDays(30);
     });
 #endregion
 

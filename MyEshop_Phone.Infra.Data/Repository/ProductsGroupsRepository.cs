@@ -58,13 +58,14 @@ namespace MyEshop_Phone.Infra.Data.Repository
             return await (
                 from p in _db.Products_Groups
                 join pg in _db.submenuGroups
-                on p.Id equals pg.Products_GroupsId
+                on p.Id equals pg.Products_GroupsId into subGroups
+                from sg in subGroups.DefaultIfEmpty()
                 select new ShowGroupsSubGroupDTO
                 {
                     Id = p.Id,
                     GroupTitle = p.GroupTitle,
-                    SubId = pg.Id,
-                    Title = pg.Title,
+                    SubId = sg !=null ? sg.Id : 0,
+                    Title = sg !=null ? sg.Title :null,
                 }
                 ).ToListAsync();
         }
