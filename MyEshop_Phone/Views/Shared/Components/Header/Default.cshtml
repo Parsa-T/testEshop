@@ -22,11 +22,11 @@
         </div>
         <div class="p-4 overflow-y-auto h-[calc(100%-64px)]">
             <nav class="flex flex-col gap-1">
-                <a href="{{base}}/index.html" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="home">
+                <a href="/" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="home">
                     <span class="material-icon text-gray-500 text-base" aria-hidden="true">home</span>
                     <span>خانه</span>
                 </a>
-                <a href="{{base}}/pages/products.html" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="products">
+                <a href="/Products" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="products">
                     <span class="material-icon text-gray-500 text-base" aria-hidden="true">category</span>
                     <span>همه محصولات</span>
                 </a>
@@ -45,7 +45,7 @@
                         <div class="mobile-dropdown-content mobile-submenu hidden">
                             @foreach (var sub in item)
                             {
-                                <a href="{{base}}/pages/products.html?cat=case&material=silicone" class="flex items-center gap-2.5 p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-colors pr-8 text-sm">
+                                <a href="/SubMenu/@sub.SubId" class="flex items-center gap-2.5 p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-colors pr-8 text-sm">
                                     <span class="material-icon text-sm" aria-hidden="true">circle</span>
                                     <span>@sub.Title</span>
                                 </a>
@@ -55,15 +55,9 @@
                 }
 
                 <div class="border-t border-gray-200 my-2 mx-2"></div>
-                <a href="{{base}}/pages/about-us.html#contact" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="contact">
+                <a href="/AboutUs" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="contact">
                     <span class="material-icon text-gray-500 text-base" aria-hidden="true">contact_support</span>
                     <span>ارتباط با ما</span>
-                </a>
-
-                <div class="border-t border-gray-200 my-2 mx-2"></div>
-                <a href="{{base}}/pages/favorites.html" class="mobile-nav-link flex items-center gap-3 px-3 py-2 rounded-none text-[#1D1B20] font-medium text-sm hover:bg-[#EFF6FF] transition-colors" data-nav-id="favorites">
-                    <span class="material-icon text-gray-500 text-base" aria-hidden="true">favorite_border</span>
-                    <span>محبوب‌ها</span>
                 </a>
             </nav>
         </div>

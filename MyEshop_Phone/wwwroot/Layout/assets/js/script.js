@@ -732,11 +732,9 @@
                 //removeBtn.dataset.cartMenuPid = pid;
                 //removeBtn.innerHTML = '<span class="material-icon text-base">delete</span>';
 
-                if (typeof footer !== 'undefined' && typeof qtyWrap !== 'undefined' && typeof removeBtn !== 'undefined') {
-                    footer.appendChild(qtyWrap);
-                    footer.appendChild(removeBtn);
-                    meta.appendChild(footer);
-                }
+                footer.appendChild(qtyWrap);
+                footer.appendChild(removeBtn);
+                meta.appendChild(footer);
 
                 itemRow.appendChild(thumb);
                 itemRow.appendChild(meta);
@@ -744,7 +742,6 @@
             });
             cartMenuTotal.textContent = formatCurrency(subtotal);
         }
-
 
         function renderCartBadge() {
             if (!cartBadge) return;
@@ -1093,7 +1090,6 @@
                 saveCartToStorage();
             }
         });
-
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
@@ -1173,20 +1169,8 @@
             }
         }
 
-        // Enhanced keyboard navigation for mobile menu
         function initMobileMenuKeyboardNav() {
             if (!mobileMenu) return;
-
-            // Focus management when menu opens
-            mobileMenu.addEventListener('transitionend', function (e) {
-                if (e.propertyName === 'transform' && !mobileMenu.classList.contains('translate-x-full')) {
-                    // Menu is now open, focus on the first focusable element
-                    const firstFocusable = mobileMenu.querySelector('a, button, input, [tabindex]:not([tabindex="-1"])');
-                    if (firstFocusable) {
-                        firstFocusable.focus();
-                    }
-                }
-            });
 
             // Trap focus inside the menu when it's open
             mobileMenu.addEventListener('keydown', function (e) {
@@ -1215,9 +1199,8 @@
         if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
         if (mobileMenuOverlay) mobileMenuOverlay.addEventListener('click', closeMenu);
         if (mobileFilterBtn) mobileFilterBtn.addEventListener('click', openFilterMenu);
-        if (closeFiltersBtn) closeFiltersBtn.addEventListener('click', closeFilterMenu);
-        if (filterOverlay) filterOverlay.addEventListener('click', closeFilterMenu);
-        if (applyFiltersBtn) applyFiltersBtn.addEventListener('click', () => closeFilterMenu({ restoreFocus: false }));
+        if (closeFiltersBtn) closeFiltersBtn.addEventListener('click', () => closeFilterMenu());
+        if (filterOverlay) filterOverlay.addEventListener('click', () => closeFilterMenu());
 
         // When a user taps a link inside the drawer, close the drawer.
         // This fixes cases where the overlay/state remains open and improves UX on mobile.
@@ -1616,7 +1599,6 @@
             }
         });
     }
-
     function __boot() {
         const layoutReady = window.__layoutReady;
         if (layoutReady && typeof layoutReady.then === "function") {

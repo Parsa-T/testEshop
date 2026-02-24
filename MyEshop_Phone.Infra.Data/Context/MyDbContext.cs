@@ -82,6 +82,9 @@ namespace MyEshop_Phone.Infra.Data.Context
             modelBuilder.Entity<_Products>()
                 .Property(x => x.ImageName)
                 .IsRequired(false);
+            modelBuilder.Entity<_Products>()
+                .Property(x => x.Text)
+                .IsRequired(false);
             modelBuilder.Entity<_ProductsColor>()
     .HasOne(pc => pc.products)
     .WithMany(p => p.productsColors)
