@@ -1090,11 +1090,15 @@ document.getElementById('add-all-to-cart-btn')?.addEventListener('click', (e) =>
         saveCartToStorage();
     }
 });
-
 const mobileMenu = document.getElementById('mobile-menu');
 const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
 const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+const mobileFilterBtn = document.getElementById('mobile-filter-btn');
 const closeMenuBtn = document.getElementById('close-menu-btn');
+const closeFiltersBtn = document.getElementById('close-filters-btn');
+const filterSidebar = document.getElementById('filter-sidebar');
+const filterOverlay = document.getElementById('filter-overlay');
+const applyFiltersBtn = document.getElementById('apply-filters-btn');
 
 function openMenu() {
     if (!mobileMenu || !mobileMenuOverlay) return;
@@ -1102,6 +1106,7 @@ function openMenu() {
     mobileMenuOverlay.classList.remove('hidden');
     void mobileMenuOverlay.offsetWidth;
     mobileMenuOverlay.classList.remove('opacity-0');
+    mobileMenuOverlay.style.pointerEvents = 'auto';
     document.body.classList.add('menu-open');
     mobileMenu.setAttribute('aria-hidden', 'false');
     mobileMenuOverlay.setAttribute('aria-hidden', 'false');
@@ -1123,26 +1128,46 @@ function closeMenu() {
     }
 }
 
+
 function toggleMenu() {
     if (!mobileMenu) return;
+    if (filterSidebar && filterSidebar.classList.contains('open')) {
+        closeFilterMenu({ restoreFocus: false });
+    }
     const isHidden = mobileMenu.classList.contains('translate-x-full');
     if (isHidden) openMenu(); else closeMenu();
 }
 
-// Enhanced keyboard navigation for mobile menu
-function initMobileMenuKeyboardNav() {
-    if (!mobileMenu) return;
+function openFilterMenu() {
+    if (!filterSidebar || !filterOverlay) return;
+    closeMenu();
+    document.documentElement.style.overflowX = 'hidden';
+    document.documentElement.style.overscrollBehaviorX = 'none';
+    filterSidebar.classList.add('open');
+    filterOverlay.classList.add('visible');
+    if (mobileFilterBtn) {
+        mobileFilterBtn.setAttribute('aria-expanded', 'true');
+    }
+    document.body.style.overflow = 'hidden';
+}
 
-    // Focus management when menu opens
-    mobileMenu.addEventListener('transitionend', function(e) {
-        if (e.propertyName === 'transform' && !mobileMenu.classList.contains('translate-x-full')) {
-            // Menu is now open, focus on the first focusable element
-            const firstFocusable = mobileMenu.querySelector('a, button, input, [tabindex]:not([tabindex="-1"])');
-            if (firstFocusable) {
-                firstFocusable.focus();
-            }
+function closeFilterMenu({ restoreFocus = true } = {}) {
+    if (!filterSidebar || !filterOverlay) return;
+
+    filterSidebar.classList.remove('open');
+    filterOverlay.classList.remove('visible');
+
+    document.body.style.overflow = '';
+    document.documentElement.style.overflowX = '';
+    document.documentElement.style.overscrollBehaviorX = '';
+
+    if (mobileFilterBtn) {
+        mobileFilterBtn.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) {
+            mobileFilterBtn.focus({ preventScroll: true });
         }
-    });
+    }
+}
 
     // Trap focus inside the menu when it's open
     mobileMenu.addEventListener('keydown', function(e) {

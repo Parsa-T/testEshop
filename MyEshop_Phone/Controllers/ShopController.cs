@@ -17,10 +17,12 @@ namespace MyEshop_Phone.Controllers
     {
         IOrderServices _orderServices;
         IPaymentGateway _paymentGateway;
-        public ShopController(IOrderServices order,IPaymentGateway payment)
+        IProductsServices _productsServices;
+        public ShopController(IOrderServices order,IPaymentGateway payment, IProductsServices productsServices)
         {
             _orderServices = order;
             _paymentGateway = payment;
+            _productsServices = productsServices;
         }
         public int Get()
         {
@@ -35,7 +37,9 @@ namespace MyEshop_Phone.Controllers
                 // تبدیل JSON به لیست
                 list = JsonSerializer.Deserialize<List<ShopCartItem>>(shopCartJson)!;
             }
-
+            var pro = new _Products();
+            pro.Count -= list.Count;
+            _productsServices.Save();
             // مجموع تعداد آیتم‌ها
             return list.Sum(l => l.Count);
         }
