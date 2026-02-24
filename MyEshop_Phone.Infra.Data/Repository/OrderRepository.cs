@@ -28,6 +28,12 @@ namespace MyEshop_Phone.Infra.Data.Repository
             return await _db.Orders.Where(o => o.IsFinaly == true).CountAsync();
         }
 
+        public async Task DeleteOrder(_Orders orders)
+        {
+            _db.Orders.Remove(orders);
+            await _db.SaveChangesAsync();
+        }
+
         public async Task<_Orders> FindByAuthority(string authority)
         {
             return await _db.Orders.FirstOrDefaultAsync(o => o.Authority == authority);

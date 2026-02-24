@@ -47,11 +47,11 @@
                             <span class="material-icon text-gray-500 group-focus-within:text-[#2563EB] transition-colors" aria-hidden="true">search</span>
                         </div>
                         <input type="search"
-                               name="q"
-                               enterkeyhint="search"
-                               aria-label="جستجوی محصولات"
-                               class="w-full h-12 pr-12 pl-4 rounded-full bg-[#EFF6FF] border border-transparent hover:bg-[#DBEAFE]/50 focus:bg-white focus:border-[#2563EB] focus:shadow-[0_4px_12px_rgba(37,99,235,0.15)] outline-none transition-all duration-300 placeholder-gray-500 text-sm md:text-base"
-                               placeholder="جستجو در بین هزاران محصول...">
+                        name="q"
+                        enterkeyhint="search"
+                        aria-label="جستجوی محصولات"
+                        class="w-full h-12 pr-12 pl-4 rounded-full bg-[#EFF6FF] border border-transparent hover:bg-[#DBEAFE]/50 focus:bg-white focus:border-[#2563EB] focus:shadow-[0_4px_12px_rgba(37,99,235,0.15)] outline-none transition-all duration-300 placeholder-gray-500 text-sm md:text-base"
+                        placeholder="جستجو در بین هزاران محصول...">
                     </form>
                 </div>
 
@@ -63,6 +63,24 @@
                         </a> *@
 
                     <!-- ورود (موبایل) -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="/Loguot" class="md:hidden nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="ورود" aria-label="ورود">
+                            <span class="material-icon" aria-hidden="true"></span>
+                        </a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a href="/admin" class="md:hidden header-cta header-cta--primary" aria-label="پنل ادمین">
+                                <span class="material-icon text-lg" aria-hidden="true">person_add</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/paneluser" class="md:hidden header-cta header-cta--primary" aria-label="پنل کاربری">
+                                <span class="material-icon text-lg" aria-hidden="true">person_add</span>
+                            </a>
+                        }
+                    }
                     <a href="/Login" class="md:hidden nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="ورود" aria-label="ورود">
                         <span class="material-icon" aria-hidden="true">login</span>
                     </a>

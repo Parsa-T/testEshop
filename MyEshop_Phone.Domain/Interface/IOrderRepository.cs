@@ -10,6 +10,7 @@ namespace MyEshop_Phone.Domain.Interface
     public interface IOrderRepository
     {
         Task<_Orders> FindById(int id);
+        Task DeleteOrder(_Orders orders);
         Task Save();
         Task<_Orders> FindByAuthority(string authority);
         Task AddOrder(_Orders orders);

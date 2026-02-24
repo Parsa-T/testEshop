@@ -21,7 +21,8 @@
                 <td>@item.FullName</td>
                 <td>@item.TotalPrice.ToString("N0")</td>
                 <td>
-                    <a asp-page="DownloadPdf" asp-route-id="@item.OrderId" class="btn btn-primary">دانلود pdf</a>
+                    <a asp-page="DownloadPdf" asp-route-id="@item.OrderId" class="btn btn-primary">دانلود pdf</a> |
+                    <a asp-page="Delete" asp-route-id="@item.OrderId" class="btn btn-danger">حذف فاکتور</a>
                 </td>
             </tr>
         }

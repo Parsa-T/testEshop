@@ -1,0 +1,13 @@
+﻿@page
+@model MyEshop_Phone.Pages.Admin.AdminOrder.DeleteModel
+@{
+    ViewData["Title"] = "حذف فاکتور";
+}
+<form method="post">
+    <input asp-for="DeleteOrder.Id" type="hidden" />
+    <label>نام کاربری </label>
+    <input asp-for="DeleteOrder.UserId" class="form-control" readonly/>
+    <label>شماره سفارش</label>
+    <input asp-for="DeleteOrder.RefId" class="form-control" readonly/>
+    <input type="submit" value="حذف" class="btn btn-danger" />
+</form>

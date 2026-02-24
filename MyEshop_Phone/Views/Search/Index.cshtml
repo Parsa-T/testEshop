@@ -52,63 +52,71 @@
             <div class="products-grid-shell relative">
                 <div id="products-container2" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
                     <!-- Product cards will be dynamically populated/filtered. -->
-                    @foreach (var item in Model)
+                    @if (!Model.Any())
                     {
-                        <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
-                                 data-category="@item.products_Groups.GroupTitle"
-                                 data-brand="@item.ShortDescription"
-                                 data-model="@item.Title"
-                                 data-material="silicone"
-                                 data-price="@item.Price"
-                                 data-popular="9"
-                                 data-new="@item.CreateTime.ToString("yyyy-MM-dd")"
-                                 data-stock="true">
-                            <div class="relative">
-                                <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
-                                    <img src="/AdminPanel/Photo/Products/@item.ImageName" alt="@item.Title" class="w-full h-full object-contain" width="900" height="900" loading="lazy">
-                                </div>
+                        <p>محصولی یافت نشد</p>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
+                                     data-category="@item.products_Groups.GroupTitle"
+                                     data-brand="@item.ShortDescription"
+                                     data-model="@item.Title"
+                                     data-material="silicone"
+                                     data-price="@item.Price"
+                                     data-popular="9"
+                                     data-new="@item.CreateTime.ToString("yyyy-MM-dd")"
+                                     data-stock="true">
+                                <div class="relative">
+                                    <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
+                                        <img src="/AdminPanel/Photo/Products/@item.ImageName" alt="@item.Title" class="w-full h-full object-contain" width="900" height="900" loading="lazy">
+                                    </div>
 
-                                @* <div class="product-card-color-strip" aria-label="رنگ‌های موجود">
+                                    @* <div class="product-card-color-strip" aria-label="رنگ‌های موجود">
                                     <span class="color-swatch bg-slate-900" data-color-hex="#0f172a" title="مشکی" aria-label="مشکی"></span>
                                     <span class="color-swatch bg-zinc-400" data-color-hex="#a1a1aa" title="خاکستری" aria-label="خاکستری"></span>
                                 </div> *@
-                            </div>
-
-                            <div class="mt-4">
-                                <a href="/Product/@item.Id">
-                                    <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
-                                </a>
-                                <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: @item.ShortDescription</p>
-                            </div>
-
-                            <div class="mt-3 flex items-center justify-between gap-3">
-                                <div class="min-w-0">
-                                    <div class="text-[10px] md:text-xs text-gray-400 line-through">@item.Price.ToString("N0")</div>
-                                    <div class="text-base md:text-lg font-black text-[#2563EB] leading-tight">
-                                        @item.Price.ToString("N0") <span class="text-[10px] md:text-xs font-medium text-gray-500">تومان</span>
-                                    </div>
                                 </div>
 
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    @if (item.Count != 0)
-                                    {
-                                        <div class="flex items-center gap-2">
-                                            <button aria-label="افزودن به سبد خرید" data-id="@item.Id" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
-                                                <span class="material-icon text-[22px]">add</span>
-                                            </button>
+                                <div class="mt-4">
+                                    <a href="/Product/@item.Id">
+                                        <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">@item.Title</h3>
+                                    </a>
+                                    <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: @item.ShortDescription</p>
+                                </div>
+
+                                <div class="mt-3 flex items-center justify-between gap-3">
+                                    <div class="min-w-0">
+                                        <div class="text-[10px] md:text-xs text-gray-400 line-through">@item.Price.ToString("N0")</div>
+                                        <div class="text-base md:text-lg font-black text-[#2563EB] leading-tight">
+                                            @item.Price.ToString("N0") <span class="text-[10px] md:text-xs font-medium text-gray-500">تومان</span>
                                         </div>
-                                    }
-                                    else
+                                    </div>
+
+                                    @if (User.Identity.IsAuthenticated)
                                     {
-                                        <div class="flex items-center gap-2">
-                                            <p style="color:red">موجود در انبار نمیباشد</p>
-                                        </div>
+                                        @if (item.Count != 0)
+                                        {
+                                            <div class="flex items-center gap-2">
+                                                <button aria-label="افزودن به سبد خرید" data-id="@item.Id" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
+                                                    <span class="material-icon text-[22px]">add</span>
+                                                </button>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="flex items-center gap-2">
+                                                <p style="color:red">موجود در انبار نمیباشد</p>
+                                            </div>
+                                        }
                                     }
-                                }
-                            </div>
-                        </article>
-                    }
+                                </div>
+                            </article>
+                        }
+
+                    }            
                 </div>
 
                 <div id="no-results" class="no-results hidden" role="status" aria-live="polite">
