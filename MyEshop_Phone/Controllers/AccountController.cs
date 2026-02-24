@@ -102,7 +102,7 @@ namespace MyEshop_Phone.Controllers
         }
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(LoginUsersDTO dTO,string ReturnUrl="/")
+        public async Task<IActionResult> Login(LoginUsersDTO dTO, string ReturnUrl = "/")
         {
             if (!ModelState.IsValid)
                 return View();
@@ -128,36 +128,59 @@ namespace MyEshop_Phone.Controllers
         [HttpPost]
         public async Task<IActionResult> VerifyLoginCode(VerifyCodeViewModel userCode)
         {
-            if (userCode == null)
+            if (userCode == null || string.IsNullOrEmpty(userCode.Code))
                 return View();
-            var saveCode = HttpContext.Session.GetString("OtpCode");
-            if (saveCode == null)
-                return RedirectToAction("Login");
-            if (saveCode == userCode.Code)
-            {
-                var userId = HttpContext.Session.GetString("UserId");
-                var name = HttpContext.Session.GetString("UserName");
-                var admin = HttpContext.Session.GetString("IsAdmin");
-                var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier,userId),
-                new Claim(ClaimTypes.Name,name),
-                new Claim(ClaimTypes.Role,bool.Parse(admin)?"Admin":"User"),
-            };
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var prancipal = new ClaimsPrincipal(identity);
-                var properties = new AuthenticationProperties
-                {
-                    IsPersistent = bool.Parse(HttpContext.Session.GetString("RememberMe"))
-                };
-                await HttpContext.SignInAsync(
-                      CookieAuthenticationDefaults.AuthenticationScheme,
-                      prancipal,
-                      properties);
-                return Redirect("/");
-            }
-            return RedirectToAction("Login");
 
+            var saveCode = HttpContext.Session.GetString("OtpCode");
+            if (string.IsNullOrEmpty(saveCode))
+                return RedirectToAction("Login");
+
+            if (saveCode != userCode.Code)
+                return RedirectToAction("Login");
+
+            var userId = HttpContext.Session.GetString("UserId");
+            var name = HttpContext.Session.GetString("UserName");
+            var admin = HttpContext.Session.GetString("IsAdmin");
+            var rememberMeString = HttpContext.Session.GetString("RememberMe");
+
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(name))
+                return RedirectToAction("Login");
+
+            bool isAdmin = false;
+            bool rememberMe = false;
+
+            bool.TryParse(admin, out isAdmin);
+            bool.TryParse(rememberMeString, out rememberMe);
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, userId),
+        new Claim(ClaimTypes.Name, name),
+        new Claim(ClaimTypes.Role, isAdmin ? "Admin" : "User")
+    };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            var properties = new AuthenticationProperties
+            {
+                IsPersistent = rememberMe,
+                AllowRefresh = true,
+                ExpiresUtc = rememberMe
+                    ? DateTimeOffset.UtcNow.AddDays(30)   // اگر RememberMe تیک خورده
+                    : DateTimeOffset.UtcNow.AddHours(2)  // اگر تیک نخورده
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                properties);
+
+            // پاک کردن اطلاعات Session مربوط به ورود
+            HttpContext.Session.Remove("OtpCode");
+            HttpContext.Session.Remove("RememberMe");
+
+            return Redirect("/");
         }
         #endregion
 

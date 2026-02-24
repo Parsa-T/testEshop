@@ -89,8 +89,6 @@
                                     </div>
                                 </div>
 
-                                @if (User.Identity.IsAuthenticated)
-                                {
                                     @if (item.Count != 0)
                                     {
                                         <div class="flex items-center gap-2">
@@ -105,7 +103,6 @@
                                             <p style="color:red">موجود در انبار نمیباشد</p>
                                         </div>
                                     }
-                                }
                             </div>
                         </article>
                     }

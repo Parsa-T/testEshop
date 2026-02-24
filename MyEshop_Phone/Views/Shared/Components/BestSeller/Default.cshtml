@@ -8,7 +8,7 @@
     </div>
     <!-- کارت‌ها توسط بک‌اند رندر شوند؛ data-* برای سبد/علاقه‌مندی استفاده می‌شود -->
     <div aria-label="پرفروش‌ترین‌ها" aria-live="off" aria-roledescription="carousel" class="products-row best-sellers-row drag-scroll flex gap-3 md:gap-6 overflow-x-auto no-scrollbar pb-8 px-2 snap-x snap-mandatory" data-autoplay="best" role="region" tabindex="0">
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
             <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-3.5 md:p-4 border border-gray-100 group shrink-0 snap-start w-[44vw] min-w-[44vw] sm:w-[270px] sm:min-w-[270px] md:w-[300px] md:min-w-[300px]" data-brand="Apple" data-category="case" data-compare-price="650000" data-currency="IRR" data-image="/Layout/assets/img/i24l.png" data-name="قاب سیلیکونی آیفون ۱۵" data-pid="best-001" data-price="450000" data-sku="BEST-001">
                 <div class="relative">
@@ -34,22 +34,19 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (item.Count != 0)
                         {
-                            @if (item.Count != 0)
-                            {
-                                <div class="flex items-center gap-2">
-                                    <button aria-label="افزودن به سبد خرید" data-id="@item.Id" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
-                                        <span class="material-icon text-[22px]">add</span>
-                                    </button>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="flex items-center gap-2">
-                                    <p style="color:red">موجود در انبار نمیباشد</p>
-                                </div>
-                            }
+                            <div class="flex items-center gap-2">
+                                <button aria-label="افزودن به سبد خرید" data-id="@item.Id" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
+                                    <span class="material-icon text-[22px]">add</span>
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="flex items-center gap-2">
+                                <p style="color:red">موجود در انبار نمیباشد</p>
+                            </div>
                         }
                     </div>
                 </div>
