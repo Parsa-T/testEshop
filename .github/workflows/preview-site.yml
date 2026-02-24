@@ -1,0 +1,187 @@
+name: Temporary Preview Site
+
+on:
+  workflow_dispatch:
+    inputs:
+      runtime_minutes:
+        description: "How many minutes the preview stays online (1-180)"
+        required: true
+        default: "20"
+        type: number
+      target_ref:
+        description: "Optional branch/tag/SHA to build (leave empty to use selected run branch)"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    name: Build and Run Temporary Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: "Y"
+          MSSQL_SA_PASSWORD: "Strong!Passw0rd1"
+        ports:
+          - 1433:1433
+
+    env:
+      APP_PORT: "5078"
+      ConnectionStrings__EShop_PhoneDb: "Server=localhost,1433;Database=ShopPhoneDb;User Id=sa;Password=Strong!Passw0rd1;TrustServerCertificate=True;Encrypt=False;"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          clean: true
+          ref: ${{ inputs.target_ref || github.ref_name }}
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            7.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore MyEshop_Phone.sln
+
+      - name: Install EF Core CLI
+        run: |
+          dotnet tool update --global dotnet-ef --version 7.0.20 || dotnet tool install --global dotnet-ef --version 7.0.20
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      - name: Wait for SQL Server and apply migrations
+        shell: bash
+        run: |
+          set -euo pipefail
+          ATTEMPT=1
+          MAX_ATTEMPTS=40
+
+          until dotnet ef database update \
+            --project MyEshop_Phone.Infra.Data/MyEshop_Phone.Infra.Data.csproj \
+            --startup-project MyEshop_Phone/MyEshop_Phone.csproj
+          do
+            if [ "$ATTEMPT" -ge "$MAX_ATTEMPTS" ]; then
+              echo "Database migration failed after $MAX_ATTEMPTS attempts."
+              exit 1
+            fi
+
+            echo "SQL Server not ready yet (attempt $ATTEMPT/$MAX_ATTEMPTS). Retrying in 5s..."
+            ATTEMPT=$((ATTEMPT + 1))
+            sleep 5
+          done
+
+      - name: Build application
+        run: dotnet build MyEshop_Phone.sln -c Release --no-restore
+
+      - name: Install cloudflared
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i /tmp/cloudflared.deb
+          cloudflared --version
+
+      - name: Run app, expose public URL, and keep online
+        id: preview
+        shell: bash
+        env:
+          RUNTIME_MINUTES: ${{ inputs.runtime_minutes }}
+          BUILT_REF: ${{ inputs.target_ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if ! [[ "$RUNTIME_MINUTES" =~ ^[0-9]+$ ]]; then
+            echo "runtime_minutes must be numeric."
+            exit 1
+          fi
+
+          if [ "$RUNTIME_MINUTES" -lt 1 ] || [ "$RUNTIME_MINUTES" -gt 180 ]; then
+            echo "runtime_minutes must be between 1 and 180."
+            exit 1
+          fi
+
+          APP_URL="http://127.0.0.1:${APP_PORT}"
+          APP_LOG=/tmp/app.log
+          TUNNEL_LOG=/tmp/tunnel.log
+
+          (
+            cd ./MyEshop_Phone
+            dotnet run --no-build -c Release --urls "$APP_URL"
+          ) > "$APP_LOG" 2>&1 &
+          APP_PID=$!
+
+          cleanup() {
+            kill "$APP_PID" >/dev/null 2>&1 || true
+            kill "${TUNNEL_PID:-}" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          READY=0
+          for _ in $(seq 1 60); do
+            STATUS=$(curl -s -o /tmp/home.html -w "%{http_code}" "$APP_URL/" || true)
+            if [ "$STATUS" = "200" ]; then
+              READY=1
+              break
+            fi
+            sleep 2
+          done
+
+          if [ "$READY" -ne 1 ]; then
+            echo "Application did not return HTTP 200 in time."
+            echo "--- app log ---"
+            sed -n '1,220p' "$APP_LOG" || true
+            exit 1
+          fi
+
+          cloudflared tunnel --no-autoupdate --url "$APP_URL" > "$TUNNEL_LOG" 2>&1 &
+          TUNNEL_PID=$!
+
+          TUNNEL_URL=""
+          for _ in $(seq 1 60); do
+            TUNNEL_URL=$(grep -Eo 'https://[-a-zA-Z0-9]+\.trycloudflare\.com' "$TUNNEL_LOG" | head -n 1 || true)
+            if [ -n "$TUNNEL_URL" ]; then
+              break
+            fi
+            sleep 2
+          done
+
+          if [ -z "$TUNNEL_URL" ]; then
+            echo "Could not extract cloudflared tunnel URL."
+            echo "--- tunnel log ---"
+            sed -n '1,220p' "$TUNNEL_LOG" || true
+            exit 1
+          fi
+
+          echo "preview_url=$TUNNEL_URL" >> "$GITHUB_OUTPUT"
+          echo "Preview URL: $TUNNEL_URL"
+          echo "Preview is online for $RUNTIME_MINUTES minute(s)."
+
+          {
+            echo "## Temporary Preview"
+            echo ""
+            echo "- URL: $TUNNEL_URL"
+            echo "- Ref built: $BUILT_REF"
+            echo "- Active time: $RUNTIME_MINUTES minute(s)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          sleep "$((RUNTIME_MINUTES * 60))"
+
+      - name: Upload runtime logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-logs
+          path: |
+            /tmp/app.log
+            /tmp/tunnel.log
+          if-no-files-found: ignore
