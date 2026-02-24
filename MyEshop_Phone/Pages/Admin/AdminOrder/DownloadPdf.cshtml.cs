@@ -20,6 +20,11 @@ namespace MyEshop_Phone.Pages.Admin.AdminOrder
             var order = await _adminOrders.GetOrderForPdf(id);
             if(order==null)
                 return NotFound();
+            if (order == null)
+                return NotFound();
+
+            if (order.Items == null)
+                throw new Exception("Items is null");
             var document = new OrderPdfDocument(order);
             var pdfBytes = document.GeneratePdf();
             return File(pdfBytes, "application/pdf", $"Order-{id}.pdf");
