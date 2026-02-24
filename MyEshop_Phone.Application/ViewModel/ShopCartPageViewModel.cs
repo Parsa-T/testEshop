@@ -8,6 +8,7 @@ namespace MyEshop_Phone.Application.ViewModel
 {
     public class ShopCartPageViewModel
     {
+        public int Id { get; set; }
         public List<ShowOrderViewModel> Items { get; set; } = new(); // 👈 این خیلی مهمه
 
         public bool IsLoggedIn { get; set; }

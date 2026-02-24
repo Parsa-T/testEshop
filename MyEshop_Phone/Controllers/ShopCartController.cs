@@ -70,6 +70,7 @@ namespace MyEshop_Phone.Controllers
                 viewModel.FullName = $"{user.Name}   {user.Family}";
                 viewModel.Address = user.Address;
                 viewModel.PostalCode = user.PostalCode.ToString();
+                viewModel.Id = int.Parse(userId);
             }
             else
             {
