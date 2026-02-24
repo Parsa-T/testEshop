@@ -1,10 +1,6 @@
 ﻿@using MyEshop_Phone.Application.DTO
 @model IEnumerable<ShowGroupsSubGroupDTO>
 
-@if (Model == null || !Model.Any())
-{
-    return;
-}
 <!-- منوی موبایل (دراور) -->
 <div class="md:hidden">
     <!-- لایه تار (Overlay) -->
@@ -30,28 +26,32 @@
                     <span class="material-icon text-gray-500 text-base" aria-hidden="true">category</span>
                     <span>همه محصولات</span>
                 </a>
-                <div class="border-t border-gray-200 my-2 mx-2"></div>
-                <span class="text-xs font-bold text-gray-400 px-3 mb-1">دسته‌بندی</span>
-                @foreach (var item in Model.GroupBy(x => new { x.Id, x.GroupTitle }))
+
+                @if (Model != null && Model.Any())
                 {
-                    <div class="mobile-dropdown">
-                        <div class="mobile-dropdown-header mobile-nav-link flex items-center justify-between p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] transition-colors cursor-pointer">
-                            <div class="flex items-center gap-2.5">
-                                <span class="material-icon text-gray-500 text-base" aria-hidden="true">smartphone</span>
-                                <span>@item.Key.GroupTitle</span>
+                    <div class="border-t border-gray-200 my-2 mx-2"></div>
+                    <span class="text-xs font-bold text-gray-400 px-3 mb-1">دسته‌بندی</span>
+                    @foreach (var item in Model.GroupBy(x => new { x.Id, x.GroupTitle }))
+                    {
+                        <div class="mobile-dropdown">
+                            <div class="mobile-dropdown-header mobile-nav-link flex items-center justify-between p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] transition-colors cursor-pointer">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="material-icon text-gray-500 text-base" aria-hidden="true">smartphone</span>
+                                    <span>@item.Key.GroupTitle</span>
+                                </div>
+                                <span class="material-icon mobile-dropdown-arrow" aria-hidden="true">expand_more</span>
                             </div>
-                            <span class="material-icon mobile-dropdown-arrow" aria-hidden="true">expand_more</span>
+                            <div class="mobile-dropdown-content mobile-submenu hidden">
+                                @foreach (var sub in item)
+                                {
+                                    <a href="/SubMenu/@sub.SubId" class="flex items-center gap-2.5 p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-colors pr-8 text-sm">
+                                        <span class="material-icon text-sm" aria-hidden="true">circle</span>
+                                        <span>@sub.Title</span>
+                                    </a>
+                                }
+                            </div>
                         </div>
-                        <div class="mobile-dropdown-content mobile-submenu hidden">
-                            @foreach (var sub in item)
-                            {
-                                <a href="/SubMenu/@sub.SubId" class="flex items-center gap-2.5 p-2.5 rounded-lg text-gray-600 font-medium hover:bg-[#EFF6FF] hover:text-[#2563EB] transition-colors pr-8 text-sm">
-                                    <span class="material-icon text-sm" aria-hidden="true">circle</span>
-                                    <span>@sub.Title</span>
-                                </a>
-                            }
-                        </div>
-                    </div>
+                    }
                 }
 
                 <div class="border-t border-gray-200 my-2 mx-2"></div>
@@ -63,4 +63,3 @@
         </div>
     </div>
 </div>
-        </header>
