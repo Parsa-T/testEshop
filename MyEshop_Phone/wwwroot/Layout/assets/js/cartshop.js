@@ -57,6 +57,8 @@ function updateCartTotals() {
 
 // حذف آیتم از سبد
 $(document).on('click', '[data-action="remove-cart-item"]', function () {
+    if (document.querySelector('[data-cart-main]') && document.getElementById('cart-confirm-modal')) return;
+
     const cartItem = $(this).closest('.cart-item');
     const productId = parseInt(cartItem.data('cart-item-id')); // بهتره تو HTML data-cart-item-id اضافه کنی
 
@@ -112,5 +114,4 @@ $(document).on('click', '.qty-minus', function () {
         updateCartTotals();
     }
 });
-
 
