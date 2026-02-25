@@ -282,6 +282,8 @@
             const inStockToggle = document.getElementById("in-stock-toggle");
             const productCards = Array.from(productsContainer?.querySelectorAll(".product-card") || []);
             let isUpdatingPriceBounds = false;
+            const defaultPriceMinBound = Number(priceMin?.min || 0);
+            const defaultPriceMaxBound = Number(priceMax?.max || 50000000);
 
             // -------------------------------
             // گرفتن مقادیر فیلتر
@@ -350,23 +352,31 @@
             function syncMaxPriceFromProducts(products) {
                 if (!priceMin || !priceMax) return;
 
-                const maxFromProducts = Array.isArray(products) && products.length > 0
+                const hasProducts = Array.isArray(products) && products.length > 0;
+                const maxFromProducts = hasProducts
                     ? Math.max(...products.map(p => Number(p?.price) || 0))
-                    : 0;
+                    : defaultPriceMaxBound;
 
                 const nextMax = String(Math.max(0, maxFromProducts));
 
                 isUpdatingPriceBounds = true;
 
+                priceMin.min = String(defaultPriceMinBound);
+                priceMax.min = String(defaultPriceMinBound);
                 priceMin.max = nextMax;
                 priceMax.max = nextMax;
 
-                const currentMin = Number(priceMin.value || 0);
-                const currentMax = Number(priceMax.value || 0);
                 const numericMax = Number(nextMax);
 
-                let nextMin = Math.min(currentMin, numericMax);
-                let nextRangeMax = Math.min(currentMax, numericMax);
+                // با تغییر فیلترهای غیرقیمتی، بازه را روی حالت طبیعی (ابتدا تا انتها) قرار می‌دهیم
+                // تا نوار آبی همیشه قابل‌مشاهده و معنی‌دار بماند.
+                let nextMin = defaultPriceMinBound;
+                let nextRangeMax = numericMax;
+
+                if (!hasProducts) {
+                    nextMin = defaultPriceMinBound;
+                    nextRangeMax = defaultPriceMaxBound;
+                }
 
                 if (nextRangeMax < nextMin) {
                     nextRangeMax = nextMin;
