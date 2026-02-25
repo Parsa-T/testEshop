@@ -7,6 +7,7 @@ using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Application.Services;
 using MyEshop_Phone.Infra.Data.Context;
 using MyEshop_Phone.Infra.IoC;
+using MyEshop_Phone.Seeding;
 using QuestPDF.Drawing;
 using QuestPDF.Infrastructure;
 
@@ -63,6 +64,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 #endregion
 
 var app = builder.Build();
+
+if (app.Configuration.GetValue<bool>("SeedWorkflowTestData"))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<MyDbContext>();
+    await WorkflowPreviewDataSeeder.SeedAsync(db, app.Logger);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
