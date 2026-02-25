@@ -1223,11 +1223,11 @@
                 const minValueEl = rangeContainer?.querySelector('#price-min-value');
                 const maxValueEl = rangeContainer?.querySelector('#price-max-value');
 
-                const minLimit = Number(minInput.min || 0);
-                const maxLimit = Number(maxInput.max || 0);
-                const totalRange = Math.max(1, maxLimit - minLimit);
-
                 const syncRange = (changed) => {
+                    const minLimit = Number(minInput.min || 0);
+                    const maxLimit = Number(maxInput.max || 0);
+                    const totalRange = Math.max(1, maxLimit - minLimit);
+
                     let minValue = Number(minInput.value);
                     let maxValue = Number(maxInput.value);
 
