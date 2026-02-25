@@ -8,8 +8,18 @@ public static class WorkflowPreviewDataSeeder
 {
     private const string ProductPrefix = "WF-TEST-";
 
-    public static async Task SeedAsync(MyDbContext db, ILogger logger, CancellationToken cancellationToken = default)
+    public static async Task SeedAsync(
+        MyDbContext db,
+        ILogger logger,
+        int productCount,
+        CancellationToken cancellationToken = default)
     {
+        if (productCount <= 0)
+        {
+            logger.LogInformation("Workflow preview seeding skipped: product count is {ProductCount}.", productCount);
+            return;
+        }
+
         if (!await db.Database.CanConnectAsync(cancellationToken))
         {
             logger.LogWarning("Workflow preview seeding skipped: database is not reachable.");
@@ -25,7 +35,7 @@ public static class WorkflowPreviewDataSeeder
         var featureIds = await EnsureFeaturesAsync(db, cancellationToken);
         var colorIds = await EnsureColorsAsync(db, cancellationToken);
 
-        var seeds = BuildProductSeeds();
+        var seeds = BuildProductSeeds(productCount);
         var products = new List<_Products>(seeds.Count);
 
         for (var i = 0; i < seeds.Count; i++)
@@ -383,8 +393,9 @@ public static class WorkflowPreviewDataSeeder
     private static string BuildSubmenuKey(string groupTitle, string submenuTitle)
         => $"{groupTitle}::{submenuTitle}";
 
-    private static List<ProductSeed> BuildProductSeeds() =>
-        new()
+    private static List<ProductSeed> BuildProductSeeds(int productCount)
+    {
+        var templates = new List<ProductSeed>
         {
             new("قاب و کاور", "قاب سیلیکونی", "قاب سیلیکونی آیفون 15", "Apple", "قاب سبک با جذب ضربه مناسب استفاده روزمره.", 690000, 15, true, "۱۸ ماه", "سیلیکون", "iPhone 15", null, null),
             new("قاب و کاور", "قاب شفاف", "قاب شفاف سامسونگ S24", "Samsung", "قاب شفاف ضد زردی با لبه مقاوم در برابر ضربه.", 580000, 22, false, "۱۲ ماه", "پلی‌کربنات", "Galaxy S24", null, null),
@@ -397,6 +408,31 @@ public static class WorkflowPreviewDataSeeder
             new("شارژ و کابل", "شارژر دیواری", "شارژر دیواری 65 وات GaN", "UGREEN", "شارژر پرقدرت برای لپ‌تاپ و موبایل با ابعاد کوچک.", 1890000, 7, true, "۱۸ ماه", "GaN", "Laptop / Mobile", "65W", "USB-C + USB-A"),
             new("قاب و کاور", "قاب سیلیکونی", "قاب سیلیکونی شیائومی 13", "Xiaomi", "قاب نرم ضدلغزش مناسب استفاده طولانی.", 620000, 0, false, "۱۲ ماه", "سیلیکون مات", "Xiaomi 13", null, null)
         };
+
+        var results = new List<ProductSeed>(productCount);
+        for (var i = 0; i < productCount; i++)
+        {
+            var t = templates[i % templates.Count];
+            var round = i / templates.Count;
+
+            results.Add(new ProductSeed(
+                t.GroupTitle,
+                t.SubmenuTitle,
+                round == 0 ? t.Title : $"{t.Title} نسخه {round + 1}",
+                t.Brand,
+                t.DescriptionText,
+                t.Price + (round * 10000),
+                t.Count,
+                t.Recommended,
+                t.Warranty,
+                t.Material,
+                t.Compatibility,
+                t.Power,
+                t.ConnectionType));
+        }
+
+        return results;
+    }
 
     private sealed record ProductSeed(
         string GroupTitle,

@@ -65,11 +65,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-if (app.Configuration.GetValue<bool>("SeedWorkflowTestData"))
+var seedProductCount = app.Configuration.GetValue<int>("SeedWorkflowProductCount");
+if (seedProductCount > 0)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<MyDbContext>();
-    await WorkflowPreviewDataSeeder.SeedAsync(db, app.Logger);
+    await WorkflowPreviewDataSeeder.SeedAsync(db, app.Logger, seedProductCount);
 }
 
 // Configure the HTTP request pipeline.

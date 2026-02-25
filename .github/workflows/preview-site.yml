@@ -13,6 +13,11 @@ on:
         required: false
         default: ""
         type: string
+      seed_product_count:
+        description: "How many test products to seed (default 0 = disabled)"
+        required: true
+        default: "0"
+        type: number
 
 permissions:
   contents: read
@@ -97,7 +102,7 @@ jobs:
         env:
           RUNTIME_MINUTES: ${{ inputs.runtime_minutes }}
           BUILT_REF: ${{ inputs.target_ref || github.ref_name }}
-          SeedWorkflowTestData: "true"
+          SeedWorkflowProductCount: ${{ inputs.seed_product_count }}
         run: |
           set -euo pipefail
 
