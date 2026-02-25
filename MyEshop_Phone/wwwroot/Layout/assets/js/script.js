@@ -1202,6 +1202,73 @@
         if (closeFiltersBtn) closeFiltersBtn.addEventListener('click', () => closeFilterMenu());
         if (filterOverlay) filterOverlay.addEventListener('click', () => closeFilterMenu());
 
+        function initPriceRangeSliders() {
+            const sliders = document.querySelectorAll('.price-range-slider');
+            if (!sliders.length) return;
+
+            const formatPrice = (value) => {
+                const numeric = Number(value);
+                return Number.isFinite(numeric) ? numeric.toLocaleString('fa-IR') : '0';
+            };
+
+            sliders.forEach((slider) => {
+                if (slider.dataset.priceRangeInit === '1') return;
+
+                const minInput = slider.querySelector('.range-input-min');
+                const maxInput = slider.querySelector('.range-input-max');
+                if (!minInput || !maxInput) return;
+
+                const rangeFill = slider.querySelector('.range-fill');
+                const rangeContainer = slider.closest('.price-range-container');
+                const minValueEl = rangeContainer?.querySelector('#price-min-value');
+                const maxValueEl = rangeContainer?.querySelector('#price-max-value');
+
+                const minLimit = Number(minInput.min || 0);
+                const maxLimit = Number(maxInput.max || 0);
+                const totalRange = Math.max(1, maxLimit - minLimit);
+
+                const syncRange = (changed) => {
+                    let minValue = Number(minInput.value);
+                    let maxValue = Number(maxInput.value);
+
+                    if (!Number.isFinite(minValue)) minValue = minLimit;
+                    if (!Number.isFinite(maxValue)) maxValue = maxLimit;
+
+                    minValue = Math.min(Math.max(minValue, minLimit), maxLimit);
+                    maxValue = Math.min(Math.max(maxValue, minLimit), maxLimit);
+
+                    if (changed === 'min' && minValue > maxValue) {
+                        maxValue = minValue;
+                    } else if (changed === 'max' && maxValue < minValue) {
+                        minValue = maxValue;
+                    }
+
+                    minInput.value = String(minValue);
+                    maxInput.value = String(maxValue);
+
+                    if (minValueEl) minValueEl.textContent = formatPrice(minValue);
+                    if (maxValueEl) maxValueEl.textContent = formatPrice(maxValue);
+
+                    if (rangeFill) {
+                        const minPercent = ((minValue - minLimit) / totalRange) * 100;
+                        const maxPercent = ((maxValue - minLimit) / totalRange) * 100;
+                        rangeFill.style.right = `${minPercent}%`;
+                        rangeFill.style.left = `${100 - maxPercent}%`;
+                    }
+                };
+
+                minInput.addEventListener('input', () => syncRange('min'));
+                maxInput.addEventListener('input', () => syncRange('max'));
+                minInput.addEventListener('change', () => syncRange('min'));
+                maxInput.addEventListener('change', () => syncRange('max'));
+
+                slider.dataset.priceRangeInit = '1';
+                syncRange();
+            });
+        }
+
+        initPriceRangeSliders();
+
         // When a user taps a link inside the drawer, close the drawer.
         // This fixes cases where the overlay/state remains open and improves UX on mobile.
         if (mobileMenu) {
