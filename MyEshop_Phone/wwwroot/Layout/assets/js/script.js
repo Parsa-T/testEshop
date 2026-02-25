@@ -586,7 +586,7 @@
         });
 
 
-        // --- Product Card Navigation: click anywhere on a product card to open its product detail page ---
+        // --- Product Card Navigation: click anywhere on a product card ---
         function initProductCardNavigation() {
             document.addEventListener('click', (e) => {
                 const card = e.target.closest('.product-card');
@@ -599,12 +599,12 @@
                 const row = card.closest('.products-row');
                 if (row && row.dataset && row.dataset.justDragged === '1') return;
 
-                const pid = (card.dataset.pid || '').trim();
-                if (!pid) return;
-
-                const base = (window.__mahanBase || '.').replace(/\/$/, '');
-                const url = `${base}/pages/product-detail.html?pid=${encodeURIComponent(pid)}`;
-
+                const productLink = card.querySelector('a[href*="/Product/"]');
+                let url = productLink?.getAttribute('href')?.trim() || '';
+                if (!url) {
+                    url = (card.dataset.productUrl || card.dataset.href || '').trim();
+                }
+                if (!url) return;
                 window.location.href = url;
             }, { passive: true });
         }
