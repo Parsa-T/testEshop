@@ -53,6 +53,7 @@
                     @foreach (var item in Model)
                     {
                         <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
+                                 data-product-id="@item.Id"
                                  data-category="@item.products_Groups.GroupTitle"
                                  data-brand="@item.ShortDescription"
                                  data-model="@item.Title"
@@ -234,6 +235,13 @@
             // -------------------------------
             // رندر محصولات
             // -------------------------------
+            const escapeHtml = (value) => String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+
             function renderProducts(products) {
 
                 if (!productsContainer) return;
@@ -247,22 +255,61 @@
                 }
 
                 products.forEach(product => {
-                    const productId = String(product.id);
+                    const productId = Number(product.id) || 0;
+                    const productName = escapeHtml(product.name || product.title || "");
+                    const productBrand = escapeHtml(product.shortDescription || "");
+                    const productImage = escapeHtml(product.imageUrl || "");
+                    const productCategory = escapeHtml(product.category || "");
                     const productPrice = Number(product.price) || 0;
-                    const productCreatedAt = productCreatedDateById.get(productId) || "";
+                    const productCreatedAt = escapeHtml(productCreatedDateById.get(String(productId)) || "");
+                    const productPriceText = productPrice.toLocaleString();
+                    const inStock = Number(product.count) > 0;
+                    const actionMarkup = inStock
+                        ? `
+                                        <div class="flex items-center gap-2">
+                                            <button aria-label="افزودن به سبد خرید" data-id="${productId}" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
+                                                <span class="material-icon text-[22px]">add</span>
+                                            </button>
+                                        </div>
+                          `
+                        : `
+                                        <div class="flex items-center gap-2">
+                                            <p style="color:red">موجود در انبار نمیباشد</p>
+                                        </div>
+                          `;
                     const card = `
-                        <article class="product-card bg-white p-4 rounded-xl shadow hover:shadow-lg transition"
+                        <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
                                  data-product-id="${productId}"
+                                 data-category="${productCategory}"
+                                 data-brand="${productBrand}"
+                                 data-model="${productName}"
+                                 data-material="silicone"
                                  data-price="${productPrice}"
-                                 data-new="${productCreatedAt}">
-                            <img src="${product.imageUrl}"
-                                 class="w-full h-40 object-cover rounded-lg mb-3" />
-                            <a href="/Product/${product.id}">
-                            <h3 class="font-bold text-sm mb-2">${product.name}</h3>
-                            </a>
-                            <p class="text-blue-600 font-semibold">
-                                ${productPrice.toLocaleString()} تومان
-                            </p>
+                                 data-popular="9"
+                                 data-new="${productCreatedAt}"
+                                 data-stock="${inStock ? "true" : "false"}">
+                            <div class="relative">
+                                <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
+                                    <img src="${productImage}" alt="${productName}" class="w-full h-full object-contain" width="900" height="900" loading="lazy">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <a href="/Product/${productId}">
+                                    <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">${productName}</h3>
+                                </a>
+                                <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: ${productBrand}</p>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between gap-3">
+                                <div class="min-w-0">
+                                    <div class="text-[10px] md:text-xs text-gray-400 line-through">${productPriceText}</div>
+                                    <div class="text-base md:text-lg font-black text-[#2563EB] leading-tight">
+                                        ${productPriceText} <span class="text-[10px] md:text-xs font-medium text-gray-500">تومان</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2" style="margin-top:40px">
+                                    ${actionMarkup}
+                                </div>
+                            </div>
                         </article>
                     `;
                     productsContainer.insertAdjacentHTML("beforeend", card);
