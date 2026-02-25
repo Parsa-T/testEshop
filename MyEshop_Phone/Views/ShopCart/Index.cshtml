@@ -416,6 +416,9 @@
           });
           if (!response.ok) return;
           article.remove();
+          if (typeof window.countShopCart === 'function') {
+            window.countShopCart();
+          }
         } finally {
           toggleItemLoading(article, false);
         }
