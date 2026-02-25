@@ -220,7 +220,7 @@
                     }
                 </div>
 
-                <div id="no-results" class="no-results hidden" role="status" aria-live="polite">
+                @* <div id="no-results" class="no-results hidden" role="status" aria-live="polite">
                     <div class="no-results-card rounded-3xl border border-dashed border-[#BFDBFE]/70 bg-white/90 shadow-lg shadow-blue-50 p-6 text-center">
                         <span class="material-icon text-6xl text-[#2563EB] mb-4 inline-block">search_off</span>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">محصول پیدا نشد !</h3>
@@ -230,7 +230,7 @@
                             <a href="../index.html" class="px-4 py-2 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-[#EFF6FF] transition">بازگشت به خانه</a>
                         </div>
                     </div>
-                </div>
+                </div> *@
             </div>
 
         </div>
@@ -276,11 +276,9 @@
             const productsContainer = document.getElementById("products-container2");
             const applyBtn = document.getElementById("apply-filters-btn");
             const resetBtn = document.getElementById("reset-filters");
-            const noResults = document.getElementById("no-results");
             const priceMin = document.getElementById("price-min");
             const priceMax = document.getElementById("price-max");
             const inStockToggle = document.getElementById("in-stock-toggle");
-            const productCards = Array.from(productsContainer?.querySelectorAll(".product-card") || []);
             let isUpdatingPriceBounds = false;
             const defaultPriceMinBound = Number(priceMin?.min || 0);
             const defaultPriceMaxBound = Number(priceMax?.max || 50000000);
@@ -329,21 +327,29 @@
             // -------------------------------
             function renderProducts(products) {
                 if (!productsContainer) return;
+                productsContainer.innerHTML = "";
 
-                const list = Array.isArray(products) ? products : [];
-                const ids = new Set(list.map(p => String(p.id)));
-                let visibleCount = 0;
-
-                productCards.forEach((card) => {
-                    const id = card.dataset.productId;
-                    const isVisible = ids.has(String(id));
-                    card.classList.toggle("hidden", !isVisible);
-                    if (isVisible) visibleCount++;
-                });
-
-                if (noResults) {
-                    noResults.classList.toggle("hidden", visibleCount > 0);
+                if (!products || products.length === 0) {
+                    productsContainer.innerHTML =
+                        "<p class='col-span-full text-center text-gray-500'>محصولی یافت نشد</p>";
+                    return;
                 }
+
+                products.forEach(product => {
+                    const card = `
+                        <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
+                            <img src="${product.imageUrl}"
+                                 class="w-full h-40 object-cover rounded-lg mb-3" />
+                            <a href="/Product/${product.id}">
+                            <h3 class="font-bold text-sm mb-2">${product.name}</h3>
+                            </a>
+                            <p class="text-blue-600 font-semibold">
+                                ${Number(product.price).toLocaleString()} تومان
+                            </p>
+                        </div>
+                    `;
+                    productsContainer.insertAdjacentHTML("beforeend", card);
+                });
             }
 
             // -------------------------------
