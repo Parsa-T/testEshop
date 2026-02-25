@@ -168,9 +168,21 @@
 
             const productsContainer = document.getElementById("products-container2");
             const applyBtn = document.getElementById("apply-filters-btn");
+            const resetBtn = document.getElementById("reset-filters");
             const priceMin = document.getElementById("price-min");
             const priceMax = document.getElementById("price-max");
             const inStockToggle = document.getElementById("in-stock-toggle");
+            let isUpdatingPriceBounds = false;
+            const defaultPriceMinBound = Number(priceMin?.min || 0);
+            const defaultPriceMaxBound = Number(priceMax?.max || 50000000);
+
+            function getCurrentRenderedProducts() {
+                if (!productsContainer) return [];
+                return Array.from(productsContainer.querySelectorAll(".product-card"))
+                    .map(card => ({
+                        price: Number(card.dataset.price) || 0
+                    }));
+            }
 
             // -------------------------------
             // گرفتن مقادیر فیلتر
@@ -189,6 +201,26 @@
                 const inStock = inStockToggle ? inStockToggle.checked : false;
 
                 return { category, brands, minPrice, maxPrice, inStock };
+            }
+
+            function buildQueryParams(filters, includePrice = true) {
+                const queryParams = new URLSearchParams();
+
+                if (filters.category && filters.category !== "all")
+                    queryParams.append("Category", filters.category);
+
+                filters.brands.forEach(b => queryParams.append("Brands", b));
+
+                if (includePrice && filters.minPrice !== null && filters.minPrice !== "")
+                    queryParams.append("MinPrice", filters.minPrice);
+
+                if (includePrice && filters.maxPrice !== null && filters.maxPrice !== "")
+                    queryParams.append("MaxPrice", filters.maxPrice);
+
+                if (filters.inStock)
+                    queryParams.append("InStock", true);
+
+                return queryParams;
             }
 
             // -------------------------------
@@ -224,46 +256,72 @@
             }
 
             // -------------------------------
+            // همگام‌سازی سقف قیمت (بر اساس نتایج فیلترهای غیرقیمتی)
+            // -------------------------------
+            function syncMaxPriceFromProducts(products) {
+                if (!priceMin || !priceMax) return;
+
+                const hasProducts = Array.isArray(products) && products.length > 0;
+                const maxFromProducts = hasProducts
+                    ? Math.max(...products.map(p => Number(p?.price) || 0))
+                    : defaultPriceMaxBound;
+
+                const nextMax = String(Math.max(0, maxFromProducts));
+
+                isUpdatingPriceBounds = true;
+
+                priceMin.min = String(defaultPriceMinBound);
+                priceMax.min = String(defaultPriceMinBound);
+                priceMin.max = nextMax;
+                priceMax.max = nextMax;
+
+                const numericMax = Number(nextMax);
+                let nextMin = defaultPriceMinBound;
+                let nextRangeMax = numericMax;
+
+                if (!hasProducts) {
+                    nextMin = defaultPriceMinBound;
+                    nextRangeMax = defaultPriceMaxBound;
+                }
+
+                if (nextRangeMax < nextMin) {
+                    nextRangeMax = nextMin;
+                }
+
+                priceMin.value = String(nextMin);
+                priceMax.value = String(nextRangeMax);
+
+                priceMin.dispatchEvent(new Event("input", { bubbles: true }));
+                priceMax.dispatchEvent(new Event("input", { bubbles: true }));
+
+                isUpdatingPriceBounds = false;
+            }
+
+            // -------------------------------
             // صدا زدن API
             // -------------------------------
-            async function applyFilters() {
-
+            async function fetchFilteredProducts(includePrice = true) {
                 const filters = getFilters();
-                const queryParams = new URLSearchParams();
+                const queryParams = buildQueryParams(filters, includePrice);
+                const response = await fetch(`/api/FilterProducts/filter?${queryParams.toString()}`);
+                if (!response.ok) throw new Error("Server error");
+                return await response.json();
+            }
 
-                if (filters.category && filters.category !== "all")
-                    queryParams.append("Category", filters.category);
-
-                filters.brands.forEach(b => queryParams.append("Brands", b));
-
-                if (filters.minPrice)
-                    queryParams.append("MinPrice", filters.minPrice);
-
-                if (filters.maxPrice)
-                    queryParams.append("MaxPrice", filters.maxPrice);
-
-                if (filters.inStock)
-                    queryParams.append("InStock", true);
-
+            async function applyFilters(options = {}) {
+                const refreshPriceBounds = Boolean(options.refreshPriceBounds);
                 try {
-
-                    // لودینگ ساده
-                    productsContainer.innerHTML =
-                        "<p class='col-span-full text-center'>در حال بارگذاری...</p>";
-
-                    const response = await fetch(`/api/FilterProducts/filter?${queryParams.toString()}`);
-
-                    if (!response.ok) {
-                        throw new Error("Server error");
+                    if (refreshPriceBounds) {
+                        const baseFilteredProducts = await fetchFilteredProducts(false);
+                        syncMaxPriceFromProducts(baseFilteredProducts);
                     }
 
-                    const data = await response.json();
+                    const data = await fetchFilteredProducts(true);
                     renderProducts(data);
-
                 } catch (error) {
                     console.error("خطا در دریافت اطلاعات:", error);
-                    productsContainer.innerHTML =
-                        "<p class='col-span-full text-center text-red-500'>خطا در دریافت اطلاعات</p>";
+                } finally {
+                    isUpdatingPriceBounds = false;
                 }
             }
 
@@ -291,52 +349,57 @@
                         .forEach(b => b.classList.remove("active"));
 
                     this.classList.add("active");
-                    applyFilters();
+                    applyFilters({ refreshPriceBounds: true });
                 });
             });
 
             // برندها
             document.querySelectorAll(".filter-input").forEach(cb => {
-                cb.addEventListener("change", applyFilters);
+                cb.addEventListener("change", () => applyFilters({ refreshPriceBounds: true }));
             });
 
             // قیمت
-            if (priceMin) priceMin.addEventListener("input", debouncedApply);
-            if (priceMax) priceMax.addEventListener("input", debouncedApply);
+            if (priceMin) {
+                priceMin.addEventListener("input", () => {
+                    if (isUpdatingPriceBounds) return;
+                    debouncedApply();
+                });
+            }
+            if (priceMax) {
+                priceMax.addEventListener("input", () => {
+                    if (isUpdatingPriceBounds) return;
+                    debouncedApply();
+                });
+            }
 
             // موجودی
             if (inStockToggle)
-                inStockToggle.addEventListener("change", applyFilters);
+                inStockToggle.addEventListener("change", () => applyFilters({ refreshPriceBounds: true }));
 
             // دکمه اعمال (موبایل)
             if (applyBtn)
                 applyBtn.addEventListener("click", applyFilters);
 
-        });
-        //حذف فیلتر ها
-                document.getElementById("reset-filters").addEventListener("click", function() {
+            // حذف فیلترها
+            if (resetBtn) {
+                resetBtn.addEventListener("click", function () {
+                    document.querySelectorAll(".category-filter-btn").forEach((btn, index) => {
+                        btn.classList.remove("active");
+                        if (index === 0) btn.classList.add("active");
+                    });
 
-            // 1️⃣ دسته‌ها: کلاس active رو پاک کن و اولی (تمام محصولات) رو فعال کن
-            document.querySelectorAll(".category-filter-btn").forEach((btn, index) => {
-                btn.classList.remove("active");
-                if (index === 0) btn.classList.add("active"); // اولی = "تمام محصولات"
-            });
+                    document.querySelectorAll(".filter-input").forEach(cb => cb.checked = false);
 
-            // 2️⃣ برندها: تمام چک‌باکس‌ها رو uncheck کن
-            document.querySelectorAll(".filter-input").forEach(cb => cb.checked = false);
+                    if (priceMin) priceMin.value = priceMin.min || 0;
+                    if (priceMax) priceMax.value = priceMax.max || 50000000;
 
-            // 3️⃣ قیمت: بازنشانی به مقدار پیش‌فرض
-            const priceMin = document.getElementById("price-min");
-            const priceMax = document.getElementById("price-max");
-            if (priceMin) priceMin.value = priceMin.min || 0;
-            if (priceMax) priceMax.value = priceMax.max || 50000000;
+                    if (inStockToggle) inStockToggle.checked = false;
 
-            // 4️⃣ موجودی: uncheck کن
-            const inStock = document.getElementById("in-stock-toggle");
-            if (inStock) inStock.checked = false;
+                    applyFilters({ refreshPriceBounds: true });
+                });
+            }
 
-            // 5️⃣ دوباره فیلتر اعمال کن (اکنون همه مقادیر پیش‌فرض هستند)
-            applyFilters();
+            syncMaxPriceFromProducts(getCurrentRenderedProducts());
         });
 
     </script>
