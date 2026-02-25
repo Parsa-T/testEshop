@@ -29,10 +29,6 @@ $(document).ready(function () {
 
 });
 
-function isModernCartFlowActive() {
-    return !!document.querySelector('[data-cart-main]') && !!document.getElementById('cart-confirm-modal');
-}
-
 
 
 
@@ -61,9 +57,6 @@ function updateCartTotals() {
 
 // حذف آیتم از سبد
 $(document).on('click', '[data-action="remove-cart-item"]', function () {
-    // On the new cart page, removal must happen only after modal confirmation.
-    if (isModernCartFlowActive()) return;
-
     const cartItem = $(this).closest('.cart-item');
     const productId = parseInt(cartItem.data('cart-item-id')); // بهتره تو HTML data-cart-item-id اضافه کنی
 
@@ -106,16 +99,12 @@ function updateCartTotals() {
 }
 
 $(document).on('click', '.qty-plus', function () {
-    if (isModernCartFlowActive()) return;
-
     const input = $(this).siblings('input');
     input.val(parseInt(input.val()) + 1);
     updateCartTotals();
 });
 
 $(document).on('click', '.qty-minus', function () {
-    if (isModernCartFlowActive()) return;
-
     const input = $(this).siblings('input');
     let current = parseInt(input.val());
     if (current > 1) {
@@ -123,4 +112,5 @@ $(document).on('click', '.qty-minus', function () {
         updateCartTotals();
     }
 });
+
 
