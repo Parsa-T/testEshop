@@ -137,31 +137,40 @@
     <script>
         const sortSelect = document.getElementById("sort-by");
         const productsContainer = document.getElementById("products-container2");
+        if (sortSelect && productsContainer) {
+            const toNumber = (value) => {
+                const number = Number(value);
+                return Number.isFinite(number) ? number : 0;
+            };
+            const toTime = (value) => {
+                const time = Date.parse(value || "");
+                return Number.isFinite(time) ? time : 0;
+            };
 
-        sortSelect.addEventListener("change", () => {
-            const option = sortSelect.value;
-            const products = Array.from(productsContainer.querySelectorAll(".product-card"));
+            sortSelect.addEventListener("change", () => {
+                const option = sortSelect.value;
+                const products = Array.from(productsContainer.querySelectorAll(".product-card"));
 
-            products.sort((a, b) => {
-                const priceA = parseFloat(a.dataset.price);
-                const priceB = parseFloat(b.dataset.price);
-                const dateA = new Date(a.dataset.new);
-                const dateB = new Date(b.dataset.new);
+                products.sort((a, b) => {
+                    const priceA = toNumber(a.dataset.price);
+                    const priceB = toNumber(b.dataset.price);
+                    const dateA = toTime(a.dataset.new);
+                    const dateB = toTime(b.dataset.new);
 
+                    switch (option) {
+                        case "newest": return dateB - dateA;
+                        case "oldest": return dateA - dateB;
+                        case "price-asc": return priceA - priceB;
+                        case "price-desc": return priceB - priceA;
+                        default: return 0;
+                    }
+                });
 
-               switch(option) {
-                   case "newest": return dateB - dateA;  // جدیدترین اول
-                   case "oldest": return dateA - dateB;  // قدیمی‌ترین اول
-                   case "price-asc": return priceA - priceB;
-                   case "price-desc": return priceB - priceA;
-               }
-
+                // حذف کارت‌ها و اضافه کردن دوباره بر اساس مرتب‌سازی
+                productsContainer.innerHTML = "";
+                products.forEach(p => productsContainer.appendChild(p));
             });
-
-            // حذف کارت‌ها و اضافه کردن دوباره بر اساس مرتب‌سازی
-            productsContainer.innerHTML = "";
-            products.forEach(p => productsContainer.appendChild(p));
-        });
+        }
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -175,6 +184,10 @@
             let isUpdatingPriceBounds = false;
             const defaultPriceMinBound = Number(priceMin?.min || 0);
             const defaultPriceMaxBound = Number(priceMax?.max || 50000000);
+            const productCreatedDateById = new Map(
+                Array.from(productsContainer?.querySelectorAll(".product-card") || [])
+                    .map(card => [String(card.dataset.productId), card.dataset.new || ""])
+            );
 
             function getCurrentRenderedProducts() {
                 if (!productsContainer) return [];
@@ -239,17 +252,23 @@
                 }
 
                 products.forEach(product => {
+                    const productId = String(product.id);
+                    const productPrice = Number(product.price) || 0;
+                    const productCreatedAt = productCreatedDateById.get(productId) || "";
                     const card = `
-                        <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
+                        <article class="product-card bg-white p-4 rounded-xl shadow hover:shadow-lg transition"
+                                 data-product-id="${productId}"
+                                 data-price="${productPrice}"
+                                 data-new="${productCreatedAt}">
                             <img src="${product.imageUrl}"
                                  class="w-full h-40 object-cover rounded-lg mb-3" />
                             <a href="/Product/${product.id}">
                             <h3 class="font-bold text-sm mb-2">${product.name}</h3>
                             </a>
                             <p class="text-blue-600 font-semibold">
-                                ${Number(product.price).toLocaleString()} تومان
+                                ${productPrice.toLocaleString()} تومان
                             </p>
-                        </div>
+                        </article>
                     `;
                     productsContainer.insertAdjacentHTML("beforeend", card);
                 });
