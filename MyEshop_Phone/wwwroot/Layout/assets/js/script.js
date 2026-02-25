@@ -732,10 +732,6 @@
                 //removeBtn.dataset.cartMenuPid = pid;
                 //removeBtn.innerHTML = '<span class="material-icon text-base">delete</span>';
 
-                footer.appendChild(qtyWrap);
-                footer.appendChild(removeBtn);
-                meta.appendChild(footer);
-
                 itemRow.appendChild(thumb);
                 itemRow.appendChild(meta);
                 cartMenuItems.appendChild(itemRow);
