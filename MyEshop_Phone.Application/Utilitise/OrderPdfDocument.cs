@@ -9,7 +9,7 @@ public class OrderPdfDocument : IDocument
 
     public OrderPdfDocument(AdminOrderPdfDto model)
     {
-        _model = model;
+        _model = model ?? new AdminOrderPdfDto();
     }
 
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
@@ -36,12 +36,12 @@ public class OrderPdfDocument : IDocument
 
                 col.Item().LineHorizontal(1);
 
-                // اطلاعات خریدار
-                col.Item().Text($"نام و نام خانوادگی: {_model.FullName}");
-                col.Item().Text($"استان : {_model.StateName}");
-                col.Item().Text($"شهرستان : {_model.CityName}");
-                col.Item().Text($"آدرس: {_model.Address}");
-                col.Item().Text($"کد پستی: {_model.PostalCode}");
+                // اطلاعات خریدار (ایمن شده)
+                col.Item().Text($"نام و نام خانوادگی: {_model.FullName ?? ""}");
+                col.Item().Text($"استان : {_model.StateName ?? ""}");
+                col.Item().Text($"شهرستان : {_model.CityName ?? ""}");
+                col.Item().Text($"آدرس: {_model.Address ?? ""}");
+                col.Item().Text($"کد پستی: {_model.PostalCode ?? ""}");
 
                 col.Item().LineHorizontal(1);
 
@@ -50,10 +50,10 @@ public class OrderPdfDocument : IDocument
                 {
                     table.ColumnsDefinition(columns =>
                     {
-                        columns.RelativeColumn(3); // نام محصول
-                        columns.RelativeColumn(2); // رنگ
-                        columns.RelativeColumn(1); // تعداد
-                        columns.RelativeColumn(2); // قیمت
+                        columns.RelativeColumn(3);
+                        columns.RelativeColumn(2);
+                        columns.RelativeColumn(1);
+                        columns.RelativeColumn(2);
                     });
 
                     // Header
@@ -65,28 +65,37 @@ public class OrderPdfDocument : IDocument
                         header.Cell().Element(CellStyle).Text("قیمت").Bold();
                     });
 
-                    foreach (var item in _model.Items)
+                    foreach (var item in _model.Items ?? new List<AdminOrderPdfItemDto>())
                     {
-                        table.Cell().Element(CellStyle).Text(item.ProductTitle);
+                        var safeColor = GetSafeColor(item.ColorName);
+
+                        table.Cell().Element(CellStyle)
+                            .Text(item.ProductTitle ?? "");
+
                         table.Cell().Element(CellStyle).Row(row =>
                         {
-                            // باکس رنگ
-                            row.ConstantItem(20).Height(20).Background(item.ColorName);
+                            row.ConstantItem(20)
+                               .Height(20)
+                               .Background(safeColor);
 
-                            // فاصله
                             row.ConstantItem(5);
 
-                            // کد رنگ یا نام رنگ
-                            row.RelativeItem().Text(item.ColorName);
+                            row.RelativeItem()
+                               .Text(item.ColorName ?? "");
                         });
-                        table.Cell().Element(CellStyle).Text(item.Count.ToString());
-                        table.Cell().Element(CellStyle).Text(item.Price.ToString("N0"));
+
+                        table.Cell().Element(CellStyle)
+                            .Text(item.Count.ToString());
+
+                        table.Cell().Element(CellStyle)
+                            .Text(item.Price.ToString("N0"));
                     }
                 });
 
                 col.Item().LineHorizontal(1);
 
-                col.Item().AlignLeft().Text($"مبلغ کل: {_model.TotalPrice:N0} تومان")
+                col.Item().AlignLeft()
+                    .Text($"مبلغ کل: {_model.TotalPrice:N0} تومان")
                     .FontSize(14)
                     .Bold();
             });
@@ -99,5 +108,22 @@ public class OrderPdfDocument : IDocument
             .Border(1)
             .Padding(5)
             .AlignMiddle();
+    }
+    private string GetSafeColor(string? color)
+    {
+        if (string.IsNullOrWhiteSpace(color))
+            return "#FFFFFF";
+
+        color = color.Trim();
+
+        // اگر با # شروع نشه، معتبر نیست
+        if (!color.StartsWith("#"))
+            return "#FFFFFF";
+
+        // پشتیبانی از #RGB و #RRGGBB و حتی #RGBA
+        if (color.Length == 4 || color.Length == 7 || color.Length == 9)
+            return color;
+
+        return "#FFFFFF";
     }
 }

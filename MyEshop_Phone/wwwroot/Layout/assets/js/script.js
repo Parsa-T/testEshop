@@ -1201,7 +1201,6 @@
         if (mobileFilterBtn) mobileFilterBtn.addEventListener('click', openFilterMenu);
         if (closeFiltersBtn) closeFiltersBtn.addEventListener('click', () => closeFilterMenu());
         if (filterOverlay) filterOverlay.addEventListener('click', () => closeFilterMenu());
-
         function initPriceRangeSliders() {
             const sliders = document.querySelectorAll('.price-range-slider');
             if (!sliders.length) return;

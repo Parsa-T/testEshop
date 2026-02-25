@@ -36,22 +36,19 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (item.Count != 0)
                         {
-                            @if (item.Count != 0)
-                            {
-                                <div class="flex items-center gap-2">
-                                    <button aria-label="افزودن به سبد خرید" data-id="@item.Id" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
-                                        <span class="material-icon text-[22px]">add</span>
-                                    </button>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="flex items-center gap-2">
-                                    <p style="color:red">موجود در انبار نمیباشد</p>
-                                </div>
-                            }
+                            <div class="flex items-center gap-2">
+                                <button aria-label="افزودن به سبد خرید" data-id="@item.Id" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
+                                    <span class="material-icon text-[22px]">add</span>
+                                </button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="flex items-center gap-2">
+                                <p style="color:red">موجود در انبار نمیباشد</p>
+                            </div>
                         }
                     </div>
                 </div>

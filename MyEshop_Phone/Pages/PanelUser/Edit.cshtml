@@ -42,9 +42,12 @@
             <label>کد پستی : </label>
             <input asp-for="EditUser.PostalCode" />
             <label>عکس پروفایل : </label>
-            @if (Model.EditUser.UrlPhoto.Length > 0)
+            @if (Model.EditUser.UrlPhoto != null)
             {
-                <img src="/AdminPanel/Photo/Users/@Model.EditUser.UrlPhoto" />
+                @if (Model.EditUser.UrlPhoto.Length > 0)
+                {
+                    <img src="/AdminPanel/Photo/Users/@Model.EditUser.UrlPhoto" />
+                }
             }
             <input asp-for="EditUser.imgUp" />
             <input id="btnsum" style="margin: 10px;padding: 5px;border-radius: 10px;background-color: #2563EB;width: 150px;color: white;font-family: inherit;font-weight: bold;" type="submit" value="ذخیره" class="btn btn-primary" />

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyEshop_Phone.Application.Common.Interfaces;
@@ -29,18 +30,21 @@ namespace MyEshop_Phone.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            List<ShowOrderViewModel> model = new();
+            var viewModel = new ShopCartPageViewModel();
+
             var shopCartJson = HttpContext.Session.GetString("ShopCart");
+
             if (!string.IsNullOrEmpty(shopCartJson))
             {
                 var cartItems = JsonSerializer.Deserialize<List<ShopCartItem>>(shopCartJson);
+
                 foreach (var item in cartItems)
                 {
                     var product = await _productsService.ShopCartItem(item.ProductID);
 
                     if (product != null)
                     {
-                        model.Add(new ShowOrderViewModel
+                        viewModel.Items.Add(new ShowOrderViewModel
                         {
                             ProductID = product.Id,
                             Title = product.Title,
@@ -54,37 +58,61 @@ namespace MyEshop_Phone.Controllers
                     }
                 }
             }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-                return RedirectToAction("Login");
-            var user = await _userRepository.FindUserById(int.Parse(userId));
-            ViewBag.HasAddress = !string.IsNullOrWhiteSpace(user.Address) &&
-                !string.IsNullOrWhiteSpace(user.PostalCode.ToString());
-            return View(model);
+
+            if (userId != null)
+            {
+                viewModel.IsLoggedIn = true;
+
+                var user = await _userRepository.FindUserById(int.Parse(userId));
+
+                viewModel.FullName = $"{user.Name}   {user.Family}";
+                viewModel.Address = user.Address;
+                viewModel.PostalCode = user.PostalCode.ToString();
+                viewModel.Id = int.Parse(userId);
+            }
+            else
+            {
+                viewModel.IsLoggedIn = false;
+            }
+
+            return View(viewModel);
         }
         [HttpPost]
+        [Authorize] // 👈 مهم
         public async Task<IActionResult> FinalizeOrder()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+                return RedirectToAction("Login", "Account");
+
             var shopCartJson = HttpContext.Session.GetString("ShopCart");
 
             if (string.IsNullOrEmpty(shopCartJson))
-                return BadRequest("سبد خرید خالی است");
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-                return RedirectToAction("Login");
+                return RedirectToAction("Index");
 
             var cartItems = JsonSerializer.Deserialize<List<ShopCartItem>>(shopCartJson);
+
+            if (cartItems == null || !cartItems.Any())
+                return RedirectToAction("Index");
 
             decimal totalPrice = 0;
 
             foreach (var item in cartItems)
             {
                 var product = await _productsService.ShopCartItem(item.ProductID);
+
+                if (product == null)
+                    return BadRequest("یکی از محصولات یافت نشد");
+
+                if (product.Count < item.Count)
+                    return BadRequest($"موجودی محصول {product.Title} کافی نیست");
+
                 totalPrice += product.Price * item.Count;
             }
 
-            // 🔥 ساخت سفارش
             var order = new _Orders
             {
                 UserId = int.Parse(userId),
@@ -92,17 +120,13 @@ namespace MyEshop_Phone.Controllers
                 IsFinaly = false,
                 TotalPrice = totalPrice
             };
-            if(order.IsFinaly)
-                return BadRequest("سفارش قبلا ثبت شده");
 
             await _orderServices.AddOrderAsunc(order);
             await _orderServices.SaveAsync();
-            // 🔥 ساخت OrderDetails
+
             foreach (var item in cartItems)
             {
                 var product = await _productsService.ShopCartItem(item.ProductID);
-
-                if (product == null) continue;
 
                 var detail = new _OrderDetails
                 {
@@ -113,28 +137,28 @@ namespace MyEshop_Phone.Controllers
                     ColorName = item.ColorName,
                     ProductTitle = product.Title
                 };
+
                 await _orderDitelsService.AddDitelsAsync(detail);
-                if (product.Count != 0)
-                {
-                    product.Count -= detail.Count;
-                    await _productsService.Save();
-                }
+
+                product.Count -= item.Count;
+                await _productsService.Save();
             }
 
             await _orderServices.SaveAsync();
 
-            // 🔥 رفتن به پرداخت
             var authority = await _paymentGateway
                 .RequestPaymentAsync(order.Id, order.TotalPrice);
 
-            if (authority == null)
+            if (string.IsNullOrEmpty(authority))
                 return BadRequest("خطا در اتصال به درگاه");
 
             order.Authority = authority;
             await _orderServices.SaveAsync();
 
+            // 🔥 پاک کردن سشن بعد از رفتن به پرداخت
+            HttpContext.Session.Remove("ShopCart");
+
             var url = $"https://zarinpal.com/pg/StartPay/{authority}";
-            //var url = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
             return Redirect(url);
         }
     }

@@ -84,9 +84,6 @@
                     <a href="/Login" class="md:hidden nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="ورود" aria-label="ورود">
                         <span class="material-icon" aria-hidden="true">login</span>
                     </a>
-
-                    @if (User.Identity.IsAuthenticated)
-                    {
                         <!-- سبد خرید -->
                         <div id="cart-menu-wrapper" class="relative">
                             <a href="/ShopCart" id="cart-btn" class="nav-icon-btn ripple w-10 h-10 rounded-lg flex items-center justify-center text-gray-600" title="سبد خرید" aria-label="سبد خرید" aria-haspopup="dialog" aria-controls="cart-menu" aria-expanded="false">
@@ -120,7 +117,6 @@
                                 </div>
                             </div> *@
                         </div>
-                    }
 
                     <!-- جداکننده (نمایش در دسکتاپ) -->
                     <div class="hidden md:block w-px h-6 bg-gray-300 mx-1"></div>

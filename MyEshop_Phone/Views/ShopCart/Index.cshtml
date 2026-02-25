@@ -1,5 +1,5 @@
 ﻿@using MyEshop_Phone.Application.ViewModel
-@model List<ShowOrderViewModel>
+@model ShopCartPageViewModel
 @{
     ViewData["Title"] = "سبد خرید | ماهان شاپ";
 }
@@ -49,7 +49,7 @@
             </div>
 
             <div id="cart-items-wrapper" class="flex flex-col gap-4 rounded-3xl bg-transparent px-3 py-3 max-h-[65vh] overflow-y-auto">
-                @foreach (var item in Model)
+                @foreach (var item in Model.Items)
                 {
                     <article class="cart-item" data-cart-item-id="@item.ProductID" data-cart-color="@item.ColorName" data-cart-item="case-iphone-15-silicone" data-unit-price="@item.Price">
                         <div class="cart-item-main">
@@ -128,7 +128,7 @@
 
         <section class="space-y-6 lg:pr-10 lg:border-r lg:border-gray-200/70">
             @{
-                var subtotal = Model.Sum(item => item.Price * item.Count);
+                var subtotal = Model.Items.Sum(item => item.Price * item.Count);
             }
             <div class="sticky top-0 space-y-6">
                 <div class="rounded-3xl bg-white/80 backdrop-blur-sm shadow-[0_20px_50px_rgba(37,99,235,0.12)] p-6 space-y-4">
@@ -144,36 +144,81 @@
                         </div>
                     </div>
                 </div>
-                @if (ViewBag.HasAddress)
+                @if (Model.IsLoggedIn)
                 {
-                    <form method="post" asp-action="FinalizeOrder">
-                        <div class="space-y-3">
-                            <button type="submit" id="btnSubmitOrder" class="w-full bg-[#2563EB] text-white font-bold py-3.5 rounded-full hover:bg-[#1D4ED8] transition-colors shadow-lg shadow-[#2563EB]/20 flex items-center justify-center gap-2 ripple">
-                                ادامه و ثبت سفارش
-                                <span class="material-icon text-sm">shopping_bag</span>
-                            </button>
-                            <a href="/" class="block text-center text-sm text-gray-500 hover:text-gray-800">بازگشت به فروشگاه</a>
+                    @if (Model.HasAddress)
+                    {
+                        <div class="rounded-3xl bg-[#EFF6FF]/60 px-6 py-5 shadow-[0_18px_40px_rgba(37,99,235,0.08)] space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.3em] text-gray-400">اطلاعات ارسال</p>
+                                    <h3 class="text-lg font-semibold text-gray-900">@Model.FullName</h3>
+                                </div>
+                                <span class="text-sm font-bold text-green-600">تکمیل شده</span>
+                            </div>
+
+                            <div class="space-y-2 text-sm text-gray-700">
+                                <p><strong>آدرس:</strong> @Model.Address</p>
+                                <p><strong>کد پستی:</strong> @Model.PostalCode</p>
+                            </div>
                         </div>
-                    </form>
+
+                        <form method="post" asp-action="FinalizeOrder">
+                            <div class="space-y-3">
+                                <button type="submit" id="btnSubmitOrder"
+                                        class="w-full bg-[#2563EB] text-white font-bold py-3.5 rounded-full hover:bg-[#1D4ED8] transition-colors shadow-lg shadow-[#2563EB]/20 flex items-center justify-center gap-2 ripple">
+                                    ادامه و ثبت سفارش
+                                    <span class="material-icon text-sm">shopping_bag</span>
+                                </button>
+                                <a href="/" class="block text-center text-sm text-gray-500 hover:text-gray-800">
+                                    بازگشت به فروشگاه
+                                </a>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="rounded-3xl bg-[#EFF6FF]/60 px-6 py-5 shadow-[0_18px_40px_rgba(37,99,235,0.08)] space-y-4" data-address-card data-address-added="false">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.3em] text-gray-400">آدرس ارسال</p>
+                                    <h3 class="text-lg font-semibold text-gray-900">آدرسی ثبت نشده است</h3>
+                                </div>
+                                <span class="text-sm font-bold text-red-500">نیاز به اتمام</span>
+                            </div>
+                            <div data-address-empty class="space-y-2 text-sm text-gray-600">
+                                <p>در حال حاضر هیچ آدرسی به سبد متصل نیست.</p>
+                                <div class="flex items-start gap-2 border-r-2 border-red-300 pr-3 text-red-600 text-xs font-semibold">
+                                    <span class="material-icon text-base">warning</span>
+                                    برای ثبت سفارش باید یک آدرس در صفحه پروفایل اضافه کنید.
+                                </div>
+                                <a href="/PanelUser/Edit?id=@Model.Id" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition">
+                                    رفتن به ثبت آدرس
+                                    <span class="material-icon text-base">arrow_forward</span>
+                                </a>
+                            </div>
+                            <!-- اگر آدرسی ثبت شود، حالت دوم نمایش پیدا می‌کند -->
+                        </div>
+                    }
                 }
                 else
                 {
                     <div class="rounded-3xl bg-[#EFF6FF]/60 px-6 py-5 shadow-[0_18px_40px_rgba(37,99,235,0.08)] space-y-4" data-address-card data-address-added="false">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-xs uppercase tracking-[0.3em] text-gray-400">آدرس ارسال</p>
-                                <h3 class="text-lg font-semibold text-gray-900">آدرسی ثبت نشده است</h3>
+                                <p class="text-xs uppercase tracking-[0.3em] text-gray-400">برای تکمیل سفارش باید وارد اکانتتون بشید</p>
+                                <h3 class="text-lg font-semibold text-gray-900">برای تکمیل سفارش باید وارد اکانتتون بشید</h3>
                             </div>
-                            <span class="text-sm font-bold text-red-500">نیاز به اتمام</span>
+                            <span class="text-sm font-bold text-red-500">نیاز به اکانت</span>
                         </div>
                         <div data-address-empty class="space-y-2 text-sm text-gray-600">
-                            <p>در حال حاضر هیچ آدرسی به سبد متصل نیست.</p>
+                            <p>در حال حاظر شما وارد اکانت نشدید</p>
                             <div class="flex items-start gap-2 border-r-2 border-red-300 pr-3 text-red-600 text-xs font-semibold">
                                 <span class="material-icon text-base">warning</span>
-                                برای ثبت سفارش باید یک آدرس در صفحه پروفایل اضافه کنید.
+                                برای ثبت سفارش باید وارد اکانت خود بشید
                             </div>
-                            <a href="/PanelUser" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition">
-                                رفتن به ثبت آدرس
+                            <a href="/Login" class="inline-flex items-center gap-2 text-sm font-semibold text-[#2563EB] hover:text-[#1D4ED8] transition">
+                                صفحه لاگین
                                 <span class="material-icon text-base">arrow_forward</span>
                             </a>
                         </div>
