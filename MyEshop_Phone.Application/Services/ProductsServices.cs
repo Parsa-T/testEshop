@@ -50,6 +50,11 @@ namespace MyEshop_Phone.Application.Services
 
         }
 
+        public async Task<IEnumerable<_Products>> FilterByNameProducts(string filter)
+        {
+            return await _productsRepository.FilterProducts(filter);
+        }
+
         public async Task<IEnumerable<GetProductsDTO>> GetAll()
         {
             var product = await _productsRepository.GetAllProducts();

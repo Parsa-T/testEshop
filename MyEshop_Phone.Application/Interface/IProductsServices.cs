@@ -11,6 +11,7 @@ namespace MyEshop_Phone.Application.Interface
 {
     public interface IProductsServices
     {
+        Task<IEnumerable<_Products>> FilterByNameProducts(string filter);
         Task<int> GetProductsCount();
         Task<IEnumerable<GetProductsDTO>> GetAll();
         Task<ShowProductsDTO> GetAllProducts();

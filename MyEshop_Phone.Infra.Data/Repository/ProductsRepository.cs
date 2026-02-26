@@ -109,6 +109,11 @@ namespace MyEshop_Phone.Infra.Data.Repository
             var productId = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
             return productId;
         }
+
+        public async Task<IEnumerable<_Products>> FilterProducts(string filter)
+        {
+            return _db.Products.Where(p=>p.Title.Contains(filter)||p.products_Groups.GroupTitle.Contains(filter)).Distinct();
+        }
     }
     public class QueriProductsRepository : IQueriProductsServices
     {

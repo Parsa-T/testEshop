@@ -9,6 +9,7 @@ namespace MyEshop_Phone.Domain.Interface
 {
     public interface IProductsRepository
     {
+        Task<IEnumerable<_Products>> FilterProducts(string filter);
         Task<int> ProductsCount();
         Task<IEnumerable<_Products>> GetAllProducts();
         Task<IEnumerable<_Products>> GetAll();
