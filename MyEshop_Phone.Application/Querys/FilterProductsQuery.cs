@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 public class FilterProductsQuery : IRequest<List<ProductsDTO>>
 {
+    public string? Q { get; set; }
+    public int? GroupId { get; set; }
+    public int? SubMenuId { get; set; }
     public string? Category { get; set; }
     public List<string>? Brands { get; set; }
     public decimal? MinPrice { get; set; }

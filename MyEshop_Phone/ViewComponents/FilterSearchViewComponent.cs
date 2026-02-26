@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyEshop_Phone.Application.Interface;
+using MyEshop_Phone.Domain.Model;
 
 public class FilterSearchViewComponent : ViewComponent
 {
@@ -8,9 +9,12 @@ public class FilterSearchViewComponent : ViewComponent
     {
         _productsService = products;
     }
-    public async Task<IViewComponentResult> InvokeAsync()
+    public async Task<IViewComponentResult> InvokeAsync(IEnumerable<_Products>? products = null)
     {
-        var products = await _productsService.GetAllProduct();
-        return View(products);
+        if (products != null)
+            return View(products);
+
+        var allProducts = await _productsService.GetAllProduct();
+        return View(allProducts);
     }
 }

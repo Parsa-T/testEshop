@@ -1391,9 +1391,11 @@
         document.querySelectorAll('.drag-scroll').forEach((row) => {
             let isDown = false;
             let startX = 0;
+            let startY = 0;
+            let startTime = 0;
             let startScrollLeft = 0;
-            let moved = false;
-            const threshold = 6;
+            let hasDragged = false;
+            const threshold = 10;
 
             function canStartFrom(target) {
                 return !target.closest('button, a, input, textarea, select, details, summary');
@@ -1403,33 +1405,48 @@
                 if (e.pointerType === 'mouse' && e.button !== 0) return;
                 if (!canStartFrom(e.target)) return;
                 isDown = true;
-                moved = false;
+                hasDragged = false;
                 startX = e.clientX;
+                startY = e.clientY;
+                startTime = Date.now();
                 startScrollLeft = row.scrollLeft;
-                row.classList.add('is-dragging');
-                row.style.scrollSnapType = 'none';
-                row.style.scrollBehavior = 'auto';
                 try { row.setPointerCapture(e.pointerId); } catch { }
             });
 
             row.addEventListener('pointermove', (e) => {
                 if (!isDown) return;
                 const dx = e.clientX - startX;
-                if (Math.abs(dx) > threshold) moved = true;
+                const dy = e.clientY - startY;
+
+                if (!hasDragged) {
+                    if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy)) {
+                        hasDragged = true;
+                        row.classList.add('is-dragging');
+                        row.style.scrollSnapType = 'none';
+                        row.style.scrollBehavior = 'auto';
+                    } else {
+                        return;
+                    }
+                }
+
                 row.scrollLeft = startScrollLeft - dx;
-                if (moved) e.preventDefault();
+                e.preventDefault();
             }, { passive: false });
 
             function endDrag(e) {
                 if (!isDown) return;
                 isDown = false;
+                const gestureDuration = Date.now() - startTime;
                 row.classList.remove('is-dragging');
                 row.style.scrollSnapType = 'none';
                 row.style.scrollBehavior = '';
                 try { row.releasePointerCapture(e.pointerId); } catch { }
-                if (moved) {
+
+                if (hasDragged) {
                     row.dataset.justDragged = '1';
-                    setTimeout(() => { delete row.dataset.justDragged; }, 100);
+                    setTimeout(() => { delete row.dataset.justDragged; }, 160);
+                } else if (gestureDuration >= 0) {
+                    delete row.dataset.justDragged;
                 }
             }
 

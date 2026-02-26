@@ -17,6 +17,21 @@ public class FilterProductsQueryHandler : IRequestHandler<FilterProductsQuery, L
     {
         var query = _context.Products.Include(p=>p.products_Groups).Include(s=>s.submenuGroups).AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(request.Q))
+        {
+            var q = request.Q.Trim();
+            query = query.Where(p =>
+                (p.Title ?? string.Empty).Contains(q) ||
+                (p.ShortDescription ?? string.Empty).Contains(q) ||
+                (p.Text ?? string.Empty).Contains(q));
+        }
+
+        if (request.GroupId.HasValue)
+            query = query.Where(p => p.ProductGroupsId == request.GroupId.Value);
+
+        if (request.SubMenuId.HasValue)
+            query = query.Where(p => p.SubmenuGroupsId == request.SubMenuId.Value);
+
         if (!string.IsNullOrEmpty(request.Category) && request.Category != "all")
             query = query.Where(p => p.products_Groups.GroupTitle == request.Category);
 
@@ -37,6 +52,7 @@ public class FilterProductsQueryHandler : IRequestHandler<FilterProductsQuery, L
             {
                 Id = p.Id,
                 Title = p.Title,
+                Category = p.products_Groups != null ? p.products_Groups.GroupTitle : string.Empty,
                 Price = p.Price,
                 Count = p.Count,
                 ShortDescription = p.ShortDescription,

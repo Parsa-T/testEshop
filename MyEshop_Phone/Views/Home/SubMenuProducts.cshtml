@@ -8,7 +8,7 @@
     <div class="lg:grid lg:grid-cols-12 lg:gap-8">
 
         <!-- Filter Sidebar -->
-        @await Component.InvokeAsync("FilterSearch")
+        @await Component.InvokeAsync("FilterSearch", new { products = Model })
 
         <!-- Products Grid -->
         <div class="lg:col-span-9 mt-6 lg:mt-0">
@@ -180,6 +180,11 @@
             let isUpdatingPriceBounds = false;
             const defaultPriceMinBound = Number(priceMin?.min || 0);
             const defaultPriceMaxBound = Number(priceMax?.max || 50000000);
+            const pathSegments = window.location.pathname.split("/").filter(Boolean);
+            const subMenuSegmentIndex = pathSegments.findIndex(seg => seg.toLowerCase() === "submenu");
+            const scopedSubMenuId = subMenuSegmentIndex >= 0
+                ? Number(pathSegments[subMenuSegmentIndex + 1])
+                : Number.NaN;
             const productCreatedDateById = new Map(
                 Array.from(productsContainer?.querySelectorAll(".product-card") || [])
                     .map(card => [String(card.dataset.productId), card.dataset.new || ""])
@@ -228,6 +233,9 @@
 
                 if (filters.inStock)
                     queryParams.append("InStock", true);
+
+                if (Number.isFinite(scopedSubMenuId))
+                    queryParams.append("SubMenuId", String(scopedSubMenuId));
 
                 return queryParams;
             }
