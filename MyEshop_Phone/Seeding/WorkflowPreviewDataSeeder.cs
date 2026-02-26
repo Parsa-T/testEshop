@@ -137,13 +137,10 @@ public static class WorkflowPreviewDataSeeder
                 });
             }
 
-            var colorA = colorPalette[i % colorPalette.Count];
-            var colorB = colorPalette[(i + 2) % colorPalette.Count];
-
-            productColors.Add(new _ProductsColor { ProductId = product.Id, ColorId = colorA });
-            if (colorB != colorA)
+            var randomColorIds = PickRandomColorIds(colorPalette, minCount: 2, maxCount: 7);
+            foreach (var colorId in randomColorIds)
             {
-                productColors.Add(new _ProductsColor { ProductId = product.Id, ColorId = colorB });
+                productColors.Add(new _ProductsColor { ProductId = product.Id, ColorId = colorId });
             }
 
             if (i < 5)
@@ -369,7 +366,19 @@ public static class WorkflowPreviewDataSeeder
 
     private static async Task<Dictionary<string, int>> EnsureColorsAsync(MyDbContext db, CancellationToken cancellationToken)
     {
-        var names = new[] { "مشکی", "سفید", "آبی", "قرمز", "سبز" };
+        var names = new[]
+        {
+            "مشکی",
+            "سفید",
+            "آبی",
+            "قرمز",
+            "سبز",
+            "زرد",
+            "صورتی",
+            "بنفش",
+            "نارنجی",
+            "خاکستری"
+        };
 
         var existing = await db.colors
             .Where(c => names.Contains(c.Name))
@@ -392,6 +401,27 @@ public static class WorkflowPreviewDataSeeder
 
     private static string BuildSubmenuKey(string groupTitle, string submenuTitle)
         => $"{groupTitle}::{submenuTitle}";
+
+    private static List<int> PickRandomColorIds(IReadOnlyList<int> palette, int minCount, int maxCount)
+    {
+        if (palette.Count == 0)
+        {
+            return new List<int>();
+        }
+
+        var maxAllowed = Math.Min(maxCount, palette.Count);
+        var minAllowed = Math.Min(Math.Max(1, minCount), maxAllowed);
+        var takeCount = Random.Shared.Next(minAllowed, maxAllowed + 1);
+
+        var pool = palette.ToList();
+        for (var i = pool.Count - 1; i > 0; i--)
+        {
+            var j = Random.Shared.Next(i + 1);
+            (pool[i], pool[j]) = (pool[j], pool[i]);
+        }
+
+        return pool.Take(takeCount).ToList();
+    }
 
     private static List<ProductSeed> BuildProductSeeds(int productCount)
     {
