@@ -40,6 +40,7 @@ jobs:
     env:
       APP_PORT: "5078"
       ConnectionStrings__EShop_PhoneDb: "Server=localhost,1433;Database=ShopPhoneDb;User Id=sa;Password=Strong!Passw0rd1;TrustServerCertificate=True;Encrypt=False;"
+      SeedWorkflowAdminNumber: "09037882674"
 
     steps:
       - name: Checkout repository

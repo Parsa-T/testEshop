@@ -67,11 +67,21 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 var app = builder.Build();
 
 var seedProductCount = app.Configuration.GetValue<int>("SeedWorkflowProductCount");
-if (seedProductCount > 0)
+var seedWorkflowAdminNumber = app.Configuration["SeedWorkflowAdminNumber"];
+if (seedProductCount > 0 || !string.IsNullOrWhiteSpace(seedWorkflowAdminNumber))
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<MyDbContext>();
-    await WorkflowPreviewDataSeeder.SeedAsync(db, app.Logger, seedProductCount);
+
+    if (seedProductCount > 0)
+    {
+        await WorkflowPreviewDataSeeder.SeedAsync(db, app.Logger, seedProductCount);
+    }
+
+    if (!string.IsNullOrWhiteSpace(seedWorkflowAdminNumber))
+    {
+        await WorkflowPreviewDataSeeder.EnsureWorkflowAdminAsync(db, app.Logger, seedWorkflowAdminNumber);
+    }
 }
 
 // Configure the HTTP request pipeline.

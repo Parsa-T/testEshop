@@ -7,6 +7,10 @@ namespace MyEshop_Phone.Seeding;
 public static class WorkflowPreviewDataSeeder
 {
     private const string ProductPrefix = "WF-TEST-";
+    private const string WorkflowAdminDefaultName = "Admin";
+    private const string WorkflowAdminDefaultFamily = "Preview";
+    private const string WorkflowAdminDefaultState = "Tehran";
+    private const int WorkflowAdminDefaultPostalCode = 1111111111;
 
     public static async Task SeedAsync(
         MyDbContext db,
@@ -188,6 +192,63 @@ public static class WorkflowPreviewDataSeeder
 
         var count = await db.Products.CountAsync(p => p.Title.StartsWith(ProductPrefix), cancellationToken);
         logger.LogInformation("Workflow preview seed completed. Seeded products: {Count}", count);
+    }
+
+    public static async Task EnsureWorkflowAdminAsync(
+        MyDbContext db,
+        ILogger logger,
+        string? adminNumber,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(adminNumber))
+        {
+            logger.LogInformation("Workflow admin seeding skipped: admin number is empty.");
+            return;
+        }
+
+        if (!await db.Database.CanConnectAsync(cancellationToken))
+        {
+            logger.LogWarning("Workflow admin seeding skipped: database is not reachable.");
+            return;
+        }
+
+        var normalizedNumber = adminNumber.Trim();
+        var existingUser = await db.Users
+            .SingleOrDefaultAsync(u => u.Number == normalizedNumber, cancellationToken);
+
+        if (existingUser is null)
+        {
+            db.Users.Add(new _Users
+            {
+                Name = WorkflowAdminDefaultName,
+                Family = WorkflowAdminDefaultFamily,
+                Number = normalizedNumber,
+                Address = WorkflowAdminDefaultState,
+                UrlPhoto = "default-user.png",
+                RegisterDate = DateTime.UtcNow,
+                IsAdmin = true,
+                PostalCode = WorkflowAdminDefaultPostalCode,
+                StateId = 1,
+                StateName = WorkflowAdminDefaultState,
+                CityId = 1,
+                CityName = WorkflowAdminDefaultState,
+                ProductsId = null
+            });
+
+            await db.SaveChangesAsync(cancellationToken);
+            logger.LogInformation("Workflow admin user created for number {AdminNumber}.", normalizedNumber);
+            return;
+        }
+
+        if (!existingUser.IsAdmin)
+        {
+            existingUser.IsAdmin = true;
+            await db.SaveChangesAsync(cancellationToken);
+            logger.LogInformation("Workflow admin role enabled for existing user {AdminNumber}.", normalizedNumber);
+            return;
+        }
+
+        logger.LogInformation("Workflow admin seeding skipped: user already exists as admin.");
     }
 
     private static async Task ClearPreviousWorkflowSeedAsync(MyDbContext db, CancellationToken cancellationToken)
