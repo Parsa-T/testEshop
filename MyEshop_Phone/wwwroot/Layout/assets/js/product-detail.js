@@ -262,8 +262,6 @@
     //  if (!inCart) qtyInput.value = '1';
     //};
 
-    setBtnState();
-
     //btn.addEventListener('click', () => {
     //  const inCart = isInCart(pid);
 
@@ -810,6 +808,5 @@
     initBuyBoxScroll();
   });
 })();
-
 
 
