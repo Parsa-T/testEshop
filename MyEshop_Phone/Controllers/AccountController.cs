@@ -93,7 +93,7 @@ namespace MyEshop_Phone.Controllers
             return RedirectToAction("Login");
         }
         #endregion
-        //edit
+
         #region Login
         [Route("Login")]
         public async Task<IActionResult> Login()
