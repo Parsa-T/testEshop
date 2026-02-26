@@ -586,26 +586,37 @@
         });
 
 
+        const isInteractiveCardTarget = (target) => !!target?.closest('button, a, input, textarea, select, label, summary, details');
+
+        const resolveCardProductUrl = (card) => {
+            if (!card) return '';
+            const productLink = card.querySelector('a[href*="/Product/"]');
+            let url = productLink?.getAttribute('href')?.trim() || '';
+            if (!url) url = (card.dataset.productUrl || card.dataset.href || '').trim();
+            return url;
+        };
+
+        const navigateToProductCard = (card) => {
+            const url = resolveCardProductUrl(card);
+            if (!url) return false;
+            window.location.href = url;
+            return true;
+        };
+
         // --- Product Card Navigation: click anywhere on a product card ---
         function initProductCardNavigation() {
             document.addEventListener('click', (e) => {
                 const card = e.target.closest('.product-card');
                 if (!card) return;
 
-                // Ignore clicks on interactive elements inside the card (buttons, links, form controls, etc.)
-                if (e.target.closest('button, a, input, textarea, select, label, summary, details')) return;
+                // Keep native behavior for interactive controls inside cards.
+                if (isInteractiveCardTarget(e.target)) return;
 
                 // Ignore click events right after drag-scroll gesture
                 const row = card.closest('.products-row');
                 if (row && row.dataset && row.dataset.justDragged === '1') return;
 
-                const productLink = card.querySelector('a[href*="/Product/"]');
-                let url = productLink?.getAttribute('href')?.trim() || '';
-                if (!url) {
-                    url = (card.dataset.productUrl || card.dataset.href || '').trim();
-                }
-                if (!url) return;
-                window.location.href = url;
+                navigateToProductCard(card);
             }, { passive: true });
         }
 
@@ -1395,19 +1406,28 @@
             let startTime = 0;
             let startScrollLeft = 0;
             let hasDragged = false;
+            let lastClientX = 0;
+            let lastClientY = 0;
+            let downCard = null;
+            let downOnInteractive = false;
             const threshold = 10;
+            const tapSlop = 8;
 
             function canStartFrom(target) {
-                return !target.closest('button, a, input, textarea, select, details, summary');
+                return !isInteractiveCardTarget(target);
             }
 
             row.addEventListener('pointerdown', (e) => {
                 if (e.pointerType === 'mouse' && e.button !== 0) return;
+                downCard = e.target.closest('.product-card');
+                downOnInteractive = isInteractiveCardTarget(e.target);
                 if (!canStartFrom(e.target)) return;
                 isDown = true;
                 hasDragged = false;
                 startX = e.clientX;
                 startY = e.clientY;
+                lastClientX = e.clientX;
+                lastClientY = e.clientY;
                 startTime = Date.now();
                 startScrollLeft = row.scrollLeft;
                 try { row.setPointerCapture(e.pointerId); } catch { }
@@ -1417,6 +1437,8 @@
                 if (!isDown) return;
                 const dx = e.clientX - startX;
                 const dy = e.clientY - startY;
+                lastClientX = e.clientX;
+                lastClientY = e.clientY;
 
                 if (!hasDragged) {
                     if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy)) {
@@ -1436,7 +1458,13 @@
             function endDrag(e) {
                 if (!isDown) return;
                 isDown = false;
+                if (typeof e.clientX === 'number' && typeof e.clientY === 'number') {
+                    lastClientX = e.clientX;
+                    lastClientY = e.clientY;
+                }
                 const gestureDuration = Date.now() - startTime;
+                const traveledX = Math.abs(lastClientX - startX);
+                const traveledY = Math.abs(lastClientY - startY);
                 row.classList.remove('is-dragging');
                 row.style.scrollSnapType = 'none';
                 row.style.scrollBehavior = '';
@@ -1447,7 +1475,18 @@
                     setTimeout(() => { delete row.dataset.justDragged; }, 160);
                 } else if (gestureDuration >= 0) {
                     delete row.dataset.justDragged;
+                    const shouldNavigate =
+                        e.type === 'pointerup' &&
+                        downCard &&
+                        !downOnInteractive &&
+                        traveledX <= tapSlop &&
+                        traveledY <= tapSlop;
+                    if (shouldNavigate) {
+                        navigateToProductCard(downCard);
+                    }
                 }
+                downCard = null;
+                downOnInteractive = false;
             }
 
             row.addEventListener('pointerup', endDrag);
