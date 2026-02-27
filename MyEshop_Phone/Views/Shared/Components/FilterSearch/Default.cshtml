@@ -65,12 +65,15 @@
                             <span>برند</span>
                             <span class="material-icon">expand_more</span>
                         </summary><div class="filter-options">
-                            @foreach (var item in Model)
+                            @if (!Model.Any())
                             {
-                                <label class="filter-option">
-                                    <input type="checkbox" class="filter-input" value="@item.ShortDescription" data-filter-key="brand" data-normalized="apple">
-                                    <span>@item.submenuGroups.Title</span>
-                                </label>
+                                @foreach (var item in Model)
+                                {
+                                    <label class="filter-option">
+                                        <input type="checkbox" class="filter-input" value="@item.ShortDescription" data-filter-key="brand" data-normalized="apple">
+                                        <span>@item.submenuGroups.Title</span>
+                                    </label>
+                                }
                             }
                         </div>
                     </details>
