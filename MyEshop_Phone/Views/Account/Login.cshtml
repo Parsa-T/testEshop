@@ -102,6 +102,26 @@
     <script defer src="/Layout/assets/js/layout.js"></script>
     <script defer src="/Layout/assets/js/script.js"></script>
     <div data-include="footer"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginForm = document.getElementById("login-form");
+            if (!loginForm) return;
+
+            loginForm.addEventListener("submit", function () {
+                const numberInput = loginForm.querySelector('input[name="Number"]');
+                const rememberInput = loginForm.querySelector('input[name="RememberMe"]');
+                const number = (numberInput?.value || "").replace(/[^0-9]/g, "").slice(0, 11);
+
+                sessionStorage.setItem(
+                    "otpLoginPayload",
+                    JSON.stringify({
+                        Number: number,
+                        RememberMe: Boolean(rememberInput?.checked)
+                    })
+                );
+            });
+        });
+    </script>
 
     @*   <script>
 document.addEventListener('DOMContentLoaded', () => {

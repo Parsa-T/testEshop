@@ -99,6 +99,26 @@
     <script defer src="/Layout/assets/js/layout.js"></script>
     <script defer src="/Layout/assets/js/script.js"></script>
     <div data-include="footer"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const registerForm = document.getElementById("register-form");
+            if (!registerForm) return;
+
+            registerForm.addEventListener("submit", function () {
+                const nameInput = registerForm.querySelector('input[name="Name"]');
+                const familyInput = registerForm.querySelector('input[name="Family"]');
+                const numberInput = registerForm.querySelector('input[name="Number"]');
+
+                const payload = {
+                    Name: (nameInput?.value || "").trim(),
+                    Family: (familyInput?.value || "").trim(),
+                    Number: (numberInput?.value || "").replace(/[^0-9]/g, "").slice(0, 11)
+                };
+
+                sessionStorage.setItem("otpRegisterPayload", JSON.stringify(payload));
+            });
+        });
+    </script>
 
     @section Scripts{
         <script>
@@ -331,5 +351,4 @@
 
 </body>
 </html>
-
 

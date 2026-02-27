@@ -55,6 +55,12 @@
                             <button style="margin-right: 30%;background-color: #2563EB;padding: 14px;border-radius: 10px;width: 150px;color:#FFFFFF;font-weight:bold;" type="submit">
                                 تایید کد
                             </button>
+                            <div class="pt-2 text-center">
+                                <button id="resend-code-btn" type="button" class="w-full rounded-xl py-3 font-bold transition-colors">
+                                    ارسال مجدد کد
+                                </button>
+                                <p id="resend-code-countdown" class="mt-2 text-sm text-gray-500"></p>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -68,5 +74,114 @@
     <script defer src="/Layout/assets/js/layout.js"></script>
     <script defer src="/Layout/assets/js/script.js"></script>
     <div data-include="footer"></div>
+    <script>
+        (function () {
+            const resendBtn = document.getElementById("resend-code-btn");
+            const countdownText = document.getElementById("resend-code-countdown");
+            if (!resendBtn || !countdownText) return;
+
+            const durationMs = 2 * 60 * 1000;
+            const timerKey = "otpResendUntilLogin";
+            const loginPayloadKey = "otpLoginPayload";
+            let timerId = null;
+
+            const navigationEntry = performance.getEntriesByType("navigation")[0];
+            const isReload = navigationEntry
+                ? navigationEntry.type === "reload"
+                : performance.navigation && performance.navigation.type === 1;
+
+            const setButtonState = (disabled) => {
+                resendBtn.disabled = disabled;
+                resendBtn.classList.remove(
+                    "bg-gray-300",
+                    "text-gray-500",
+                    "cursor-not-allowed",
+                    "bg-[#2563EB]",
+                    "text-white",
+                    "hover:bg-[#1D4ED8]"
+                );
+                if (disabled) {
+                    resendBtn.classList.add("bg-gray-300", "text-gray-500", "cursor-not-allowed");
+                } else {
+                    resendBtn.classList.add("bg-[#2563EB]", "text-white", "hover:bg-[#1D4ED8]");
+                }
+            };
+
+            const submitPost = (action, data) => {
+                const form = document.createElement("form");
+                form.method = "post";
+                form.action = action;
+                Object.keys(data).forEach((key) => {
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = key;
+                    input.value = data[key];
+                    form.appendChild(input);
+                });
+                document.body.appendChild(form);
+                form.submit();
+            };
+
+            const startTimer = (until) => {
+                localStorage.setItem(timerKey, String(until));
+                if (timerId) clearInterval(timerId);
+
+                const update = () => {
+                    const remainingMs = until - Date.now();
+                    if (remainingMs > 0) {
+                        setButtonState(true);
+                        const remainingSeconds = Math.ceil(remainingMs / 1000);
+                        countdownText.textContent = `ارسال مجدد تا ${remainingSeconds} ثانیه`;
+                        return;
+                    }
+                    setButtonState(false);
+                    countdownText.textContent = "می‌توانید دوباره کد را ارسال کنید";
+                    if (timerId) {
+                        clearInterval(timerId);
+                        timerId = null;
+                    }
+                };
+
+                update();
+                timerId = setInterval(update, 1000);
+            };
+
+            let savedUntil = parseInt(localStorage.getItem(timerKey) || "0", 10);
+            const now = Date.now();
+            if (!isReload || Number.isNaN(savedUntil) || savedUntil <= 0) {
+                savedUntil = now + durationMs;
+            }
+            startTimer(savedUntil);
+
+            resendBtn.addEventListener("click", () => {
+                if (resendBtn.disabled) return;
+
+                const payloadRaw = sessionStorage.getItem(loginPayloadKey);
+                if (!payloadRaw) {
+                    window.location.href = "/Login";
+                    return;
+                }
+
+                let payload;
+                try {
+                    payload = JSON.parse(payloadRaw);
+                } catch (error) {
+                    window.location.href = "/Login";
+                    return;
+                }
+
+                if (!payload?.Number) {
+                    window.location.href = "/Login";
+                    return;
+                }
+
+                startTimer(Date.now() + durationMs);
+                submitPost("/Login", {
+                    Number: payload.Number,
+                    RememberMe: payload.RememberMe === true ? "true" : "false"
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
