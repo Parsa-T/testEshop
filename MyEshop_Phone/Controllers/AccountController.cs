@@ -4,24 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using MyEshop_Phone.Application.DTO;
 using MyEshop_Phone.Application.Interface;
 using MyEshop_Phone.Application.Services;
+using MyEshop_Phone.Application.Utilitise;
 using MyEshop_Phone.Application.ViewModel;
 using MyEshop_Phone.Domain.Interface;
 using MyEshop_Phone.Domain.Model;
+using MyEshop_Phone.Pages.Admin.Color;
 using System.Security.Claims;
 
 namespace MyEshop_Phone.Controllers
 {
     public class AccountController : Controller
     {
-        private const int LoginOtpCooldownSeconds = 120;
-        private const string SessionLoginOtpCode = "LoginOtpCode";
-        private const string SessionLoginOtpPhone = "LoginOtpPhone";
-        private const string SessionLoginOtpUserId = "LoginOtpUserId";
-        private const string SessionLoginOtpUserName = "LoginOtpUserName";
-        private const string SessionLoginOtpIsAdmin = "LoginOtpIsAdmin";
-        private const string SessionLoginOtpRememberMe = "LoginOtpRememberMe";
-        private const string SessionLoginOtpLastSentUnix = "LoginOtpLastSentUnix";
-
         IUserServices _userServices;
         IUserRepository _userRepository;
         SendSmsSercives _sendSmsSercives;
@@ -103,7 +96,7 @@ namespace MyEshop_Phone.Controllers
 
         #region Login
         [Route("Login")]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
             return View();
         }
@@ -116,52 +109,39 @@ namespace MyEshop_Phone.Controllers
             var user = await _userRepository.IsExistUser(dTO.Number);
             if (user == null)
             {
-                ClearLoginOtpSession();
                 ViewBag.User = "شماره ای یافت نشد";
                 return RedirectToAction("Register");
             }
-
-            ClearLoginOtpSession();
-            var code = GenerateOtpCode();
+            var code = new Random().Next(1000, 9999).ToString();
             var result = await _sendSmsSercives.SendOtpAsync(dTO.Number, code);
-            if (!result)
-            {
-                ViewBag.Error = "ارسال پیامک با خطا مواجه شد، لطفاً دوباره تلاش کنید";
-                return View(dTO);
-            }
-
-            SetLoginOtpSession(user, dTO.Number, dTO.RememberMe, code);
+            HttpContext.Session.SetString("OtpCode", code);
+            HttpContext.Session.SetString("UserId", user.Id.ToString());
+            HttpContext.Session.SetString("UserName", user.Name);
+            HttpContext.Session.SetString("RememberMe", dTO.RememberMe.ToString());
+            HttpContext.Session.SetString("IsAdmin", user.IsAdmin.ToString());
             return RedirectToAction("VerifyLoginCode");
         }
-        public IActionResult VerifyLoginCode()
+        public async Task<IActionResult> VerifyLoginCode()
         {
-            if (!HasPendingLoginOtpSession())
-                return RedirectToAction("Login");
-
-            ViewBag.RemainingSeconds = CalculateRemainingSeconds(GetSessionLong(SessionLoginOtpLastSentUnix));
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyLoginCode(VerifyCodeViewModel userCode)
         {
             if (userCode == null || string.IsNullOrEmpty(userCode.Code))
-            {
-                ViewBag.RemainingSeconds = CalculateRemainingSeconds(GetSessionLong(SessionLoginOtpLastSentUnix));
                 return View();
-            }
 
-            var saveCode = HttpContext.Session.GetString(SessionLoginOtpCode);
+            var saveCode = HttpContext.Session.GetString("OtpCode");
             if (string.IsNullOrEmpty(saveCode))
                 return RedirectToAction("Login");
 
             if (saveCode != userCode.Code)
                 return RedirectToAction("Login");
 
-            var userId = HttpContext.Session.GetString(SessionLoginOtpUserId);
-            var name = HttpContext.Session.GetString(SessionLoginOtpUserName);
-            var admin = HttpContext.Session.GetString(SessionLoginOtpIsAdmin);
-            var rememberMeString = HttpContext.Session.GetString(SessionLoginOtpRememberMe);
+            var userId = HttpContext.Session.GetString("UserId");
+            var name = HttpContext.Session.GetString("UserName");
+            var admin = HttpContext.Session.GetString("IsAdmin");
+            var rememberMeString = HttpContext.Session.GetString("RememberMe");
 
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(name))
                 return RedirectToAction("Login");
@@ -196,68 +176,11 @@ namespace MyEshop_Phone.Controllers
                 principal,
                 properties);
 
-            ClearLoginOtpSession();
+            // پاک کردن اطلاعات Session مربوط به ورود
+            HttpContext.Session.Remove("OtpCode");
+            HttpContext.Session.Remove("RememberMe");
 
             return Redirect("/");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResendLoginCode()
-        {
-            if (!HasPendingLoginOtpSession())
-            {
-                return Json(new
-                {
-                    success = false,
-                    redirectToLogin = true,
-                    message = "نشست منقضی شده است"
-                });
-            }
-
-            var remainingSeconds = CalculateRemainingSeconds(GetSessionLong(SessionLoginOtpLastSentUnix));
-            if (remainingSeconds > 0)
-            {
-                return Json(new
-                {
-                    success = false,
-                    remainingSeconds,
-                    message = "تا پایان زمان باقی‌مانده صبر کنید"
-                });
-            }
-
-            var phone = HttpContext.Session.GetString(SessionLoginOtpPhone);
-            if (string.IsNullOrWhiteSpace(phone))
-            {
-                return Json(new
-                {
-                    success = false,
-                    redirectToLogin = true,
-                    message = "نشست منقضی شده است"
-                });
-            }
-
-            var newCode = GenerateOtpCode();
-            var sendResult = await _sendSmsSercives.SendOtpAsync(phone, newCode);
-            if (!sendResult)
-            {
-                return Json(new
-                {
-                    success = false,
-                    remainingSeconds = 0,
-                    message = "ارسال پیامک ناموفق بود"
-                });
-            }
-
-            HttpContext.Session.SetString(SessionLoginOtpCode, newCode);
-            HttpContext.Session.SetString(SessionLoginOtpLastSentUnix, GetCurrentUnixTimeSeconds().ToString());
-
-            return Json(new
-            {
-                success = true,
-                remainingSeconds = LoginOtpCooldownSeconds,
-                message = "کد جدید ارسال شد"
-            });
         }
         #endregion
 
@@ -268,69 +191,6 @@ namespace MyEshop_Phone.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Clear();
             return Redirect("/");
-        }
-
-        private static string GenerateOtpCode()
-        {
-            return Random.Shared.Next(1000, 9999).ToString();
-        }
-
-        private static long GetCurrentUnixTimeSeconds()
-        {
-            return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        }
-
-        private long? GetSessionLong(string key)
-        {
-            var value = HttpContext.Session.GetString(key);
-            if (!long.TryParse(value, out var parsed))
-                return null;
-
-            return parsed;
-        }
-
-        private static int CalculateRemainingSeconds(long? lastSentUnix)
-        {
-            if (!lastSentUnix.HasValue)
-                return 0;
-
-            var elapsed = GetCurrentUnixTimeSeconds() - lastSentUnix.Value;
-            if (elapsed < 0)
-                elapsed = 0;
-
-            var remaining = LoginOtpCooldownSeconds - (int)elapsed;
-            return remaining > 0 ? remaining : 0;
-        }
-
-        private bool HasPendingLoginOtpSession()
-        {
-            return !string.IsNullOrWhiteSpace(HttpContext.Session.GetString(SessionLoginOtpCode))
-                && !string.IsNullOrWhiteSpace(HttpContext.Session.GetString(SessionLoginOtpPhone))
-                && !string.IsNullOrWhiteSpace(HttpContext.Session.GetString(SessionLoginOtpUserId))
-                && !string.IsNullOrWhiteSpace(HttpContext.Session.GetString(SessionLoginOtpUserName));
-        }
-
-        private void SetLoginOtpSession(_Users user, string phone, bool rememberMe, string code)
-        {
-            ClearLoginOtpSession();
-            HttpContext.Session.SetString(SessionLoginOtpCode, code);
-            HttpContext.Session.SetString(SessionLoginOtpPhone, phone);
-            HttpContext.Session.SetString(SessionLoginOtpUserId, user.Id.ToString());
-            HttpContext.Session.SetString(SessionLoginOtpUserName, user.Name);
-            HttpContext.Session.SetString(SessionLoginOtpRememberMe, rememberMe.ToString());
-            HttpContext.Session.SetString(SessionLoginOtpIsAdmin, user.IsAdmin.ToString());
-            HttpContext.Session.SetString(SessionLoginOtpLastSentUnix, GetCurrentUnixTimeSeconds().ToString());
-        }
-
-        private void ClearLoginOtpSession()
-        {
-            HttpContext.Session.Remove(SessionLoginOtpCode);
-            HttpContext.Session.Remove(SessionLoginOtpPhone);
-            HttpContext.Session.Remove(SessionLoginOtpUserId);
-            HttpContext.Session.Remove(SessionLoginOtpUserName);
-            HttpContext.Session.Remove(SessionLoginOtpRememberMe);
-            HttpContext.Session.Remove(SessionLoginOtpIsAdmin);
-            HttpContext.Session.Remove(SessionLoginOtpLastSentUnix);
         }
     }
 }
