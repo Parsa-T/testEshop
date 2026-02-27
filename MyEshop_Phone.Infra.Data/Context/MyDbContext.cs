@@ -30,6 +30,7 @@ namespace MyEshop_Phone.Infra.Data.Context
         public DbSet<_ProductsColor> productsColors { get; set; }
         public DbSet<_SubmenuGroups> submenuGroups { get; set; }
         public DbSet<_CodePostal> CodePostals { get; set; }
+        public DbSet<_SmsOtpRequest> smsOtpRequests { get; set; }
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         => await base.SaveChangesAsync(cancellationToken);
 

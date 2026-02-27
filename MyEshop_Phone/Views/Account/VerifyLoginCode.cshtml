@@ -42,14 +42,15 @@
                                 <span class="font-black text-xl text-gray-900">ماهان شاپ</span>
                             </a>
                             <h1 class="text-2xl font-bold text-gray-900">تایید کد ورود</h1>
-                            <p class="text-sm text-gray-500 mt-2">کد ۴ رقمی ارسال‌شده را وارد کنید</p>
+                            <p class="text-sm text-gray-500 mt-2">کد 6 رقمی ارسال‌شده را وارد کنید</p>
                         </div>
 
                         <form method="post" id="register-form" class="space-y-5 max-w-sm mx-auto" novalidate>
+                            <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
                             <div class="min-w-0">
                                 <label for="Code" class="block text-sm font-medium text-gray-700 mb-2">کد تایید:</label>
                                 <div class="relative min-w-0">
-                                    <input asp-for="Code" placeholder="1234" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="one-time-code" spellcheck="false" aria-describedby="register-error" class="auth-input w-full min-w-0 px-4 py-3 rounded-xl border border-gray-300 text-center tracking-[0.35em] focus:outline-none focus:ring-2 focus:ring-[#2563EB]" required>
+                                    <input asp-for="Code" placeholder="123456" dir="ltr" inputmode="numeric" maxlength="6" autocomplete="one-time-code" spellcheck="false" aria-describedby="register-error" class="auth-input w-full min-w-0 px-4 py-3 rounded-xl border border-gray-300 text-center tracking-[0.35em] focus:outline-none focus:ring-2 focus:ring-[#2563EB]" required>
                                 </div>
                             </div>
 

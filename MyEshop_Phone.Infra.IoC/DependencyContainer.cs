@@ -35,6 +35,8 @@ namespace MyEshop_Phone.Infra.IoC
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDitelsRepository, OrderDitelsRepository>();
             services.AddScoped<ICodePostalRepository, PostalCodeRepository>();
+            services.AddScoped<IOtpRateLimitService, OtpRateLimitService>();
+            services.AddScoped<ISmsOtpRequestRepository, RequestSmsRepository>();
             //Application
             services.AddScoped<IOrderDitelsServices, OrderDitelsServices>();
             services.AddScoped<IUserServices, UserServices>();

@@ -40,6 +40,7 @@ builder.Services.AddHttpClient<SendSmsSercives>();
 builder.Services.AddHttpClient<ILocationServices, LocationServices>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(GetUserProfileQuery).Assembly));
 builder.Services.AddScoped<IApplicationDbContext>(provider =>
@@ -50,7 +51,6 @@ static void RegisterServices(IServiceCollection services, IConfiguration configu
     DependencyContainer.RegisterServices(services,configuration);
 }
 #endregion
-
 
 #region Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
