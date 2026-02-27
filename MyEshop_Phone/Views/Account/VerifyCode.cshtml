@@ -41,21 +41,23 @@
                                 <span class="material-icon text-3xl text-[#2563EB]" aria-hidden="true">shopping_bag</span>
                                 <span class="font-black text-xl text-gray-900">ماهان شاپ</span>
                             </a>
+                            <h1 class="text-2xl font-bold text-gray-900">تایید کد ثبت نام</h1>
+                            <p class="text-sm text-gray-500 mt-2">کد ۴ رقمی ارسال‌شده را وارد کنید</p>
                         </div>
 
-                        <form method="post" id="register-form" class="space-y-6" novalidate>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="firstname" class="block text-sm font-medium text-gray-700 mb-2">تایید شماره :</label>
-                                    <div class="relative">
-                                        <input asp-for="Code" placeholder="کد ارسالی را وارد کنید" style="width:350px" autocomplete="given-name" autocapitalize="off" maxlength="4" spellcheck="false" aria-describedby="register-error" class="auth-input w-full pl-4 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#2563EB]" required>
-                                    </div>
+                        <form method="post" id="register-form" class="space-y-5 max-w-sm mx-auto" novalidate>
+                            <div class="min-w-0">
+                                <label for="Code" class="block text-sm font-medium text-gray-700 mb-2">کد تایید:</label>
+                                <div class="relative min-w-0">
+                                    <input asp-for="Code" placeholder="1234" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="one-time-code" spellcheck="false" aria-describedby="register-error" class="auth-input w-full min-w-0 px-4 py-3 rounded-xl border border-gray-300 text-center tracking-[0.35em] focus:outline-none focus:ring-2 focus:ring-[#2563EB]" required>
                                 </div>
                             </div>
-                            <button style="margin-right: 30%;background-color: #2563EB;padding: 14px;border-radius: 10px;width: 150px;color:#FFFFFF;font-weight:bold;" type="submit">
+
+                            <button type="submit" class="w-full bg-[#2563EB] text-white font-bold py-3.5 rounded-xl hover:bg-[#1D4ED8] transition-colors shadow-lg shadow-[#2563EB]/20">
                                 تایید کد
                             </button>
-                            <div class="pt-2 text-center">
+
+                            <div class="pt-1 text-center space-y-2">
                                 <button id="resend-code-btn" type="button" class="w-full rounded-xl py-3 font-bold transition-colors">
                                     ارسال مجدد کد
                                 </button>
