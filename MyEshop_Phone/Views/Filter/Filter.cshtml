@@ -1,22 +1,12 @@
-﻿@using MyEshop_Phone.Domain.Model
+@using MyEshop_Phone.Domain.Model
 @model IEnumerable<_Products>
 @{
     ViewData["Title"] = "ماهان شاپ | فیلتر ها";
+    var products = Model ?? Enumerable.Empty<_Products>();
+    var initialProductsCount = products.Count();
+    var hasInitialProducts = initialProductsCount > 0;
 }
 <main id="main-content" class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-6 md:pb-8">
-    @if (!Model.Any())
-    {
-        <div id="no-results" class="no-results" role="status" aria-live="polite">
-            <div class="no-results-card rounded-3xl border border-dashed border-[#BFDBFE]/70 bg-white/90 shadow-lg shadow-blue-50 p-6 text-center">
-                <span class="material-icon text-6xl text-[#2563EB] mb-4 inline-block">search_off</span>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">محصول پیدا نشد !</h3>
-                <p class="text-sm text-gray-600 mb-4">محصولی با این فیلتر ها پیدا نشد یا هنوز موجود نمیباشد برای دیدن سایر محصولات فیلتر هارا تعویض کنید.</p>
-                <div class="flex flex-wrap justify-center gap-3">
-                    <a href="/" class="px-4 py-2 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-[#EFF6FF] transition">بازگشت به خانه</a>
-                </div>
-            </div>
-        </div>
-    }
     <div class="lg:grid lg:grid-cols-12 lg:gap-8">
 
         <!-- Filter Sidebar -->
@@ -29,14 +19,7 @@
                 <div class="products-header-main flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="products-header-sort flex items-center gap-3 flex-1 min-w-[220px]">
                         <span class="material-icon text-[#2563EB] text-2xl">sort</span>
-                        <label for="sort-by" class="font-semibold text-sm text-gray-700">تعداد "@Model.Count()" با عبارت "@ViewData["FilterName"]" یافت شد.</label>
-                        @* <div class="relative flex-1 sm:flex-none sm:w-56">
-                            <select id="sort-by" class="sort-select bg-white border border-gray-200 text-gray-900 text-sm rounded-2xl focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] block w-full pr-3 pl-10 py-2.5 appearance-none shadow-sm hover:shadow-md transition">
-                                <option value="price-asc">قیمت: از کم به زیاد</option>
-                                <option value="price-desc">قیمت: از زیاد به کم</option>
-                            </select>
-                            <span class="material-icon absolute left-3 top-1/2 -translate-y-1/2 text-[#2563EB] pointer-events-none text-lg">unfold_more</span>
-                        </div> *@
+                        <label for="sort-by" class="font-semibold text-sm text-gray-700">تعداد "@initialProductsCount" با عبارت "@ViewData["FilterName"]" یافت شد.</label>
                     </div>
                 </div>
                 <div class="filters-toolbar flex flex-col gap-3">
@@ -62,9 +45,10 @@
             <div class="products-grid-shell relative">
                 <div id="products-container2" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4 lg:gap-5">
                     <!-- Product cards will be dynamically populated/filtered. -->
-                    @foreach (var item in Model)
+                    @foreach (var item in products)
                     {
                         <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
+                                 data-product-id="@item.Id"
                                  data-category="@item.products_Groups.GroupTitle"
                                  data-brand="@item.ShortDescription"
                                  data-model="@item.Title"
@@ -72,16 +56,11 @@
                                  data-price="@item.Price"
                                  data-popular="9"
                                  data-new="@item.CreateTime.ToString("yyyy-MM-dd")"
-                                 data-stock="true">
+                                 data-stock="@(item.Count > 0 ? "true" : "false")">
                             <div class="relative">
                                 <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
                                     <img src="/AdminPanel/Photo/Products/@item.ImageName" alt="@item.Title" class="w-full h-full object-contain" width="900" height="900" loading="lazy">
                                 </div>
-
-                                @* <div class="product-card-color-strip" aria-label="رنگ‌های موجود">
-                                    <span class="color-swatch bg-slate-900" data-color-hex="#0f172a" title="مشکی" aria-label="مشکی"></span>
-                                    <span class="color-swatch bg-zinc-400" data-color-hex="#a1a1aa" title="خاکستری" aria-label="خاکستری"></span>
-                                </div> *@
                             </div>
 
                             <div class="mt-4">
@@ -119,14 +98,14 @@
 
                 </div>
 
-                <div id="no-results" class="no-results hidden" role="status" aria-live="polite">
+                <div id="no-results" class="no-results @(hasInitialProducts ? "hidden" : "")" role="status" aria-live="polite" aria-hidden="@(hasInitialProducts ? "true" : "false")">
                     <div class="no-results-card rounded-3xl border border-dashed border-[#BFDBFE]/70 bg-white/90 shadow-lg shadow-blue-50 p-6 text-center">
                         <span class="material-icon text-6xl text-[#2563EB] mb-4 inline-block">search_off</span>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">محصول پیدا نشد !</h3>
                         <p class="text-sm text-gray-600 mb-4">محصولی با این فیلتر ها پیدا نشد یا هنوز موجود نمیباشد برای دیدن سایر محصولات فیلتر هارا تعویض کنید.</p>
-                        <div class="flex flex-wrap justify-center gap-3">
-                            <button id="reset-filters-btn-mobile" class="px-4 py-2 rounded-2xl bg-[#2563EB] text-white text-sm font-bold shadow-md hover:bg-[#1D4ED8] transition">حذف تمام فیلتر ها</button>
-                            <a href="../index.html" class="px-4 py-2 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-[#EFF6FF] transition">بازگشت به خانه</a>
+                        <div class="no-results-actions flex flex-wrap justify-center gap-3">
+                            <button id="no-results-reset-filters-btn" type="button" class="no-results-action px-4 py-2 rounded-2xl bg-[#2563EB] text-white text-sm font-bold shadow-md hover:bg-[#1D4ED8] transition">حذف تمام فیلتر ها</button>
+                            <a href="/" class="no-results-action px-4 py-2 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-[#EFF6FF] transition">بازگشت به خانه</a>
                         </div>
                     </div>
                 </div>
@@ -144,10 +123,26 @@
         document.addEventListener("DOMContentLoaded", function () {
 
             const productsContainer = document.getElementById("products-container2");
+            const noResultsEl = document.getElementById("no-results");
             const applyBtn = document.getElementById("apply-filters-btn");
+            const resetBtn = document.getElementById("reset-filters");
+            const noResultsResetBtn = document.getElementById("no-results-reset-filters-btn");
             const priceMin = document.getElementById("price-min");
             const priceMax = document.getElementById("price-max");
             const inStockToggle = document.getElementById("in-stock-toggle");
+
+            const escapeHtml = (value) => String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+
+            function toggleNoResults(isVisible) {
+                if (!noResultsEl) return;
+                noResultsEl.classList.toggle("hidden", !isVisible);
+                noResultsEl.setAttribute("aria-hidden", isVisible ? "false" : "true");
+            }
 
             // -------------------------------
             // گرفتن مقادیر فیلتر
@@ -178,23 +173,65 @@
                 productsContainer.innerHTML = "";
 
                 if (!products || products.length === 0) {
-                    productsContainer.innerHTML =
-                        "<p class='col-span-full text-center text-gray-500'>محصولی یافت نشد</p>";
+                    toggleNoResults(true);
                     return;
                 }
 
+                toggleNoResults(false);
+
                 products.forEach(product => {
+                    const productId = Number(product.id) || 0;
+                    const productName = escapeHtml(product.name || product.title || "");
+                    const productBrand = escapeHtml(product.shortDescription || "");
+                    const productImage = escapeHtml(product.imageUrl || "");
+                    const productCategory = escapeHtml(product.category || "");
+                    const productPrice = Number(product.price) || 0;
+                    const productPriceText = productPrice.toLocaleString();
+                    const inStock = Number(product.count) > 0;
+                    const actionMarkup = inStock
+                        ? `
+                                <div class="flex items-center gap-2">
+                                    <button aria-label="افزودن به سبد خرید" data-id="${productId}" class="add-to-cart-btn nav-icon-btn ripple w-10 h-10 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center hover:bg-[#1E3A8A] transition shadow-sm" type="button">
+                                        <span class="material-icon text-[22px]">add</span>
+                                    </button>
+                                </div>
+                          `
+                        : `
+                                <div class="flex items-center gap-2">
+                                    <p style="color:red">موجود در انبار نمیباشد</p>
+                                </div>
+                          `;
                     const card = `
-                        <div class="bg-white p-4 rounded-xl shadow hover:shadow-lg transition">
-                            <img src="${product.imageUrl}"
-                                 class="w-full h-40 object-cover rounded-lg mb-3" />
-                            <a href="/Product/${product.id}">
-                            <h3 class="font-bold text-sm mb-2">${product.name}</h3>
-                            </a>
-                            <p class="text-blue-600 font-semibold">
-                                ${Number(product.price).toLocaleString()} تومان
-                            </p>
-                        </div>
+                        <article class="product-card product-card--hero has-flush-media bg-white rounded-3xl p-4 border border-gray-100 group"
+                                 data-product-id="${productId}"
+                                 data-category="${productCategory}"
+                                 data-brand="${productBrand}"
+                                 data-model="${productName}"
+                                 data-material="silicone"
+                                 data-price="${productPrice}"
+                                 data-popular="9"
+                                 data-stock="${inStock ? "true" : "false"}">
+                            <div class="relative">
+                                <div class="product-media product-media--flush rounded-2xl bg-[#F7F5FA] flex items-center justify-center overflow-hidden" data-media-width="900" data-media-height="900">
+                                    <img src="${productImage}" alt="${productName}" class="w-full h-full object-contain" width="900" height="900" loading="lazy">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <a href="/Product/${productId}">
+                                    <h3 class="font-extrabold text-gray-900 text-sm md:text-base leading-tight truncate">${productName}</h3>
+                                </a>
+                                <p class="text-[11px] md:text-xs text-gray-500 mt-1">برند: ${productBrand}</p>
+                            </div>
+                            <div class="mt-3 flex items-center justify-between gap-3">
+                                <div class="min-w-0">
+                                    <div class="text-[10px] md:text-xs text-gray-400 line-through">${productPriceText}</div>
+                                    <div class="text-base md:text-lg font-black text-[#2563EB] leading-tight">
+                                        ${productPriceText} <span class="text-[10px] md:text-xs font-medium text-gray-500">تومان</span>
+                                    </div>
+                                </div>
+                                ${actionMarkup}
+                            </div>
+                        </article>
                     `;
                     productsContainer.insertAdjacentHTML("beforeend", card);
                 });
@@ -204,6 +241,8 @@
             // صدا زدن API
             // -------------------------------
             async function applyFilters() {
+
+                if (!productsContainer) return;
 
                 const filters = getFilters();
                 const queryParams = new URLSearchParams();
@@ -223,8 +262,7 @@
                     queryParams.append("InStock", true);
 
                 try {
-
-                    // لودینگ ساده
+                    toggleNoResults(false);
                     productsContainer.innerHTML =
                         "<p class='col-span-full text-center'>در حال بارگذاری...</p>";
 
@@ -239,6 +277,7 @@
 
                 } catch (error) {
                     console.error("خطا در دریافت اطلاعات:", error);
+                    toggleNoResults(false);
                     productsContainer.innerHTML =
                         "<p class='col-span-full text-center text-red-500'>خطا در دریافت اطلاعات</p>";
                 }
@@ -260,8 +299,22 @@
             // -------------------------------
             // Event ها
             // -------------------------------
+            function resetFiltersAndApply() {
+                document.querySelectorAll(".category-filter-btn").forEach((btn, index) => {
+                    btn.classList.remove("active");
+                    if (index === 0) btn.classList.add("active");
+                });
 
-            // دسته‌ها
+                document.querySelectorAll(".filter-input").forEach(cb => cb.checked = false);
+
+                if (priceMin) priceMin.value = priceMin.min || 0;
+                if (priceMax) priceMax.value = priceMax.max || 50000000;
+
+                if (inStockToggle) inStockToggle.checked = false;
+
+                applyFilters();
+            }
+
             document.querySelectorAll(".category-filter-btn").forEach(btn => {
                 btn.addEventListener("click", function () {
                     document.querySelectorAll(".category-filter-btn")
@@ -272,48 +325,27 @@
                 });
             });
 
-            // برندها
             document.querySelectorAll(".filter-input").forEach(cb => {
                 cb.addEventListener("change", applyFilters);
             });
 
-            // قیمت
             if (priceMin) priceMin.addEventListener("input", debouncedApply);
             if (priceMax) priceMax.addEventListener("input", debouncedApply);
 
-            // موجودی
             if (inStockToggle)
                 inStockToggle.addEventListener("change", applyFilters);
 
-            // دکمه اعمال (موبایل)
             if (applyBtn)
                 applyBtn.addEventListener("click", applyFilters);
 
-        });
-        //حذف فیلتر ها
-                document.getElementById("reset-filters").addEventListener("click", function() {
+            if (resetBtn)
+                resetBtn.addEventListener("click", resetFiltersAndApply);
 
-            // 1️⃣ دسته‌ها: کلاس active رو پاک کن و اولی (تمام محصولات) رو فعال کن
-            document.querySelectorAll(".category-filter-btn").forEach((btn, index) => {
-                btn.classList.remove("active");
-                if (index === 0) btn.classList.add("active"); // اولی = "تمام محصولات"
-            });
+            if (noResultsResetBtn)
+                noResultsResetBtn.addEventListener("click", resetFiltersAndApply);
 
-            // 2️⃣ برندها: تمام چک‌باکس‌ها رو uncheck کن
-            document.querySelectorAll(".filter-input").forEach(cb => cb.checked = false);
-
-            // 3️⃣ قیمت: بازنشانی به مقدار پیش‌فرض
-            const priceMin = document.getElementById("price-min");
-            const priceMax = document.getElementById("price-max");
-            if (priceMin) priceMin.value = priceMin.min || 0;
-            if (priceMax) priceMax.value = priceMax.max || 50000000;
-
-            // 4️⃣ موجودی: uncheck کن
-            const inStock = document.getElementById("in-stock-toggle");
-            if (inStock) inStock.checked = false;
-
-            // 5️⃣ دوباره فیلتر اعمال کن (اکنون همه مقادیر پیش‌فرض هستند)
-            applyFilters();
+            const hasVisibleCards = Boolean(productsContainer?.querySelector(".product-card"));
+            toggleNoResults(!hasVisibleCards);
         });
 
     </script>
