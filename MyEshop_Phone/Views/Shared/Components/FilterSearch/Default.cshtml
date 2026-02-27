@@ -1,5 +1,18 @@
 ﻿@using MyEshop_Phone.Domain.Model
 @model IEnumerable<_Products>
+@{
+    var items = Model ?? Enumerable.Empty<_Products>();
+    var uniqueCategoryNames = items
+        .Select(item => item.products_Groups?.GroupTitle?.Trim())
+        .Where(name => !string.IsNullOrWhiteSpace(name))
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToList();
+    var uniqueBrandNames = items
+        .Select(item => item.ShortDescription?.Trim())
+        .Where(name => !string.IsNullOrWhiteSpace(name))
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .ToList();
+}
 
 
 <aside id="filter-sidebar" class="filter-sidebar fixed lg:static top-0 -right-full lg:right-auto w-[86%] sm:w-[78%] md:w-80 max-w-[360px] lg:max-w-none lg:w-full h-full lg:h-auto bg-white lg:bg-transparent z-[160] lg:z-auto lg:col-span-3 lg:block p-4 lg:p-0" role="navigation" aria-label="فیلترهای محصولات">
@@ -32,10 +45,10 @@
                     <button data-category="all" class="category-filter-btn" type="button">
                         <span class="category-label">تمام محصولات</span>
                     </button>
-                    @foreach (var item in Model)
+                    @foreach (var categoryName in uniqueCategoryNames)
                     {
-                        <button data-category="@item.products_Groups.GroupTitle" class="category-filter-btn" type="button">
-                            <span class="category-label">@item.products_Groups.GroupTitle</span>
+                        <button data-category="@categoryName" class="category-filter-btn" type="button">
+                            <span class="category-label">@categoryName</span>
                         </button>
                     }
                 </div>
@@ -52,11 +65,11 @@
                             <span>برند</span>
                             <span class="material-icon">expand_more</span>
                         </summary><div class="filter-options">
-                            @foreach (var item in Model)
+                            @foreach (var brandName in uniqueBrandNames)
                             {
                                 <label class="filter-option">
-                                    <input type="checkbox" class="filter-input" value="@item.ShortDescription" data-filter-key="brand" data-normalized="apple">
-                                    <span>@item.submenuGroups.Title</span>
+                                    <input type="checkbox" class="filter-input" value="@brandName" data-filter-key="brand" data-normalized="@brandName?.ToLowerInvariant()">
+                                    <span>@brandName</span>
                                 </label>
                             }
                         </div>
