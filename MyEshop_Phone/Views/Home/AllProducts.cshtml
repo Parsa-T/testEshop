@@ -225,17 +225,17 @@
                     }
                 </div>
 
-                @* <div id="no-results" class="no-results hidden" role="status" aria-live="polite">
+                <div id="no-results" class="no-results hidden" role="status" aria-live="polite" aria-hidden="true">
                     <div class="no-results-card rounded-3xl border border-dashed border-[#BFDBFE]/70 bg-white/90 shadow-lg shadow-blue-50 p-6 text-center">
                         <span class="material-icon text-6xl text-[#2563EB] mb-4 inline-block">search_off</span>
                         <h3 class="text-xl font-bold text-gray-900 mb-2">محصول پیدا نشد !</h3>
                         <p class="text-sm text-gray-600 mb-4">محصولی با این فیلتر ها پیدا نشد یا هنوز موجود نمیباشد برای دیدن سایر محصولات فیلتر هارا تعویض کنید.</p>
-                        <div class="flex flex-wrap justify-center gap-3">
-                            <button id="reset-filters-btn-mobile" class="px-4 py-2 rounded-2xl bg-[#2563EB] text-white text-sm font-bold shadow-md hover:bg-[#1D4ED8] transition">حذف تمام فیلتر ها</button>
-                            <a href="../index.html" class="px-4 py-2 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-[#EFF6FF] transition">بازگشت به خانه</a>
+                        <div class="no-results-actions flex flex-wrap justify-center gap-3">
+                            <button id="no-results-reset-filters-btn" type="button" class="no-results-action px-4 py-2 rounded-2xl bg-[#2563EB] text-white text-sm font-bold shadow-md hover:bg-[#1D4ED8] transition">حذف تمام فیلتر ها</button>
+                            <a href="/" class="no-results-action px-4 py-2 rounded-2xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-[#EFF6FF] transition">بازگشت به خانه</a>
                         </div>
                     </div>
-                </div> *@
+                </div>
             </div>
 
         </div>
@@ -288,6 +288,8 @@
         document.addEventListener("DOMContentLoaded", function () {
 
             const productsContainer = document.getElementById("products-container2");
+            const noResultsEl = document.getElementById("no-results");
+            const noResultsResetBtn = document.getElementById("no-results-reset-filters-btn");
             const applyBtn = document.getElementById("apply-filters-btn");
             const resetBtn = document.getElementById("reset-filters");
             const priceMin = document.getElementById("price-min");
@@ -350,15 +352,22 @@
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#39;");
 
+            function toggleNoResults(isVisible) {
+                if (!noResultsEl) return;
+                noResultsEl.classList.toggle("hidden", !isVisible);
+                noResultsEl.setAttribute("aria-hidden", isVisible ? "false" : "true");
+            }
+
             function renderProducts(products) {
                 if (!productsContainer) return;
                 productsContainer.innerHTML = "";
 
                 if (!products || products.length === 0) {
-                    productsContainer.innerHTML =
-                        "<p class='col-span-full text-center text-gray-500'>محصولی یافت نشد</p>";
+                    toggleNoResults(true);
                     return;
                 }
+
+                toggleNoResults(false);
 
                 products.forEach(product => {
                     const productId = Number(product.id) || 0;
@@ -564,6 +573,25 @@
 
                     if (inStockToggle) inStockToggle.checked = false;
 
+                    applyFilters({ refreshPriceBounds: true });
+                });
+            }
+
+            if (noResultsResetBtn) {
+                noResultsResetBtn.addEventListener("click", function () {
+                    if (resetBtn) {
+                        resetBtn.click();
+                        return;
+                    }
+
+                    document.querySelectorAll(".category-filter-btn").forEach((btn, index) => {
+                        btn.classList.remove("active");
+                        if (index === 0) btn.classList.add("active");
+                    });
+                    document.querySelectorAll(".filter-input").forEach(cb => cb.checked = false);
+                    if (priceMin) priceMin.value = priceMin.min || 0;
+                    if (priceMax) priceMax.value = priceMax.max || 50000000;
+                    if (inStockToggle) inStockToggle.checked = false;
                     applyFilters({ refreshPriceBounds: true });
                 });
             }
